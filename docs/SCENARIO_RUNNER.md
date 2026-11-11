@@ -5,7 +5,7 @@ deterministic ballot-PDF workflow without a browser or PDF viewer:
 
 ```text
 stock -> session -> contest validation -> finalization -> Truth QR verification
-      -> WORM evidence -> recursive verification -> tally -> reports
+      -> WORM evidence -> recursive verification -> deterministic Election Return -> reports
 ```
 
 The scenario also asserts that an over-limit selection is rejected and that a

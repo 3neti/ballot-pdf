@@ -86,6 +86,7 @@ export class BallotPdfProtocolClient {
   requestFinalization(body) { return this.send('ballot.finalize', body) }
   requestPrint(body) { return this.send('ballot.print', body) }
   verifyEvidence(body) { return this.send('evidence.verify', body) }
+  requestElectionReturn(body) { return this.send('election.return', body) }
   commitEvidence(body) { return this.send('evidence.commit', body) }
   readCeremonyStatus(body) { return this.send('ceremony.status', body) }
 }

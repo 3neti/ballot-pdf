@@ -22,5 +22,5 @@ This is an engineering backlog item, not a claim of legal compliance.
 - [x] Return the finalized PDF from `ballot.finalize` to the Vue host.
 - [x] Add Download Finalized PDF and View Evidence actions.
 - [x] Run recursive verification against the latest finalized artifact.
-- [ ] Add a deterministic Election Return/tally artifact to the scenario runner.
+- [x] Add a deterministic Election Return/tally artifact to the scenario runner.
 - [ ] Replace ephemeral demo signing keys with an injectable persistent trust roster.

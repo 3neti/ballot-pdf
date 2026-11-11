@@ -3,6 +3,7 @@
 namespace LBHurtado\BallotPdf\Scenario;
 
 use LBHurtado\BallotPdf\Application\BuildReports;
+use LBHurtado\BallotPdf\Application\BuildElectionReturn;
 use LBHurtado\BallotPdf\Application\FinalizeBallot;
 use LBHurtado\BallotPdf\Application\VerifyDirectory;
 use LBHurtado\BallotPdf\Contracts\BallotPayloadCodec;
@@ -54,6 +55,7 @@ final readonly class LifecycleScenarioRunner
 
         $finalized = (new FinalizeBallot($this->codec, $this->materializer, $this->store))->execute($session);
         $verification = (new VerifyDirectory($this->codec))->execute($root, $context);
+        $electionReturn = (new BuildElectionReturn($this->codec))->execute($verification, $context);
         $decoded = $this->codec->decode($finalized->truthQrScans);
         $tally = [];
         foreach ((array) ($decoded['candidate_codes'] ?? []) as $candidateCode) {
@@ -82,6 +84,8 @@ final readonly class LifecycleScenarioRunner
             'tally' => $tally,
             'report_json' => (new BuildReports)->json($verification),
             'report_html' => (new BuildReports)->html($verification),
+            'election_return' => $electionReturn['artifact'],
+            'election_return_sha256' => $electionReturn['sha256'],
             'repeat_finalization_rejected' => $repeatFinalizationRejected,
         ];
     }

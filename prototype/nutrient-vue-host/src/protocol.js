@@ -58,4 +58,14 @@ export class BallotPdfProtocolClient extends AdapterProtocolClient {
       mapping_hash: mappingHash,
     })
   }
+
+  electionReturn({ sessionId, electionId, precinctId, ballotStyleId, mappingHash }) {
+    return this.requestElectionReturn({
+      session_id: sessionId,
+      election_id: electionId,
+      precinct_id: precinctId,
+      ballot_style_id: ballotStyleId,
+      mapping_hash: mappingHash,
+    })
+  }
 }

@@ -14,12 +14,14 @@ const finalizedArtifact = ref(null)
 const finalizedPdfUrl = ref('')
 const evidenceVisible = ref(false)
 const verification = ref(null)
+const electionReturn = ref(null)
 const viewer = ref(null)
 const protocol = new BallotPdfProtocolClient()
 const protocolMode = import.meta.env.VITE_PROTOCOL_BASE_URL ? 'local service' : 'mock'
 const nutrientBaseUrl = `${window.location.origin}/nutrient-web/`
 
 const canFinalize = computed(() => Boolean(viewer.value && session.value && !finalized.value))
+const canBuildElectionReturn = computed(() => Boolean(verification.value?.target_results?.some((result) => result.eligible)))
 
 function record(type, detail = {}) {
   events.value.unshift({
@@ -47,6 +49,7 @@ function clearFinalizedArtifact() {
   finalizedArtifact.value = null
   evidenceVisible.value = false
   verification.value = null
+  electionReturn.value = null
 }
 
 function selectionsFromForm() {
@@ -144,6 +147,30 @@ async function verifyEvidence() {
   }
 }
 
+async function buildElectionReturn() {
+  if (!session.value || !finalizedArtifact.value) return
+  status.value = 'Building deterministic Election Return...'
+  try {
+    electionReturn.value = await protocol.electionReturn({
+      sessionId: session.value.session_id,
+      electionId: import.meta.env.VITE_ELECTION_ID || 'DEMO-2028',
+      precinctId: import.meta.env.VITE_PRECINCT_ID || 'DEMO-PRECINCT-001',
+      ballotStyleId: import.meta.env.VITE_BALLOT_STYLE_ID || 'DEMO-BS-001',
+      mappingHash: import.meta.env.VITE_MAPPING_HASH || 'demo-mapping-hash',
+    })
+    status.value = 'Election Return ready'
+    record('election.return', {
+      election_return_sha256: electionReturn.value.election_return_sha256,
+      eligible_ballot_count: electionReturn.value.election_return.eligible_ballot_count,
+      tally: electionReturn.value.election_return.tally,
+    })
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : String(cause)
+    status.value = 'Election Return failed'
+    record('error', { message: error.value })
+  }
+}
+
 async function print() {
   if (!session.value) return
   const result = await protocol.print({ sessionId: session.value.session_id })
@@ -186,6 +213,7 @@ onBeforeUnmount(closeBallot)
       <a v-if="finalizedPdfUrl" class="button secondary" :href="finalizedPdfUrl" :download="`${finalizedArtifact.ballot_serial}-finalized.pdf`">Download finalized PDF</a>
       <button type="button" class="secondary" :disabled="!finalizedArtifact" @click="evidenceVisible = !evidenceVisible">{{ evidenceVisible ? 'Hide evidence' : 'View evidence' }}</button>
       <button type="button" class="secondary" :disabled="!finalizedArtifact" @click="verifyEvidence">Verify evidence</button>
+      <button type="button" class="secondary" :disabled="!canBuildElectionReturn" @click="buildElectionReturn">Build Election Return</button>
       <button type="button" class="secondary" :disabled="!session" @click="print">Print</button>
       <button type="button" class="quiet" :disabled="!session" @click="closeBallot">Close</button>
     </section>
@@ -204,6 +232,9 @@ onBeforeUnmount(closeBallot)
         <div><dt>Truth QR read-back</dt><dd>{{ finalizedArtifact.truth_qr_scans?.length ?? 0 }} scan(s)</dd></div>
         <div v-if="verification"><dt>Recursive verification</dt><dd>{{ verification.target_results?.[0]?.classification || 'No matching result' }}; {{ verification.recursive_result_count }} artifact(s) scanned</dd></div>
         <div v-if="verification"><dt>Verification report SHA-256</dt><dd><code>{{ verification.report_sha256 }}</code></dd></div>
+        <div v-if="electionReturn"><dt>Election Return SHA-256</dt><dd><code>{{ electionReturn.election_return_sha256 }}</code></dd></div>
+        <div v-if="electionReturn"><dt>Eligible ballots</dt><dd>{{ electionReturn.election_return.eligible_ballot_count }}</dd></div>
+        <div v-if="electionReturn"><dt>Tally</dt><dd><code>{{ JSON.stringify(electionReturn.election_return.tally) }}</code></dd></div>
       </dl>
     </section>
 

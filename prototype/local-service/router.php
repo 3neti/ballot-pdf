@@ -15,6 +15,7 @@ require dirname(__DIR__, 2).'/vendor/autoload.php';
 use LBHurtado\BallotPdf\Protocol\ReferenceProtocolService;
 use LBHurtado\BallotPdf\Application\FinalizeBallot;
 use LBHurtado\BallotPdf\Application\BuildReports;
+use LBHurtado\BallotPdf\Application\BuildElectionReturn;
 use LBHurtado\BallotPdf\Application\VerifyDirectory;
 use LBHurtado\BallotPdf\Contracts\BallotPayloadCodec;
 use LBHurtado\BallotPdf\Contracts\PdfMaterializer;
@@ -180,6 +181,23 @@ $service = new ReferenceProtocolService(
             'recursive_result_count' => count($results),
             'accepted_count' => count(array_filter($results, static fn ($result): bool => $result->eligible)),
             'report_sha256' => hash('sha256', $report),
+        ];
+    },
+    static function (array $message) use ($signedCodec): array {
+        $context = new ElectionContext(
+            (string) ($message['election_id'] ?? 'DEMO-2028'),
+            (string) ($message['precinct_id'] ?? 'DEMO-PRECINCT-001'),
+            (string) ($message['ballot_style_id'] ?? 'DEMO-BS-001'),
+            (string) ($message['mapping_hash'] ?? 'demo-mapping-hash'),
+        );
+        $results = (new VerifyDirectory($signedCodec(), new ZbarPdfQrScanner))->execute(sys_get_temp_dir().'/ballot-pdf-protocol', $context);
+        $return = (new BuildElectionReturn($signedCodec(), new ZbarPdfQrScanner))->execute($results, $context);
+        return [
+            'status' => 'election_return_ready',
+            'session_id' => $message['session_id'] ?? null,
+            'election_return' => $return['artifact'],
+            'election_return_json' => $return['json'],
+            'election_return_sha256' => $return['sha256'],
         ];
     },
 );

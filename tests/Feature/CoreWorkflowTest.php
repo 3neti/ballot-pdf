@@ -77,6 +77,7 @@ it('validates protocol envelopes and produces deterministic reports', function (
         static fn (array $message): array => ['status' => 'finalized'],
         static fn (array $message): array => ['status' => 'print_requested'],
         static fn (array $message): array => ['status' => 'verified', 'accepted_count' => 1],
+        static fn (array $message): array => ['status' => 'election_return_ready', 'election_return_sha256' => str_repeat('a', 64)],
     );
     $response = $service->handle([
         'protocol' => '3neti.ballot-pdf', 'version' => '1.0', 'message_type' => 'session.open',
@@ -89,6 +90,12 @@ it('validates protocol envelopes and produces deterministic reports', function (
         'request_id' => 'request-2', 'nonce' => 'nonce-2',
     ]);
     expect($verification['status'])->toBe('verified')->and($verification['accepted_count'])->toBe(1);
+
+    $return = $service->handle([
+        'protocol' => '3neti.ballot-pdf', 'version' => '1.0', 'message_type' => 'election.return',
+        'request_id' => 'request-3', 'nonce' => 'nonce-3',
+    ]);
+    expect($return['status'])->toBe('election_return_ready')->and($return['election_return_sha256'])->toHaveLength(64);
 
     $reports = new BuildReports;
     expect($reports->json([]))->toContain('accepted_count')->and($reports->html([]))->toContain('<table>');

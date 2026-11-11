@@ -19,6 +19,11 @@ returns a deterministic report hash. The demo trust key is generated once in
 the system temporary directory and is intentionally not a production key
 roster.
 
+`election.return` rebuilds the accepted tally from recursive verification
+results and returns a canonical, timestamp-free Election Return JSON artifact,
+its SHA-256, and the eligible ballot list. It is a demonstration artifact and
+not a legally prescribed COMELEC form.
+
 Run from the package root:
 
 ```bash
