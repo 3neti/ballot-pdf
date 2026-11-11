@@ -45,3 +45,7 @@ side behavior; the local finalization service remains authoritative.
 The fixture generator uses `pdf-lib` to create a real AcroForm ballot and
 `qpdf` to apply AES-256 PDF encryption. The development control number for
 the generated fixture is `DEMO-000001`.
+
+The synthetic OBT is a two-page role-demo-style facsimile with four contest
+panels, contest-limited AcroForm controls, review/confirmation fields, and
+reserved Truth QR placement. It remains demonstration-only.

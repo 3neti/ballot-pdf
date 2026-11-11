@@ -54,11 +54,12 @@ function clearFinalizedArtifact() {
 
 function selectionsFromForm() {
   const values = viewer.value.getFormFieldValues()
-  return {
-    senator: Object.entries(values)
-      .filter(([name, value]) => name.startsWith('senator.') && (value === 'Yes' || value === true || (Array.isArray(value) && value.includes('Yes'))))
-      .map(([name]) => name.split('.')[1]),
-  }
+  return Object.entries(values).reduce((selections, [name, value]) => {
+    const [contest, candidate] = name.split('.')
+    const selected = value === 'Yes' || value === true || (Array.isArray(value) && value.includes('Yes'))
+    if (contest && candidate && selected) selections[contest] = [...(selections[contest] || []), candidate]
+    return selections
+  }, {})
 }
 
 async function openBallot() {

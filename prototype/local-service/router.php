@@ -126,7 +126,10 @@ $service = new ReferenceProtocolService(
         );
         $stock = new BallotStock(new BallotSerial((string) ($message['ballot_serial'] ?? demoSerial((string) ($message['session_id'] ?? 'SESSION-DEMO')))), $context, 'obt-synthetic', (string) ($message['obt_hash'] ?? 'synthetic-obt-hash'), 'assets-demo', 'assets-demo-hash');
         $session = new BallotSession((string) ($message['session_id'] ?? 'SESSION-DEMO'), $stock, [
-            'senator' => new ContestDefinition('senator', 2, ['C1', 'C2', 'C3']),
+            'senator' => new ContestDefinition('senator', 2, array_map(static fn (int $index): string => 'S'.str_pad((string) $index, 2, '0', STR_PAD_LEFT), range(1, 12))),
+            'mayor' => new ContestDefinition('mayor', 1, ['M01', 'M02', 'M03', 'M04']),
+            'councilor' => new ContestDefinition('councilor', 4, array_map(static fn (int $index): string => 'K'.str_pad((string) $index, 2, '0', STR_PAD_LEFT), range(1, 8))),
+            'party_list' => new ContestDefinition('party_list', 1, ['P01', 'P02', 'P03', 'P04']),
         ], 'demo-authorization');
         foreach ((array) ($message['selections'] ?? []) as $contest => $codes) {
             $session->select((string) $contest, array_values($codes));

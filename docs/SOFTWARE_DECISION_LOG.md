@@ -226,7 +226,7 @@ Complete this section as software is installed. Do not record secrets.
 - Operating system: macOS 15.6 (build 24G84).
 - Runtime: Node 22.21.1, npm 10.9.4, PHP 8.4.22.
 - OBT fixture: `prototype/nutrient-vue-host/public/fixtures/obt-synthetic-encrypted.pdf`.
-- OBT SHA-256: `d9d287b9ba0573e08b23bd9901d008ed8d607510e9de189d5f99db6f02cd7071`.
+- OBT SHA-256: `f0ec23b3d5add75ca47668d635518c6e3ef09bfc76d520b8bcf80a60ffca3589`.
 - OBT protocol label: `synthetic-obt-hash` (fixture label used by the mock protocol; production manifest binding is not implemented here).
 - Control number: `DEMO-000001` (synthetic only).
 - Password behavior: Nutrient opened the encrypted PDF after the control number was supplied.
@@ -245,7 +245,8 @@ Complete this section as software is installed. Do not record secrets.
 - Finalized PDF behavior: the reference materializer sets the review field to `FINALIZED`, flattens the form, embeds the QR, and preserves the paper-ballot/legal-record note. The Nutrient evaluation build adds a visible evaluation watermark, which must be addressed through licensing or a production deployment decision.
 - Automated prototype coverage: the Vitest adapter tests are present, but the current Vitest/Vite module-runner combination fails before test collection with `Unknown method: getBuiltins`; the production Vite build succeeds. This is a tooling compatibility gap, not a ballot-domain failure.
 - Acrobat compatibility: Adobe Acrobat Reader is installed but remains at its first-run license agreement, so opening/saving/printing compatibility has not yet been completed. Acrobat Pro's application bundle was not found under `/Applications`; authoring validation remains pending.
-- Viewer notes: Nutrient emitted only the vendor warning for the package's copy-based asset setup; the viewer loaded the encrypted AcroForm, exposed three checkboxes and a review field, and completed the smoke test. These are prototype follow-ups, not production acceptance results.
+- Viewer notes: Nutrient emitted only the vendor warning for the package's copy-based asset setup; the viewer loaded the encrypted two-page AcroForm, exposed multi-contest checkboxes and the review field, and completed the smoke test. These are prototype follow-ups, not production acceptance results.
+- Facsimile ballot refresh: regenerated the encrypted OBT with the voter-page visual grammar: official-ballot header, election/precinct/style metadata, instruction band, Senator/Mayor/Councilor/Party List contest panels, numbered candidate rows, review/confirmation section, and reserved Truth QR placement. Multi-contest finalization through the local service succeeded with one QR payload.
 
 ## Decision Gate Before Production Licensing
 

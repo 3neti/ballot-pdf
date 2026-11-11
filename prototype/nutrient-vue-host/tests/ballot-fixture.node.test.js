@@ -20,12 +20,13 @@ test('ballot fixture is encrypted and structurally valid', () => {
 test('ballot fixture embeds click-triggered two-selection enforcement', () => {
   const document = qpdfJson()
   const serialized = JSON.stringify(document)
-  assert.equal((serialized.match(/"\/H":"\/N"/g) ?? []).length, 3)
-  assert.ok((serialized.match(/"\/AA"/g) ?? []).length >= 3)
-  assert.match(serialized, /fields\[i\]\.value === 'Yes'/)
-  assert.match(serialized, /fields\[j\]\.readonly = selected >= 2/)
+  assert.ok((serialized.match(/"\/H":"\/N"/g) ?? []).length >= 28)
+  assert.ok((serialized.match(/"\/AA"/g) ?? []).length >= 28)
+  assert.match(serialized, /field\.value === 'Yes'/)
+  assert.match(serialized, /fields\[j\]\.readonly = selected >= definition\.limit/)
   assert.doesNotMatch(serialized, /\.highlight\s*=/)
-  assert.match(serialized, /enforceSenatorLimit\(\);/)
+  assert.match(serialized, /enforceContestLimits\(\);/)
+  assert.match(serialized, /senator\.S01/)
 })
 
 test('two-selection rule rejects a third candidate in the reference model', () => {
