@@ -21,6 +21,12 @@ roster. The roster is loaded through the package's injectable
 `PersistentTrustRoster` boundary and scopes keys by purpose, election, and
 precinct.
 
+The service now uses the split demonstration custody path: a versioned public
+roster is distributed to verification, while the private signing key is kept
+in a separate mode-restricted custody file. Ceremony records and the rotation
+ledger are written beside the roster; no private key is included in the public
+roster.
+
 `election.return` rebuilds the accepted tally from recursive verification
 results and returns a canonical, timestamp-free Election Return JSON artifact,
 its SHA-256, and the eligible ballot list. It is a demonstration artifact and

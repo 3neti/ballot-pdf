@@ -16,6 +16,7 @@ use LBHurtado\BallotPdf\Protocol\ReferenceProtocolService;
 use LBHurtado\BallotPdf\Application\FinalizeBallot;
 use LBHurtado\BallotPdf\Application\BuildReports;
 use LBHurtado\BallotPdf\Application\BuildElectionReturn;
+use LBHurtado\BallotPdf\Application\KeyCeremonyManager;
 use LBHurtado\BallotPdf\Application\VerifyDirectory;
 use LBHurtado\BallotPdf\Contracts\BallotPayloadCodec;
 use LBHurtado\BallotPdf\Contracts\PdfMaterializer;
@@ -26,7 +27,8 @@ use LBHurtado\BallotPdf\Domain\Evidence\EvidenceManifest;
 use LBHurtado\BallotPdf\Domain\Stock\BallotSerial;
 use LBHurtado\BallotPdf\Domain\Stock\BallotStock;
 use LBHurtado\BallotPdf\Infrastructure\Storage\FilesystemWormStore;
-use LBHurtado\BallotPdf\Infrastructure\Crypto\PersistentTrustRoster;
+use LBHurtado\BallotPdf\Infrastructure\Crypto\FileSigningKeyProvider;
+use LBHurtado\BallotPdf\Infrastructure\Crypto\PublicTrustRoster;
 use LBHurtado\BallotPdf\Infrastructure\Verification\ZbarPdfQrScanner;
 use LBHurtado\TruthQr\Contracts\CandidateCodes;
 use LBHurtado\TruthQr\Core\CanonicalJson;
@@ -73,51 +75,23 @@ final class DemoQrPdfMaterializer implements PdfMaterializer
     }
 }
 
-$demoKeyPath = sys_get_temp_dir().'/ballot-pdf-protocol/demo-signing-key.json';
-$signedCodec = static function () use ($demoKeyPath): BallotPayloadCodec {
-    if (is_file($demoKeyPath)) {
-        $existing = json_decode((string) file_get_contents($demoKeyPath), true, 512, JSON_THROW_ON_ERROR);
-        if (! isset($existing['keys']) && isset($existing['secret_key'], $existing['public_key'])) {
-            $existing = [
-                'active_key_id' => 'demo-ballot-key',
-                'keys' => [[
-                    'key_id' => 'demo-ballot-key',
-                    'purpose' => 'election.ballot.v2',
-                    'election_id' => '*',
-                    'precinct_id' => '*',
-                    'status' => 'active',
-                    'secret_key' => $existing['secret_key'],
-                    'public_key' => $existing['public_key'],
-                ]],
-            ];
-            file_put_contents($demoKeyPath, json_encode($existing, JSON_THROW_ON_ERROR), LOCK_EX);
-        }
+$demoCeremonyRoot = sys_get_temp_dir().'/ballot-pdf-protocol/key-ceremony';
+$signedCodec = static function () use ($demoCeremonyRoot): BallotPayloadCodec {
+    $rosterPath = $demoCeremonyRoot.'/rosters/v0001.json';
+    if (! is_file($rosterPath)) {
+        (new KeyCeremonyManager($demoCeremonyRoot))->initialize(
+            'demo-ballot-key', 'election.ballot.v2', '*', '*', ['demo-operator'], '2026-01-01T00:00:00Z',
+        );
     }
-    if (! is_file($demoKeyPath)) {
-        if (! is_dir(dirname($demoKeyPath))) mkdir(dirname($demoKeyPath), 0700, true);
-        $keypair = sodium_crypto_sign_keypair();
-        file_put_contents($demoKeyPath, json_encode([
-            'active_key_id' => 'demo-ballot-key',
-            'keys' => [[
-                'key_id' => 'demo-ballot-key',
-                'purpose' => 'election.ballot.v2',
-                'election_id' => '*',
-                'precinct_id' => '*',
-                'status' => 'active',
-                'secret_key' => base64_encode(sodium_crypto_sign_secretkey($keypair)),
-                'public_key' => base64_encode(sodium_crypto_sign_publickey($keypair)),
-            ]],
-        ], JSON_THROW_ON_ERROR), LOCK_EX);
-        chmod($demoKeyPath, 0600);
-    }
-    $roster = PersistentTrustRoster::fromJsonFile($demoKeyPath);
+    $signingKeys = FileSigningKeyProvider::fromJsonFile($demoCeremonyRoot.'/private/demo-ballot-key.json');
+    $trustedKeys = PublicTrustRoster::fromJsonFile($rosterPath);
     $codes = new class implements CandidateCodes {
         public function codesForPayload(array $payload): array { return $payload['candidate_codes'] ?? []; }
         public function selectionsForCodes(array $codes): array { return ['senator' => $codes]; }
         public function codeTotalsForTally(array $tally): array { return []; }
         public function tallyForCodeTotals(array $codeTotals): array { return []; }
     };
-    $payload = new SignedBallotQrPayload(new BallotQrPayload(new CanonicalJson, $codes), new Ed25519RecordSigner($roster, $roster));
+    $payload = new SignedBallotQrPayload(new BallotQrPayload(new CanonicalJson, $codes), new Ed25519RecordSigner($signingKeys, $trustedKeys));
     $envelope = new SignedBallotPayloadEnvelope;
     return new class($payload, $envelope) implements BallotPayloadCodec {
         public function __construct(private readonly SignedBallotQrPayload $payload, private readonly SignedBallotPayloadEnvelope $envelope) {}

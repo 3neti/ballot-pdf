@@ -9,6 +9,9 @@ use LBHurtado\TruthQr\Crypto\SigningKey;
 use LBHurtado\TruthQr\Election\BallotQrPayload;
 use LBHurtado\TruthQr\Election\SignedBallotQrPayload;
 use LBHurtado\BallotPdf\Infrastructure\Crypto\PersistentTrustRoster;
+use LBHurtado\BallotPdf\Infrastructure\Crypto\FileSigningKeyProvider;
+use LBHurtado\BallotPdf\Infrastructure\Crypto\PublicTrustRoster;
+use LBHurtado\BallotPdf\Application\KeyCeremonyManager;
 
 it('uses the existing aes-election-v2 Ed25519 signed ballot profile', function (): void {
     $keypair = sodium_crypto_sign_keypair();
@@ -82,4 +85,26 @@ it('loads an injectable persistent trust roster and rejects an out-of-scope key'
     expect($key->keyId)->toBe('roster-key-1')
         ->and(strlen((string) $roster->resolve('roster-key-1', 'election.ballot.v2', 'demo-election', 'precinct-1')))->toBe(SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES)
         ->and($roster->resolve('roster-key-1', 'election.ballot.v2', 'other-election', 'precinct-1'))->toBeNull();
+});
+
+it('records key ceremony, custody, roster distribution, and rotation evidence', function (): void {
+    $root = sys_get_temp_dir().'/ballot-pdf-key-ceremony-'.bin2hex(random_bytes(4));
+    $manager = new KeyCeremonyManager($root);
+    $initial = $manager->initialize('key-2028-a', 'election.ballot.v2', 'demo-election', 'precinct-1', ['BEI-1', 'custodian-1'], '2028-01-01T00:00:00Z');
+    $rotation = $manager->rotate('key-2028-b', 'election.ballot.v2', 'demo-election', 'precinct-1', ['BEI-1', 'custodian-2'], '2028-01-02T00:00:00Z');
+
+    $roster = PublicTrustRoster::fromJsonFile($rotation['roster_path']);
+    $signingKey = FileSigningKeyProvider::fromJsonFile($rotation['private_key_path'])->forRecord('election.ballot.v2', 'demo-election', 'precinct-1');
+    $publicRosterJson = file_get_contents($rotation['roster_path']);
+    $ledgerLines = file($root.'/rotation-ledger.jsonl', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    expect($initial['action'])->toBe('initialize')
+        ->and($rotation['action'])->toBe('rotate')
+        ->and($rotation['old_key_id'])->toBe('key-2028-a')
+        ->and($signingKey->keyId)->toBe('key-2028-b')
+        ->and($roster->resolve('key-2028-a', 'election.ballot.v2', 'demo-election', 'precinct-1'))->toBeNull()
+        ->and(strlen((string) $roster->resolve('key-2028-b', 'election.ballot.v2', 'demo-election', 'precinct-1')))->toBe(SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES)
+        ->and($publicRosterJson)->not->toContain('secret_key')
+        ->and($ledgerLines)->toHaveCount(2)
+        ->and($rotation['record_sha256'])->toHaveLength(64);
 });
