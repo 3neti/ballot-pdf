@@ -76,12 +76,19 @@ it('validates protocol envelopes and produces deterministic reports', function (
         static fn (array $message): array => ['status' => 'session_opened', 'session_id' => 'session-1'],
         static fn (array $message): array => ['status' => 'finalized'],
         static fn (array $message): array => ['status' => 'print_requested'],
+        static fn (array $message): array => ['status' => 'verified', 'accepted_count' => 1],
     );
     $response = $service->handle([
         'protocol' => '3neti.ballot-pdf', 'version' => '1.0', 'message_type' => 'session.open',
         'request_id' => 'request-1', 'nonce' => 'nonce-1',
     ]);
     expect($response['status'])->toBe('session_opened');
+
+    $verification = $service->handle([
+        'protocol' => '3neti.ballot-pdf', 'version' => '1.0', 'message_type' => 'evidence.verify',
+        'request_id' => 'request-2', 'nonce' => 'nonce-2',
+    ]);
+    expect($verification['status'])->toBe('verified')->and($verification['accepted_count'])->toBe(1);
 
     $reports = new BuildReports;
     expect($reports->json([]))->toContain('accepted_count')->and($reports->html([]))->toContain('<table>');
@@ -105,4 +112,26 @@ it('recursively verifies manifests and suppresses duplicate serials', function (
     $results = (new VerifyDirectory($codec))->execute($root, $context);
     expect($results)->toHaveCount(2)
         ->and(array_map(static fn ($result): string => $result->classification, $results))->toBe(['accepted', 'duplicate_exact']);
+});
+
+it('rejects a finalized manifest when its PDF hash does not match', function (): void {
+    $codec = new class implements BallotPayloadCodec {
+        public function encode(array $payload): array { return ['demo://'.base64_encode(json_encode($payload, JSON_THROW_ON_ERROR))]; }
+        public function decode(array $scans): array { return json_decode(base64_decode(substr($scans[0], 7)), true, 512, JSON_THROW_ON_ERROR); }
+    };
+    $root = sys_get_temp_dir().'/ballot-pdf-hash-'.bin2hex(random_bytes(4));
+    mkdir($root.'/pdf', 0770, true);
+    $context = new ElectionContext('demo-election', 'precinct-1', 'style-1', 'mapping-1');
+    $payload = [...$context->toArray(), 'paper_ballot_serial' => 'SERIAL-HASH-1', 'candidate_codes' => ['C1']];
+    file_put_contents($root.'/pdf/SERIAL-HASH-1.pdf', '%PDF-actual');
+    file_put_contents($root.'/manifest.json', json_encode([
+        'ballot_serial' => 'SERIAL-HASH-1',
+        'pdf_sha256' => hash('sha256', '%PDF-other'),
+        'truth_qr_scans' => ['demo://'.base64_encode(json_encode($payload, JSON_THROW_ON_ERROR))],
+    ], JSON_THROW_ON_ERROR));
+
+    $results = (new VerifyDirectory($codec))->execute($root, $context);
+    expect($results[0]->classification)->toBe('invalid_context')
+        ->and($results[0]->issues)->toContain('PDF hash mismatch')
+        ->and($results[0]->eligible)->toBeFalse();
 });

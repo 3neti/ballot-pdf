@@ -14,6 +14,8 @@ require dirname(__DIR__, 2).'/vendor/autoload.php';
 
 use LBHurtado\BallotPdf\Protocol\ReferenceProtocolService;
 use LBHurtado\BallotPdf\Application\FinalizeBallot;
+use LBHurtado\BallotPdf\Application\BuildReports;
+use LBHurtado\BallotPdf\Application\VerifyDirectory;
 use LBHurtado\BallotPdf\Contracts\BallotPayloadCodec;
 use LBHurtado\BallotPdf\Contracts\PdfMaterializer;
 use LBHurtado\BallotPdf\Domain\Ballot\BallotSession;
@@ -23,6 +25,7 @@ use LBHurtado\BallotPdf\Domain\Evidence\EvidenceManifest;
 use LBHurtado\BallotPdf\Domain\Stock\BallotSerial;
 use LBHurtado\BallotPdf\Domain\Stock\BallotStock;
 use LBHurtado\BallotPdf\Infrastructure\Storage\FilesystemWormStore;
+use LBHurtado\BallotPdf\Infrastructure\Verification\ZbarPdfQrScanner;
 use LBHurtado\TruthQr\Contracts\CandidateCodes;
 use LBHurtado\TruthQr\Contracts\SigningKeyProvider;
 use LBHurtado\TruthQr\Contracts\TrustedPublicKeyResolver;
@@ -71,10 +74,20 @@ final class DemoQrPdfMaterializer implements PdfMaterializer
     }
 }
 
-$signedCodec = static function (): BallotPayloadCodec {
-    $keypair = sodium_crypto_sign_keypair();
-    $signingKey = new SigningKey('demo-ballot-key', sodium_crypto_sign_secretkey($keypair));
-    $publicKey = sodium_crypto_sign_publickey($keypair);
+$demoKeyPath = sys_get_temp_dir().'/ballot-pdf-protocol/demo-signing-key.json';
+$signedCodec = static function () use ($demoKeyPath): BallotPayloadCodec {
+    if (! is_file($demoKeyPath)) {
+        if (! is_dir(dirname($demoKeyPath))) mkdir(dirname($demoKeyPath), 0700, true);
+        $keypair = sodium_crypto_sign_keypair();
+        file_put_contents($demoKeyPath, json_encode([
+            'secret_key' => base64_encode(sodium_crypto_sign_secretkey($keypair)),
+            'public_key' => base64_encode(sodium_crypto_sign_publickey($keypair)),
+        ], JSON_THROW_ON_ERROR), LOCK_EX);
+        chmod($demoKeyPath, 0600);
+    }
+    $keyMaterial = json_decode((string) file_get_contents($demoKeyPath), true, 512, JSON_THROW_ON_ERROR);
+    $signingKey = new SigningKey('demo-ballot-key', base64_decode((string) $keyMaterial['secret_key'], true));
+    $publicKey = base64_decode((string) $keyMaterial['public_key'], true);
     $signingKeys = new class($signingKey) implements SigningKeyProvider {
         public function __construct(private readonly SigningKey $key) {}
         public function forRecord(string $purpose, string $electionId, string $precinctId): SigningKey { return $this->key; }
@@ -148,6 +161,27 @@ $service = new ReferenceProtocolService(
         'status' => 'awaiting-local-printer-adapter',
         'session_id' => $message['session_id'] ?? null,
     ],
+    static function (array $message) use ($signedCodec): array {
+        $context = new ElectionContext(
+            (string) ($message['election_id'] ?? 'DEMO-2028'),
+            (string) ($message['precinct_id'] ?? 'DEMO-PRECINCT-001'),
+            (string) ($message['ballot_style_id'] ?? 'DEMO-BS-001'),
+            (string) ($message['mapping_hash'] ?? 'demo-mapping-hash'),
+        );
+        $results = (new VerifyDirectory($signedCodec(), new ZbarPdfQrScanner))->execute(sys_get_temp_dir().'/ballot-pdf-protocol', $context);
+        $report = (new BuildReports)->json($results);
+        $targetSerial = (string) ($message['ballot_serial'] ?? '');
+        $target = array_values(array_filter($results, static fn ($result): bool => $targetSerial === '' || $result->serial === $targetSerial));
+        return [
+            'status' => 'verified',
+            'session_id' => $message['session_id'] ?? null,
+            'ballot_serial' => $targetSerial,
+            'target_results' => array_map(static fn ($result): array => $result->toArray(), $target),
+            'recursive_result_count' => count($results),
+            'accepted_count' => count(array_filter($results, static fn ($result): bool => $result->eligible)),
+            'report_sha256' => hash('sha256', $report),
+        ];
+    },
 );
 
 try {

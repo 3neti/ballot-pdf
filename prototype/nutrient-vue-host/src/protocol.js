@@ -47,4 +47,15 @@ export class BallotPdfProtocolClient extends AdapterProtocolClient {
       status: 'awaiting-local-printer-adapter',
     })
   }
+
+  verify({ sessionId, ballotSerial, electionId, precinctId, ballotStyleId, mappingHash }) {
+    return this.verifyEvidence({
+      session_id: sessionId,
+      ballot_serial: ballotSerial,
+      election_id: electionId,
+      precinct_id: precinctId,
+      ballot_style_id: ballotStyleId,
+      mapping_hash: mappingHash,
+    })
+  }
 }

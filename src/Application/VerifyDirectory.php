@@ -28,6 +28,10 @@ final readonly class VerifyDirectory
         $bySerial = [];
         $payloadHashes = [];
         $manifestSerials = [];
+        $pdfBySerial = [];
+        foreach ($this->pdfFiles($root) as $pdfPath) {
+            $pdfBySerial[pathinfo($pdfPath, PATHINFO_FILENAME)][] = $pdfPath;
+        }
 
         foreach ($files as $file) {
             $data = json_decode((string) file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
@@ -52,6 +56,14 @@ final readonly class VerifyDirectory
                 }
                 if (($payload['paper_ballot_serial'] ?? null) !== $serial) {
                     $issues[] = 'serial mismatch';
+                }
+                if (isset($data['pdf_sha256'])) {
+                    $pdfPaths = $pdfBySerial[$serial] ?? [];
+                    if ($pdfPaths === []) {
+                        $issues[] = 'PDF evidence not found';
+                    } elseif (! in_array((string) $data['pdf_sha256'], array_map(static fn (string $path): string => hash_file('sha256', $path), $pdfPaths), true)) {
+                        $issues[] = 'PDF hash mismatch';
+                    }
                 }
                 $classification = $issues === [] ? 'accepted' : 'invalid_context';
                 $results[] = new VerificationResult($file, $serial, $classification, $classification === 'accepted', $issues);

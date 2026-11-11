@@ -13,6 +13,12 @@ printing remains an application adapter.
 offers a download of the returned PDF, and exposes the hashes and read-back
 count through its evidence panel.
 
+`evidence.verify` recursively scans the logical-WORM evidence root, verifies
+signed QR payloads and manifest-to-PDF hashes, classifies duplicates, and
+returns a deterministic report hash. The demo trust key is generated once in
+the system temporary directory and is intentionally not a production key
+roster.
+
 Run from the package root:
 
 ```bash

@@ -13,6 +13,7 @@ const finalized = ref(false)
 const finalizedArtifact = ref(null)
 const finalizedPdfUrl = ref('')
 const evidenceVisible = ref(false)
+const verification = ref(null)
 const viewer = ref(null)
 const protocol = new BallotPdfProtocolClient()
 const protocolMode = import.meta.env.VITE_PROTOCOL_BASE_URL ? 'local service' : 'mock'
@@ -45,6 +46,7 @@ function clearFinalizedArtifact() {
   finalizedPdfUrl.value = ''
   finalizedArtifact.value = null
   evidenceVisible.value = false
+  verification.value = null
 }
 
 function selectionsFromForm() {
@@ -121,6 +123,27 @@ async function finalize() {
   }
 }
 
+async function verifyEvidence() {
+  if (!session.value || !finalizedArtifact.value) return
+  status.value = 'Verifying finalized PDF and evidence recursively...'
+  try {
+    verification.value = await protocol.verify({
+      sessionId: session.value.session_id,
+      ballotSerial: finalizedArtifact.value.ballot_serial,
+      electionId: import.meta.env.VITE_ELECTION_ID || 'DEMO-2028',
+      precinctId: import.meta.env.VITE_PRECINCT_ID || 'DEMO-PRECINCT-001',
+      ballotStyleId: import.meta.env.VITE_BALLOT_STYLE_ID || 'DEMO-BS-001',
+      mappingHash: import.meta.env.VITE_MAPPING_HASH || 'demo-mapping-hash',
+    })
+    status.value = 'Evidence verification complete'
+    record('evidence.verify', verification.value)
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : String(cause)
+    status.value = 'Evidence verification failed'
+    record('error', { message: error.value })
+  }
+}
+
 async function print() {
   if (!session.value) return
   const result = await protocol.print({ sessionId: session.value.session_id })
@@ -162,6 +185,7 @@ onBeforeUnmount(closeBallot)
       <button type="button" class="secondary" :disabled="!canFinalize" @click="finalize">Finalize</button>
       <a v-if="finalizedPdfUrl" class="button secondary" :href="finalizedPdfUrl" :download="`${finalizedArtifact.ballot_serial}-finalized.pdf`">Download finalized PDF</a>
       <button type="button" class="secondary" :disabled="!finalizedArtifact" @click="evidenceVisible = !evidenceVisible">{{ evidenceVisible ? 'Hide evidence' : 'View evidence' }}</button>
+      <button type="button" class="secondary" :disabled="!finalizedArtifact" @click="verifyEvidence">Verify evidence</button>
       <button type="button" class="secondary" :disabled="!session" @click="print">Print</button>
       <button type="button" class="quiet" :disabled="!session" @click="closeBallot">Close</button>
     </section>
@@ -178,6 +202,8 @@ onBeforeUnmount(closeBallot)
         <div><dt>PDF SHA-256</dt><dd><code>{{ finalizedArtifact.pdf_sha256 }}</code></dd></div>
         <div><dt>Evidence manifest SHA-256</dt><dd><code>{{ finalizedArtifact.evidence_manifest_sha256 }}</code></dd></div>
         <div><dt>Truth QR read-back</dt><dd>{{ finalizedArtifact.truth_qr_scans?.length ?? 0 }} scan(s)</dd></div>
+        <div v-if="verification"><dt>Recursive verification</dt><dd>{{ verification.target_results?.[0]?.classification || 'No matching result' }}; {{ verification.recursive_result_count }} artifact(s) scanned</dd></div>
+        <div v-if="verification"><dt>Verification report SHA-256</dt><dd><code>{{ verification.report_sha256 }}</code></dd></div>
       </dl>
     </section>
 
