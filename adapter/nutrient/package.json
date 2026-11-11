@@ -1,0 +1,9 @@
+{
+  "name": "@3neti/ballot-pdf-nutrient",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Nutrient Web SDK adapter boundary for ballot-pdf",
+  "exports": { ".": "./src/index.js" },
+  "peerDependencies": { "@nutrient-sdk/viewer": ">=1.25.0" }
+}

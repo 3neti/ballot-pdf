@@ -1,0 +1,43 @@
+{
+    "name": "3neti/ballot-pdf",
+    "description": "Framework-neutral ballot PDF artifacts, signing, verification, and evidence workflows",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.4",
+        "ext-sodium": "*",
+        "3neti/truth-qr": "^0.3"
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LBHurtado\\BallotPdf\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LBHurtado\\BallotPdf\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../truth-qr",
+            "options": {
+                "symlink": true,
+                "versions": { "3neti/truth-qr": "0.3.0" }
+            }
+        }
+    ],
+    "scripts": {
+        "test": "pest"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

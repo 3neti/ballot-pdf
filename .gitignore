@@ -1,0 +1,20 @@
+# PHP dependencies and local tooling
+/vendor/
+
+# Prototype dependencies and build output
+/prototype/nutrient-vue-host/node_modules/
+/prototype/nutrient-vue-host/dist/
+/prototype/nutrient-vue-host/public/nutrient-web/
+
+# Local credentials and environment overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local/runtime output
+*.log
+.DS_Store
+.idea/
+.vscode/
