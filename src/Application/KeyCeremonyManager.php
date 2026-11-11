@@ -8,24 +8,25 @@ final readonly class KeyCeremonyManager
 {
     public function __construct(private string $root) {}
 
-    /** @param list<string> $participants @return array<string, mixed> */
-    public function initialize(string $keyId, string $purpose, string $electionId, string $precinctId, array $participants, string $recordedAt): array
+    /** @param list<string> $participants @param list<array{approver_id: string, role: string, decision: string, approved_at: string}> $approvals @return array<string, mixed> */
+    public function initialize(string $keyId, string $purpose, string $electionId, string $precinctId, array $participants, string $recordedAt, array $approvals): array
     {
-        return $this->record('initialize', null, $keyId, $purpose, $electionId, $precinctId, $participants, $recordedAt, 1);
+        return $this->record('initialize', null, $keyId, $purpose, $electionId, $precinctId, $participants, $recordedAt, 1, $approvals);
     }
 
-    /** @param list<string> $participants @return array<string, mixed> */
-    public function rotate(string $keyId, string $purpose, string $electionId, string $precinctId, array $participants, string $recordedAt): array
+    /** @param list<string> $participants @param list<array{approver_id: string, role: string, decision: string, approved_at: string}> $approvals @return array<string, mixed> */
+    public function rotate(string $keyId, string $purpose, string $electionId, string $precinctId, array $participants, string $recordedAt, array $approvals): array
     {
         $current = $this->latestRoster();
         $oldKeyId = (string) ($current['active_key_id'] ?? '');
         $version = ((int) ($current['roster_version'] ?? 0)) + 1;
-        return $this->record('rotate', $oldKeyId, $keyId, $purpose, $electionId, $precinctId, $participants, $recordedAt, $version);
+        return $this->record('rotate', $oldKeyId, $keyId, $purpose, $electionId, $precinctId, $participants, $recordedAt, $version, $approvals);
     }
 
     /** @return array<string, mixed> */
-    private function record(string $action, ?string $oldKeyId, string $keyId, string $purpose, string $electionId, string $precinctId, array $participants, string $recordedAt, int $version): array
+    private function record(string $action, ?string $oldKeyId, string $keyId, string $purpose, string $electionId, string $precinctId, array $participants, string $recordedAt, int $version, array $approvals): array
     {
+        $approvalHash = (new CeremonyApprovalGate)->requireQuorum($approvals);
         $this->ensureDirectories();
         $keypair = sodium_crypto_sign_keypair();
         $publicKey = sodium_crypto_sign_publickey($keypair);
@@ -58,6 +59,7 @@ final readonly class KeyCeremonyManager
             'election_id' => $electionId,
             'precinct_id' => $precinctId,
             'participants' => array_values($participants),
+            'approval_sha256' => $approvalHash,
             'recorded_at' => $recordedAt,
             'public_roster_sha256' => hash('sha256', $rosterJson),
             'private_key_sha256' => hash('sha256', $secretKey),

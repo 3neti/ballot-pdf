@@ -12,6 +12,11 @@ use LBHurtado\BallotPdf\Infrastructure\Crypto\PersistentTrustRoster;
 use LBHurtado\BallotPdf\Infrastructure\Crypto\FileSigningKeyProvider;
 use LBHurtado\BallotPdf\Infrastructure\Crypto\PublicTrustRoster;
 use LBHurtado\BallotPdf\Application\KeyCeremonyManager;
+use LBHurtado\BallotPdf\Application\CeremonyApprovalGate;
+use LBHurtado\BallotPdf\Application\RosterDistribution;
+use LBHurtado\BallotPdf\Infrastructure\Crypto\EncryptedKeyEscrow;
+use LBHurtado\BallotPdf\Infrastructure\Crypto\KeychainSigningKeyProvider;
+use LBHurtado\BallotPdf\Contracts\SecretKeyStore;
 
 it('uses the existing aes-election-v2 Ed25519 signed ballot profile', function (): void {
     $keypair = sodium_crypto_sign_keypair();
@@ -90,8 +95,12 @@ it('loads an injectable persistent trust roster and rejects an out-of-scope key'
 it('records key ceremony, custody, roster distribution, and rotation evidence', function (): void {
     $root = sys_get_temp_dir().'/ballot-pdf-key-ceremony-'.bin2hex(random_bytes(4));
     $manager = new KeyCeremonyManager($root);
-    $initial = $manager->initialize('key-2028-a', 'election.ballot.v2', 'demo-election', 'precinct-1', ['BEI-1', 'custodian-1'], '2028-01-01T00:00:00Z');
-    $rotation = $manager->rotate('key-2028-b', 'election.ballot.v2', 'demo-election', 'precinct-1', ['BEI-1', 'custodian-2'], '2028-01-02T00:00:00Z');
+    $approvals = [
+        ['approver_id' => 'approver-1', 'role' => 'custodian', 'decision' => 'approved', 'approved_at' => '2028-01-01T00:00:00Z'],
+        ['approver_id' => 'approver-2', 'role' => 'auditor', 'decision' => 'approved', 'approved_at' => '2028-01-01T00:00:00Z'],
+    ];
+    $initial = $manager->initialize('key-2028-a', 'election.ballot.v2', 'demo-election', 'precinct-1', ['BEI-1', 'custodian-1'], '2028-01-01T00:00:00Z', $approvals);
+    $rotation = $manager->rotate('key-2028-b', 'election.ballot.v2', 'demo-election', 'precinct-1', ['BEI-1', 'custodian-2'], '2028-01-02T00:00:00Z', $approvals);
 
     $roster = PublicTrustRoster::fromJsonFile($rotation['roster_path']);
     $signingKey = FileSigningKeyProvider::fromJsonFile($rotation['private_key_path'])->forRecord('election.ballot.v2', 'demo-election', 'precinct-1');
@@ -107,4 +116,32 @@ it('records key ceremony, custody, roster distribution, and rotation evidence', 
         ->and($publicRosterJson)->not->toContain('secret_key')
         ->and($ledgerLines)->toHaveCount(2)
         ->and($rotation['record_sha256'])->toHaveLength(64);
+});
+
+it('requires distinct human approvals and verifies distribution and escrow records', function (): void {
+    $approvals = [
+        ['approver_id' => 'same-person', 'role' => 'custodian', 'decision' => 'approved', 'approved_at' => '2028-01-01T00:00:00Z'],
+        ['approver_id' => 'same-person', 'role' => 'auditor', 'decision' => 'approved', 'approved_at' => '2028-01-01T00:00:00Z'],
+    ];
+    expect(fn () => (new CeremonyApprovalGate)->requireQuorum($approvals))->toThrow(RuntimeException::class);
+
+    $distribution = (new RosterDistribution)->create('v0002', str_repeat('a', 64), ['CCS-1', 'VERIFIER-1'], 'signed-removable-media', '2028-01-03T00:00:00Z', str_repeat('b', 64));
+    expect((new RosterDistribution)->verify($distribution, str_repeat('a', 64)))->toBeTrue();
+
+    $escrow = new EncryptedKeyEscrow;
+    $wrappingKey = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
+    $secretKey = random_bytes(SODIUM_CRYPTO_SIGN_SECRETKEYBYTES);
+    $record = $escrow->seal('key-2028-b', $secretKey, $wrappingKey, '2028-01-03T00:00:00Z');
+    expect($escrow->recover($record, $wrappingKey))->toBe($secretKey);
+    $record['ciphertext'] = base64_encode(random_bytes(32));
+    expect(fn () => $escrow->recover($record, $wrappingKey))->toThrow(RuntimeException::class);
+
+    $keypair = sodium_crypto_sign_keypair();
+    $keychain = new class(sodium_crypto_sign_secretkey($keypair)) implements SecretKeyStore {
+        public function __construct(private readonly string $secret) {}
+        public function get(string $service, string $account): string { return base64_encode($this->secret); }
+    };
+    $provider = new KeychainSigningKeyProvider($keychain, 'aes-demo', 'ballot-key', 'keychain-key', 'election.ballot.v2', 'demo-election', 'precinct-1');
+    expect($provider->forRecord('election.ballot.v2', 'demo-election', 'precinct-1')->keyId)->toBe('keychain-key')
+        ->and(fn () => $provider->forRecord('election.ballot.v2', 'other-election', 'precinct-1'))->toThrow(RuntimeException::class);
 });

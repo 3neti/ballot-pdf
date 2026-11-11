@@ -24,3 +24,12 @@ This is an engineering backlog item, not a claim of legal compliance.
 - [x] Run recursive verification against the latest finalized artifact.
 - [x] Add a deterministic Election Return/tally artifact to the scenario runner.
 - [x] Replace ephemeral demo signing keys with an injectable persistent trust roster.
+
+## Deployment Hardening Status
+
+- [x] OS keychain-compatible signing-key provider.
+- [x] HSM-compatible signing boundary through injected key custody/signing ports.
+- [x] Human-controlled two-person ceremony approval gate.
+- [x] Hash-checked public-roster distribution records.
+- [x] Encrypted key escrow and recovery fixture.
+- [ ] Production HSM/OS keychain provisioning, quorum identity verification, and operational recovery drill.

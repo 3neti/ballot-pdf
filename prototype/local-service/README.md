@@ -27,6 +27,11 @@ in a separate mode-restricted custody file. Ceremony records and the rotation
 ledger are written beside the roster; no private key is included in the public
 roster.
 
+The package also provides a macOS Keychain secret-store adapter, a two-person
+approval gate, hash-checked roster distribution records, and encrypted escrow
+records. These components are integration boundaries and testable references;
+production HSM provisioning and recovery authority are not simulated.
+
 `election.return` rebuilds the accepted tally from recursive verification
 results and returns a canonical, timestamp-free Election Return JSON artifact,
 its SHA-256, and the eligible ballot list. It is a demonstration artifact and

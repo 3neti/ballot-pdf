@@ -80,7 +80,10 @@ $signedCodec = static function () use ($demoCeremonyRoot): BallotPayloadCodec {
     $rosterPath = $demoCeremonyRoot.'/rosters/v0001.json';
     if (! is_file($rosterPath)) {
         (new KeyCeremonyManager($demoCeremonyRoot))->initialize(
-            'demo-ballot-key', 'election.ballot.v2', '*', '*', ['demo-operator'], '2026-01-01T00:00:00Z',
+            'demo-ballot-key', 'election.ballot.v2', '*', '*', ['demo-operator'], '2026-01-01T00:00:00Z', [
+                ['approver_id' => 'demo-approver-1', 'role' => 'custodian', 'decision' => 'approved', 'approved_at' => '2026-01-01T00:00:00Z'],
+                ['approver_id' => 'demo-approver-2', 'role' => 'auditor', 'decision' => 'approved', 'approved_at' => '2026-01-01T00:00:00Z'],
+            ],
         );
     }
     $signingKeys = FileSigningKeyProvider::fromJsonFile($demoCeremonyRoot.'/private/demo-ballot-key.json');
