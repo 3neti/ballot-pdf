@@ -17,7 +17,9 @@ count through its evidence panel.
 signed QR payloads and manifest-to-PDF hashes, classifies duplicates, and
 returns a deterministic report hash. The demo trust key is generated once in
 the system temporary directory and is intentionally not a production key
-roster.
+roster. The roster is loaded through the package's injectable
+`PersistentTrustRoster` boundary and scopes keys by purpose, election, and
+precinct.
 
 `election.return` rebuilds the accepted tally from recursive verification
 results and returns a canonical, timestamp-free Election Return JSON artifact,

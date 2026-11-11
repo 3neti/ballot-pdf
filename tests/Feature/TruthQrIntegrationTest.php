@@ -8,6 +8,7 @@ use LBHurtado\TruthQr\Crypto\Ed25519RecordSigner;
 use LBHurtado\TruthQr\Crypto\SigningKey;
 use LBHurtado\TruthQr\Election\BallotQrPayload;
 use LBHurtado\TruthQr\Election\SignedBallotQrPayload;
+use LBHurtado\BallotPdf\Infrastructure\Crypto\PersistentTrustRoster;
 
 it('uses the existing aes-election-v2 Ed25519 signed ballot profile', function (): void {
     $keypair = sodium_crypto_sign_keypair();
@@ -57,4 +58,28 @@ it('uses the existing aes-election-v2 Ed25519 signed ballot profile', function (
     expect($decoded['truth_signature_valid'])->toBeTrue()
         ->and($decoded['paper_ballot_serial'])->toBe('SERIAL-1')
         ->and($decoded['candidate_codes'])->toBe(['C1', 'C2']);
+});
+
+it('loads an injectable persistent trust roster and rejects an out-of-scope key', function (): void {
+    $keypair = sodium_crypto_sign_keypair();
+    $path = sys_get_temp_dir().'/ballot-pdf-roster-'.bin2hex(random_bytes(4)).'.json';
+    file_put_contents($path, json_encode([
+        'active_key_id' => 'roster-key-1',
+        'keys' => [[
+            'key_id' => 'roster-key-1',
+            'purpose' => 'election.ballot.v2',
+            'election_id' => 'demo-election',
+            'precinct_id' => 'precinct-1',
+            'status' => 'active',
+            'secret_key' => base64_encode(sodium_crypto_sign_secretkey($keypair)),
+            'public_key' => base64_encode(sodium_crypto_sign_publickey($keypair)),
+        ]],
+    ], JSON_THROW_ON_ERROR));
+
+    $roster = PersistentTrustRoster::fromJsonFile($path);
+    $key = $roster->forRecord('election.ballot.v2', 'demo-election', 'precinct-1');
+
+    expect($key->keyId)->toBe('roster-key-1')
+        ->and(strlen((string) $roster->resolve('roster-key-1', 'election.ballot.v2', 'demo-election', 'precinct-1')))->toBe(SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES)
+        ->and($roster->resolve('roster-key-1', 'election.ballot.v2', 'other-election', 'precinct-1'))->toBeNull();
 });

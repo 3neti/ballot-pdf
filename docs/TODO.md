@@ -23,4 +23,4 @@ This is an engineering backlog item, not a claim of legal compliance.
 - [x] Add Download Finalized PDF and View Evidence actions.
 - [x] Run recursive verification against the latest finalized artifact.
 - [x] Add a deterministic Election Return/tally artifact to the scenario runner.
-- [ ] Replace ephemeral demo signing keys with an injectable persistent trust roster.
+- [x] Replace ephemeral demo signing keys with an injectable persistent trust roster.
