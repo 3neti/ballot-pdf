@@ -20,6 +20,13 @@ Signed OBT PDF
 
 Pre-generating one PDF for every estimated ballot is not treated as a mandatory TOR requirement unless COMELEC clarifies it separately.
 
+The bid should separately and explicitly propose the role of the finalized
+ballot PDF as the canonical electronic DRE record/tally input and the role of
+the human-readable A4/Truth QR print as voter-verification and audit evidence.
+Do not imply that either role is accepted merely because the package can
+generate a PDF or QR. Use the contract/acceptance guidance in the
+[legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md).
+
 ## 2. Functional Specification Changes
 
 ### 2.1 Replace the generic stock model with two explicit artifact types
@@ -373,3 +380,26 @@ Before selecting an SDK, approve:
 - browser/table interaction as a controlled WAES runtime;
 - Acrobat, Preview, PDF.js, and external viewers as audit/rendering clients; and
 - the volume test plan for the 83,510,241-ballot requirement.
+
+## 9. Bid response and contract acceptance
+
+The technical proposal and contract annexes should state, test, and make
+traceable the following profile commitments:
+
+| Bid commitment | Required proposal detail and acceptance evidence |
+| --- | --- |
+| Canonical electronic DRE record | Finalized authenticated ballot PDF is identified as the proposed voting record and precinct tally input; define cast boundary, PDF/canonical-data/QR binding, context, serial, retention, and eligible-set formation. |
+| A4 voter-verification paper | Human-readable selected candidates plus a Truth QR; describe voter inspection, privacy, paper handling, sealing, retention, and audit access. Request COMELEC approval of the artifact's role and final format. |
+| QR-assisted audit | Define scanner operation, human review/confirmation, independent tally, variance handling, and how the process relates to the applicable RMA instructions. Identify any required supplemental rule. |
+| Discrepancies and failures | Specify actions for PDF/paper/QR mismatch, print failure, missing or duplicate serial, unreadable QR, and voter objection; preserve evidence and identify authorized disposition. |
+| End-to-end acceptance | Use objective witnessed tests for selection-to-record fidelity, voter verification, PDF/QR/paper consistency, deterministic tally, audit, privacy, custody, offline recovery, and independent verification. |
+| Legal and operational gates | Identify COMELEC determinations, AES certification, security testing, procurement clarifications, and final approvals required before official use; do not treat bid award as a substitute for any separately required gate. |
+
+Winning the procurement can establish the accepted contract scope only for
+requirements that were evaluated and incorporated into the signed contract
+(including incorporated technical annexes), subject to the bidding documents'
+order of precedence. It does not waive statutory safeguards or automatically
+approve procedures outside the contracted scope. If the issued TOR does not
+clearly support a proposed detail, request a written clarification or bid
+bulletin and reflect the answer in the bid rather than asserting compliance by
+implication. See the [legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md).

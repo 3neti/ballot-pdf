@@ -1,17 +1,17 @@
 # OpScan with DRE
-## Technical White Paper: PDF-Authoritative Ballots, Durable Acceptance, and Truth QR
+## Technical White Paper: Canonical Electronic DRE Records, Durable Acceptance, and Truth QR
 
 **Audience:** COMELEC; Senate and congressional policymakers; election professionals; election observers; political parties and candidates; and the public.
 
 **Status:** R&D technical white paper; specifies the intended profile and identifies current prototype evidence separately.
 
-**Proposed authority model:** The finalized authenticated ballot PDF is authoritative within the OpScan with DRE design. Deployment under this model remains subject to applicable legal, procurement, and governance approval.
+**Proposed system model:** The finalized authenticated ballot PDF is the canonical electronic DRE voting record and proposed tally input. This engineering designation does not claim statutory “official ballot” status or waive paper/VVPAT requirements. Deployment remains subject to applicable legal, procurement, and governance approval; see the [legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md).
 
 **Evidence baseline:** Package documentation, implementation, and PHP tests reviewed on 2026-11-12. This paper is not a certification, legal opinion, or production-readiness declaration.
 
 ## 1. Executive specification
 
-OpScan with DRE is an authenticated, PDF-authoritative ballot-record system. The finalized authenticated ballot PDF becomes cast upon durable acceptance together with its evidence manifest. Paper output is optional supplementary evidence. OMR remains a separate paper-first profile.
+OpScan with DRE is an authenticated electronic-record system. The finalized authenticated ballot PDF becomes cast in the proposed system upon durable acceptance together with its evidence manifest and is the proposed tally input. Any paper output and voter-verification procedure must meet the COMELEC-approved profile; optional output in a prototype must not be described as satisfying VVPAT requirements. OMR remains a separate marked-paper workflow.
 
 The system targets explicit trust assumptions, signed ballot records, deterministic verification, append-only evidence, offline operation after commissioning, and independent tally reproduction. It does not claim end-to-end verifiability against fully compromised capture, signing, or tallying components.
 
@@ -19,7 +19,7 @@ The system targets explicit trust assumptions, signed ballot records, determinis
 |---|---|
 | Voter-facing medium | Approved interactive ballot PDF |
 | Selection input | DRE fields mapped to candidate codes |
-| Authoritative ballot artifact | Finalized authenticated ballot PDF |
+| Canonical electronic DRE record in this system | Finalized authenticated ballot PDF; proposed tally input, subject to COMELEC approval |
 | Machine-readable encoding | Signed canonical selections represented by Truth QR |
 | Complete-artifact authentication | PDF-native signature plus signed detached manifest containing complete-PDF SHA-256 |
 | Cast-event authority | Commissioned local finalization service and acceptance ledger |
@@ -62,7 +62,7 @@ This paper covers ballot preparation, voter interaction, canonical selections, a
 | Election Close Certificate | Authenticated commitment to the closed accepted cast set, rule versions, and reconciliation evidence. |
 | BEI | Precinct election-board actors referenced in package documents; exact official roles and signature thresholds require approval. |
 | CCS | Receiving/consolidation system that independently verifies transferred returns and evidence. |
-| VVPAT | Voter-verifiable paper audit trail; optional printed output in this profile is supplementary and must not be assumed to constitute a complete, voter-verified paper audit trail. |
+| VVPAT | Voter-verified paper audit trail required by RA 9369 §6(e); whether the proposed printed representation satisfies the applicable requirement needs COMELEC determination. Optional prototype printing alone is not enough. |
 
 “Must” describes a profile requirement, not a claim that the current prototype implements it. Section 15 identifies demonstrated behavior; sections 16–18 distinguish production requirements, assumptions, and pending decisions.
 
@@ -72,21 +72,21 @@ The principal architecture sources are [domain boundaries](ARCHITECTURE_DOMAIN_B
 
 Evidence status is informed by the [scenario-runner description](SCENARIO_RUNNER.md), [Manila scenario](MANILA_HAPPY_PATH_SCENARIO.md), [software decision log](SOFTWARE_DECISION_LOG.md), and [engineering backlog](TODO.md). Procurement context is drawn from the [TOR v34 delta and SDK criteria](TOR_V34_COMPLIANCE_DELTA_AND_SDK_CRITERIA.md); this paper does not independently certify the underlying TOR interpretation.
 
-The external working references are `~/Downloads/Ballot Journey.pdf` and `~/Downloads/pdf-ballot-document-update-handoff.txt`. The journey PDF supplies voter-stage questions and A4/thermal inspection examples. Its printing-station sequence is not adopted as mandatory: the updated profile permits casting without paper. Reuse of a control number at printing remains subject to privacy controls.
+The external working references are `~/Downloads/Ballot Journey.pdf` and `~/Downloads/pdf-ballot-document-update-handoff.txt`. The journey PDF supplies voter-stage questions and A4/thermal inspection examples. Its printing-station sequence is not adopted as a system requirement. The proposed DRE profile separates durable electronic acceptance from paper production, while the legally required voter-verification and paper-audit procedure remains for COMELEC to determine. Reuse of a control number at printing remains subject to privacy controls.
 
-Some source passages retain earlier paper-deposit, optional-PDF-signing, or tally-before-certificate language. For this paper, the explicit PDF-authoritative decision governs: dual authentication is required, paper is optional, and the closed cast set precedes the final reproducible tally. Remaining source inconsistencies are not evidence of legal approval.
+Some source passages retain earlier paper-deposit, optional-PDF-signing, or tally-before-certificate language. For the prototype architecture, durable acceptance and the closed cast set govern electronic eligibility and reproducible tally input. This engineering rule does not determine the statutory status of the PDF or printed paper. Remaining source inconsistencies are not evidence of legal approval.
 
 ## 3. OpScan with DRE architecture
 
-### 3.1 Authority model
+### 3.1 Record and acceptance model
 
 | Representation or component | Role |
 |---|---|
 | DRE selections | Voter-interface input |
 | Canonical selections | Data to be authenticated |
 | Truth QR | Authenticated machine-readable encoding |
-| Finalized ballot PDF | Authoritative ballot record |
-| Paper output | Optional supplementary evidence |
+| Finalized ballot PDF | Canonical electronic DRE voting record and proposed tally input; legal designation requires COMELEC determination |
+| Paper output | Function (official ballot, VVPAT, receipt, or other evidence) must be designated under the applicable rules; not presumed optional |
 | Acceptance ledger | Authority for the cast event |
 | Election Close Certificate | Authenticated commitment to the closed cast set |
 | PDF metadata | Supporting information only; does not independently create a vote |
@@ -122,12 +122,13 @@ The planned Nutrient adapter supplies local PDF rendering and form-state export.
 
 | Dimension | OMR profile | OpScan with DRE profile |
 |---|---|---|
-| Authoritative record | Paper ballot; vote interpretation comes from physical marks | Finalized authenticated ballot PDF |
+| Proposed system tally input | Interpreted marks from the paper ballot under the approved OMR rules | Accepted canonical electronic DRE record (finalized authenticated PDF), subject to approved counting rules |
 | Selection input | Voter-made physical mark | Electronic candidate-code selection |
 | Machine interpretation | Optical mark interpretation | Authenticated canonical payload verification |
 | Human-readable marks | Inputs available for paper inspection and interpretation | Visible confirmation of encoded selections |
-| Paper dependency | Constitutive of the paper-first pathway | Optional supplementary evidence |
-| Casting and eligibility | Governed by the applicable paper-first rules | Governed by durable acceptance and authenticated closed-set eligibility |
+| Voting medium | Voter marks a paper ballot; scanner interprets those marks | Voter selects electronically; system records an authenticated electronic record |
+| Paper verification | Apply the governing OMR and audit rules | Determine and implement the COMELEC-approved VVPAT and audit procedure |
+| System cast eligibility | Governed by applicable OMR rules and accepted scanner record | Governed in this prototype by durable acceptance and authenticated closed-set eligibility; official use needs an approved rule |
 
 ```text
 OMR
@@ -173,7 +174,7 @@ Deterministic EMS output means reproducibility under fixed source hashes, rules,
 5. The voter privately reviews candidate names, selected choices, and permitted undervotes, then confirms.
 6. The local service validates and authenticates the final record, preserves the bundle, commits acceptance, and acknowledges durable acceptance.
 7. Optional paper may be printed and inspected under the approved procedure.
-8. The authoritative PDF remains retained; officers reconcile, close the accepted set, verify, and tally.
+8. The canonical electronic DRE record remains retained; officers reconcile, close the accepted set, verify, and produce the proposed electronic tally under the approved counting rules.
 
 ### 6.2 Required lifecycle
 
@@ -401,23 +402,23 @@ Reproducible totals do not prove that selections were captured as intended befor
 
 The prototype generates a canonical, timestamp-free Election Return-like artifact containing context, eligible records, tally, and verification references. It is not a prescribed COMELEC form. Production must define canonical report bytes separately from ceremony timestamps, signature envelopes, and official presentation. Independent implementations and privacy-approved access remain required.
 
-## 13. Optional paper output
+## 13. Paper output and audit treatment
 
 Paper may support human inspection, supplementary evidence, demonstrations, reconciliation, or operational contingency. Approved A4 laser or thermal output may be considered, subject to readability, custody, retention, and procurement validation.
 
-Printing is optional for OpScan with DRE. Paper inspection, physical retention, and deposit are not casting prerequisites. Printed confirmation marks are human-readable representations, not OMR inputs in this profile. QR read-back checks encoding and print readability; it does not create another cast event or tally contribution.
+In the current prototype, printing is not a casting prerequisite. This implementation choice does not establish whether printing, voter inspection, retention, or deposit is legally required for an official DRE profile. Printed confirmation marks are human-readable representations, not OMR inputs in this profile. QR read-back checks encoding and print readability; it does not create another cast event or tally contribution. COMELEC must determine whether and how this output satisfies the applicable VVPAT and official-ballot rules.
 
 Where output is produced, record the originating PDF hash, serial, print attempt, printer identity, result, read-back evidence, and custody disposition under the privacy policy. A reprint is not a new vote; any replacement-ballot procedure requires separate authorization and serial accounting.
 
 If paper and PDF disagree:
 
-1. Preserve the authoritative PDF, manifest, acceptance record, paper, and relevant print evidence.
+1. Preserve the canonical electronic DRE record, manifest, acceptance record, paper, and relevant print evidence.
 2. Classify the discrepancy and identify the affected representations.
 3. Do not silently substitute paper, QR, canonical data, or a newly rendered PDF.
 4. Follow the approved reporting, escalation, and adjudication process.
 5. Distinguish machine-processing status, investigative hold, and legal invalidity.
 
-Optional paper evidence cannot override the accepted PDF record under this profile. How a discrepancy affects eligibility or certification is a pending governance decision. An optional printed subset must not be presented as a complete paper audit trail or as automatically supporting an election-wide paper-based risk-limiting audit.
+Under the prototype's internal tally rule, the accepted PDF supplies the electronic tally input. Its legal priority over paper evidence, and how a discrepancy affects eligibility or certification, remain for COMELEC determination. A printed subset must not be presented as a complete paper audit trail or as automatically supporting an election-wide paper-based risk-limiting audit.
 
 ## 14. Trust and key custody
 
@@ -498,15 +499,15 @@ Required demonstrations must include valid/invalid signatures, wrong-context rej
 
 ### 17.1 Assumptions
 
-The design assumes an explicitly selected PDF-authoritative profile; approved source snapshots, mappings, rules, and trust material; controlled precinct appliances; authenticated offline serial authority; and permitted independent access to evidence under a privacy policy. Those assumptions are not established by file format or signatures.
+The design assumes an explicitly selected DRE electronic-record profile; approved source snapshots, mappings, rules, and trust material; controlled precinct appliances; authenticated offline serial authority; and permitted independent access to evidence under a privacy policy. Those assumptions are not established by file format or signatures.
 
 Capture, finalization, signing, acceptance, and closure remain trusted boundaries. Independent verification may detect unauthorized changes, invalid artifacts, inconsistent evidence, or tally deviations when appropriate independent inputs exist. It does not establish end-to-end verifiability against fully compromised components.
 
 ### 17.2 Pending legal and procurement authority
 
-Legal authority for PDF-authoritative ballots remains pending. Software implementation cannot authorize replacing a legally controlling paper record. Deployments requiring paper authority must use their applicable paper-first rules rather than silently applying this profile.
+The legal designation and priority of the proposed canonical electronic DRE record remain subject to COMELEC determination. Software implementation cannot authorize replacing a legally controlling paper record or waive VVPAT safeguards. Deployments must follow their applicable approved rules rather than silently applying this profile.
 
-The TOR-delta document preserves paper-printing/deposit requirements and unresolved signature language from earlier procurement analysis. Its reported quantities and hardware criteria are planning context, not proof that PDF authority with optional paper is compliant. Written clarification must reconcile the proposed profile with the applicable TOR, receipt requirements, stock-supply interpretation, approved signing profile, and official forms.
+The TOR-delta document preserves paper-printing/deposit requirements and unresolved signature language from earlier procurement analysis. Its reported quantities and hardware criteria are planning context, not proof that the proposed electronic-record/tally rule is compliant. Written clarification must reconcile the proposed profile with the applicable TOR, receipt/VVPAT requirements, stock-supply interpretation, approved signing profile, and official forms. See the [legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md) for the authorities, questions for COMELEC Legal, and [bid/contract drafting guidance](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md#bid-and-contract-guidance).
 
 Viewer and signing vendors remain subject to licensing, offline deployment rights, procurement, interoperability, and commissioning. No SDK feature list substitutes for tests on the approved appliance.
 
@@ -514,7 +515,7 @@ Viewer and signing vendors remain subject to licensing, offline deployment right
 
 Official bodies must approve discrepancy adjudication, post-acceptance dispositions, retention, disclosure, independent audit access, signature thresholds, and key ceremonies. Technical rejection, an investigative hold, and legal invalidity are distinct outcomes.
 
-Optional paper cannot override the accepted PDF record under this design. Its availability does not establish complete voter verification, a complete physical audit trail, or a risk-limiting audit of all ballots. Independent tally reproduction does not establish intent fidelity.
+The prototype's accepted PDF controls its internal electronic tally input. Its legal priority over paper evidence has not been established here. Optional printing does not by itself establish complete voter verification, a complete physical audit trail, or a risk-limiting audit of all ballots. Independent tally reproduction does not establish intent fidelity.
 
 ## 18. Open decisions
 

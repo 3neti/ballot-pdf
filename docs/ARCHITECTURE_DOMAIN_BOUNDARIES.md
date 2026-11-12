@@ -4,10 +4,13 @@
 **Scope:** Election Management System, Official Ballot Template generation, precinct packages, and ballot-PDF integration  
 **Principle:** Public election artifacts guide and test the EMS; the EMS generates the approved OBT and operational packages.
 
-**Ballot-profile authority:** The OpScan with DRE profile is PDF-authoritative.
-The finalized signed Ballot PDF is the accepted ballot record. Paper output is
-optional supplementary evidence. OMR remains a separate paper-first profile and
-must not inherit the OpScan with DRE authority rules.
+**DRE record terminology:** In the proposed OpScan with DRE profile, the
+finalized signed Ballot PDF is the canonical electronic DRE voting record and
+proposed tally input. This engineering term does not designate it as the
+statutory “official ballot” or waive any paper/VVPAT requirement. OMR remains a
+separate paper-marked workflow. See the
+[legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md) before
+using this design for an official election.
 
 The OpScan with DRE acceptance boundary is:
 

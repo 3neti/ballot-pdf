@@ -1,11 +1,15 @@
-# ADR-0001: PDF-Authoritative OpScan with DRE Profile
+# ADR-0001: Canonical Electronic Record for OpScan with DRE Profile
 
 ## Problem
 
 The ballot-journey documentation was written for a paper-first workflow in
 which printing and physical deposit controlled casting. The intended OpScan
-with DRE workflow has changed: the finalized ballot PDF is authoritative and
-paper output is optional.
+with DRE workflow has changed: the finalized ballot PDF is the proposed
+canonical electronic DRE voting record and tally input. Its legal designation
+and the applicable paper/VVPAT requirements remain subject to COMELEC approval.
+See [the legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md).
+For the corresponding bid, contract, and acceptance-test wording, see that
+note's [bid and contract guidance](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md#bid-and-contract-guidance).
 
 ## Context
 
@@ -35,13 +39,19 @@ The OMR path remains paper-first and is outside this profile decision.
 
 For OpScan with DRE only:
 
-1. The finalized signed ballot PDF is the authoritative ballot record.
+1. The finalized signed ballot PDF is the canonical electronic DRE voting
+   record and tally input in this proposed system profile. This is an
+   engineering designation, not a claim that it is the statutory “official
+   ballot” or that paper/VVPAT requirements are waived.
 2. Durable acceptance of the finalized PDF and evidence manifest is the
    casting event.
-3. Printing, paper inspection, physical retention, and paper deposit are
-   optional supplementary steps.
-4. Post-close verification and tally operate on accepted ballot PDFs and their
-   evidence manifests.
+3. Printing, paper inspection, physical retention, and paper deposit follow
+   the COMELEC-approved voter-verification and custody rules. Until those rules
+   are established, the prototype's optional-print behavior is not evidence
+   that statutory VVPAT requirements are met.
+4. The proposed post-close electronic tally operates on accepted ballot PDFs
+   and their evidence manifests, subject to the approved counting rule and
+   discrepancy process.
 5. The Truth QR authenticates the canonical ballot data represented by the PDF.
 6. A conflict among PDF content, canonical data, and QR payload is flagged and
    adjudicated; it is never silently normalized.
@@ -57,21 +67,22 @@ For OpScan with DRE only:
 
 ## Alternatives Considered
 
-### Keep paper authoritative for all profiles
+### Use paper as the system tally input for all profiles
 
-Rejected for the OpScan with DRE design because it makes the PDF a preparation
-interface rather than the intended electronic ballot record.
+Not selected as a universal software rule. OMR remains paper-first, while the
+proposed DRE profile uses an electronic record as its machine tally input.
+That technical distinction does not decide the legal status of each artifact.
 
 ### Make paper optional without separating OMR and DRE
 
-Rejected because it would create ambiguous authority rules and could cause an
-OMR workflow to be interpreted as PDF-authoritative.
+Rejected because it would blur the distinct paper-marking and electronic
+selection workflows and leave the paper/VVPAT role unclear.
 
-### Treat the Truth QR as the only ballot record
+### Treat the Truth QR as the only voting record
 
 Rejected. The signed QR is the machine-verifiable encoding of the canonical
-ballot data, while the complete finalized PDF remains the authoritative ballot
-artifact and evidence container.
+ballot data, while the complete finalized PDF is the canonical electronic DRE
+record and evidence container.
 
 ## Consequences
 
@@ -93,11 +104,15 @@ Required follow-up:
 - define PDF/canonical-data/QR conflict handling;
 - define privacy controls for copied or exported ballot PDFs;
 - define operational retention and publication rules; and
-- obtain legal and procurement confirmation for the PDF-authoritative profile.
+- obtain written legal and procurement confirmation for the proposed DRE
+  record/tally rule and paper/VVPAT treatment.
 
 ## Recommendation
 
-Adopt this decision for the R&D OpScan with DRE profile. Keep the paper-first
-model for OMR and any deployment whose legal or procurement documents require
-paper as the controlling record. Do not silently apply the PDF-authoritative
-rule outside the explicitly selected profile.
+Adopt this technical decision for the R&D OpScan with DRE profile: the
+finalized, authenticated ballot PDF is the canonical electronic DRE voting
+record and tally input. Keep the paper-first model for OMR. Before official
+deployment, obtain COMELEC's written determination of the DRE artifact
+designations, VVPAT procedure, counting rule, and discrepancy treatment. Do not
+represent this engineering decision as legal approval or silently apply it
+outside the explicitly approved profile.

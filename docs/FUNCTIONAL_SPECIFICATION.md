@@ -9,10 +9,23 @@
 | Primary purpose | Serialized electronic ballot stock, finalized ballot PDFs, immutable evidence, and independent verification |
 | Intended first domain | Offline OpScan with DRE ballot preparation |
 | Primary runtime | Local election appliance with Nutrient Web SDK rendering the interactive ballot PDF in an offline browser kiosk |
-| Profile authority | In the OpScan with DRE profile, the finalized signed ballot PDF is the authoritative ballot record; paper output is optional supplementary evidence |
+| DRE record terminology | In the proposed OpScan with DRE profile, the finalized signed ballot PDF is the canonical electronic DRE voting record and proposed tally input; legal designation and paper/VVPAT treatment require COMELEC determination |
 | Security posture | Offline-first, cryptographically authenticated, append-only, independently verifiable |
 
 This document describes the behavior and boundaries of the package. It is not an implementation plan, a COMELEC certification, or a claim that every capability is already available in the WAES application.
+
+### Legal status and record terminology
+
+Throughout this specification, “canonical electronic DRE voting record and
+tally input” describes the proposed system architecture. It does not assert
+that a PDF is the statutory “official ballot,” or that optional printing
+satisfies the voter-verified paper audit trail requirement. RA 9369 defines the
+official ballot as paper, separately defines DRE electronic voting data, and
+requires VVPAT capability. RA 8792 recognizes qualifying electronic documents
+and signatures but preserves existing-law formalities. COMELEC Resolution No.
+11089 treats DRE VVPAT receipts as ballot equivalents for purposes of that
+RMA resolution. See the [legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md)
+for citations, scope, and questions requiring COMELEC determination.
 
 ## 2. Executive Intent
 
@@ -46,8 +59,8 @@ The package treats the PDF as a first-class, visually auditable election artifac
 
 ## 3. Design Principles
 
-1. The finalized signed Ballot PDF is the authoritative record for the OpScan with DRE profile.
-2. Paper output may provide supplementary human-readable evidence but is not required for casting or tally eligibility.
+1. For the proposed OpScan with DRE profile, the finalized signed Ballot PDF is the canonical electronic DRE voting record and proposed tally input. This technical rule does not itself establish statutory “official ballot” status.
+2. Paper output, voter verification, custody, and audit functions must follow the COMELEC-approved profile. The prototype's optional-print setting does not establish that statutory VVPAT requirements are met.
 3. Every ballot instance has a stable, unique ballot serial.
 4. Control-number authorization and ballot authentication are separate security functions.
 5. Voter identity, control numbers, print PINs, and voter-linked authorization values do not appear in the public signed ballot payload.
@@ -115,7 +128,7 @@ reusable authorization secret.
 
 ### 5.1.2 Serialized Ballot Stock PDF
 
-An optional serialized-stock artifact containing one approved blank ballot face and one assigned ballot serial. It is a packaging and distribution optimization only if COMELEC approves it. It must obey the same encryption, hash, serial, spoilage, cancellation, and retention rules as an OBT-derived ballot; printing is an optional supplementary operation in the PDF-authoritative OpScan with DRE profile.
+An optional serialized-stock artifact containing one approved blank ballot face and one assigned ballot serial. It is a packaging and distribution optimization only if COMELEC approves it. It must obey the same encryption, hash, serial, spoilage, cancellation, and retention rules as an OBT-derived ballot. Any printing, voter inspection, custody, or audit role must follow the COMELEC-approved OpScan with DRE profile and must not be presumed supplementary.
 
 ### 5.2 Ballot Session
 
@@ -458,12 +471,41 @@ The package specification must preserve these as unresolved until COMELEC issues
 2. Whether per-serial PDF stock may be transported on municipal portable media before election day.
 3. Whether each per-serial PDF is required to be physically present on the ACM, or whether an OBT plus serial ledger is sufficient.
 4. Whether the OpScan pathway's immediate QR read-back is validation only or an official cast/tally event.
-5. The issued TOR's paper or voter-receipt provisions must be reconciled with the PDF-authoritative OpScan with DRE profile.
-6. Any retained paper-deposit language must be classified as an OMR or supplementary-evidence requirement, unless the TOR expressly authorizes the PDF-authoritative profile.
+5. The issued TOR's paper or voter-receipt provisions must be reconciled with the proposed canonical electronic DRE record and tally-input rule, including applicable statutory VVPAT requirements.
+6. Any paper-deposit or receipt language must be classified by COMELEC as an OMR ballot, DRE VVPAT, statutory official ballot, or other defined artifact; the software must not assume it is merely supplementary evidence.
 7. Whether the PDF-level signature, the signed QR payload, or both are required for OBT and final ballot authenticity.
 8. Whether the 83,510,241 quantity includes electronic stock artifacts, printed paper only, or both.
 
 Until these points are clarified, a bidder should describe serialized PDF stock as a proposed compliant implementation option, not as an unambiguous reading of the issued TOR.
+
+### 9.7 Bid commitments and system acceptance
+
+The bid baseline should explicitly propose (a) the finalized authenticated
+ballot PDF as the canonical electronic DRE voting record and input to the
+precinct electronic tally, and (b) a human-readable A4 paper record with a
+Truth QR for voter verification and audit. These are distinct artifacts with
+defined roles; neither role should be left to implication from a file format
+or QR implementation.
+
+The implementation and acceptance plan must define:
+
+- the cast event and durable-acceptance boundary relative to voter inspection
+  of the A4 paper record;
+- the required visible content, readability, privacy, QR binding, paper
+  handling, sealing, retention, and audit access;
+- whether QR scanning assists the RMA and what human confirmation or tally
+  steps remain required by the approved procedure;
+- discrepancy, print-failure, unreadable-QR, duplicate/missing-serial, voter
+  objection, and recovery procedures; and
+- witnessed, reproducible acceptance tests from voter selection through PDF,
+  paper/QR, tally, Election Return, independent verification, and audit.
+
+The signed contract and incorporated technical annexes should make these
+commitments, acceptance tests, legal/technical gates, and any conditions for
+operational use explicit. Award of a bid does not itself convert a technical
+specification into a waiver of statutory safeguards or substitute for
+certification and approvals required elsewhere. Refer to the
+[bid and contract guidance](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md#bid-and-contract-guidance).
 
 ## 10. Control-Number Authorization
 

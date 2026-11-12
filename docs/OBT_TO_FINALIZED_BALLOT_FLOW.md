@@ -8,7 +8,7 @@
 | Status | Refinable design draft |
 | Related document | `docs/FUNCTIONAL_SPECIFICATION.md` |
 | Pathway | OpScan with DRE ballot preparation |
-| Profile authority | For OpScan with DRE, the finalized signed ballot PDF is the authoritative ballot record; paper output is optional supplementary evidence |
+| DRE record terminology | In the proposed OpScan with DRE profile, the finalized signed ballot PDF is the canonical electronic DRE voting record and proposed tally input; legal designation and paper/VVPAT treatment require COMELEC determination |
 | Package host | EMS uses `3neti/ballot-pdf`; the ACM uses the planned Nutrient adapter for local PDF rendering, form interaction, materialization, and printing |
 
 ## 1. End-to-End Flow
@@ -142,6 +142,14 @@ EMS + `3neti/ballot-pdf`
 ```
 
 The package is used by the EMS and precinct appliance as a deterministic artifact and verification library. It does not itself constitute COMELEC approval authority or replace BEI legal ceremonies.
+
+For the legal distinction between this system's canonical electronic DRE
+record and the statutory “official ballot,” see the
+[legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md).
+The proposed PDF tally-input role, A4/Truth QR VVPAT workflow, mismatch rules,
+and end-to-end contract acceptance tests must be explicit in the bid and its
+incorporated technical annexes; refer to the note's
+[bid and contract guidance](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md#bid-and-contract-guidance).
 
 ## 3. OBT Approval and Signing Responsibilities
 
@@ -648,7 +656,8 @@ This flow remains subject to refinement on:
 1. Whether OBT serials are embedded in the PDF or supplied through a signed serial manifest.
 2. Whether the final PDF itself receives a PDF-level signature in addition to the signed QR payload.
 3. Whether immediate QR read-back is only a print-validation ceremony or also an official cast event.
-4. The legal treatment of this PDF-authoritative profile in the applicable law and TOR.
+4. COMELEC's legal treatment of the proposed canonical electronic DRE record,
+   tally input, VVPAT, applicable law, and TOR.
 5. The exact BEI signature threshold and certificate model.
 6. The final WORM storage implementation and evidence export format.
 7. Which evidence is available to watchers, parties, candidates, and the public.

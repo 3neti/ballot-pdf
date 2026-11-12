@@ -1,8 +1,11 @@
 # Voter Journey: OMR and OpScan with DRE
 
-This document describes two distinct ballot profiles. OMR remains paper-first.
-OpScan with DRE is PDF-authoritative; paper printing is optional supplementary
-evidence and is not required for casting or tally eligibility.
+This document describes two distinct ballot profiles. OMR uses a marked paper
+ballot as its input to scanning and interpretation. In the proposed OpScan with
+DRE profile, the finalized ballot PDF is the **canonical electronic DRE voting
+record and tally input**. This system term does not claim that the PDF replaces
+the statutory paper “official ballot” or satisfies VVPAT requirements by
+itself. See the [legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md).
 
 ## Shared election-day context
 
@@ -54,12 +57,12 @@ flowchart TB
         D5["Review selections and confirm<br/>Leave tablet in booth<br/>Keep the original control number"]
     end
     subgraph S6["6. Verify the record"]
-        O6["Feed ballot into scanner<br/>Print VVPAT and inspect selections"]
+        O6["Feed marked paper ballot into scanner<br/>Interpret marks under approved rules"]
         D6["Finalize and durably accept<br/>the signed ballot PDF<br/>Optionally print and inspect"]
     end
     subgraph S7["7. Custody and exit"]
         O7["Paper ballot retained in ballot box<br/>Voter leaves"]
-        D7["Authoritative ballot PDF retained<br/>Voter leaves"]
+        D7["Canonical electronic DRE record retained<br/>Voter leaves"]
     end
 
     OMR --> O1 --> O2 --> O3 --> O4 --> O5 --> O6
@@ -89,7 +92,7 @@ flowchart TD
     MATCH{"Printed selections match the confirmed choices?"}
     CUSTODY["Record optional paper handling or retention"]
     EXCEPTION["Pause normal completion<br/>Preserve evidence and follow the approved discrepancy procedure"]
-    DONE["Complete the voter session<br/>Authoritative PDF retained"]
+    DONE["Complete the voter session<br/>Canonical electronic DRE record retained"]
     LEAVE["Voter leaves; station readied for the next voter"]
 
     CONFIRM --> ACCEPT --> PRINT
