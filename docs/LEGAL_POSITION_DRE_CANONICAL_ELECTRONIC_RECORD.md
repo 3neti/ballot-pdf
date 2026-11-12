@@ -161,17 +161,18 @@ The proposal should invite explicit written determinations on the following:
 Use the following bounded description:
 
 > The proposed OpScan with DRE profile uses the finalized, authenticated ballot
-> PDF as its **canonical electronic DRE voting record and tally input**. Where
-> required or approved, a separate printed representation enables voter
-> verification and audit. The proposal does not assume that the PDF replaces
-> the statutory paper official ballot or VVPAT. We request COMELEC's
+> PDF as its **canonical electronic DRE voting record and tally input**. The
+> offered system includes an A4 human-readable printed representation with the
+> corresponding authenticated Truth QR for voter verification and audit. The
+> proposal does not assume that the PDF replaces the statutory paper official
+> ballot or VVPAT. We request COMELEC's
 > determination of the applicable artifact designations, voter-verification
 > procedure, counting rule, and discrepancy process under RA 9369, RA 8792,
 > applicable COMELEC resolutions, and the approved procurement specifications.
 
 ## Bid and contract guidance
 
-The bid should offer the PDF and A4 paper roles as explicit, testable parts of
+The bid must offer the PDF and A4 paper roles as explicit, testable parts of
 one proposed DRE profile, not leave them as terminology buried in explanatory
 material. State the requirements in the technical proposal, compliance matrix,
 system architecture, deliverables, test plan, and draft/required contract
@@ -185,7 +186,7 @@ At minimum, make the following items explicit:
    event, acceptance acknowledgment, election/precinct/style context, serial,
    canonical selection data, QR relationship, signature/hash checks, retention,
    and the rule for forming the closed eligible set.
-2. **A4 voter-verification paper.** Specify an A4 human-readable record of the
+2. **A4 voter-verification paper.** Include an A4 human-readable record of the
    voter's selections, with election and precinct context and a Truth QR
    encoding the corresponding authenticated selections. Define how the voter
    privately inspects it, what happens if it is missing or disagrees with the

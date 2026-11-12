@@ -40,7 +40,7 @@ final class ReferenceProtocolService
         };
         return [
             'protocol' => '3neti.ballot-pdf',
-            'version' => '1.0',
+            'version' => $envelope['version'],
             'message_type' => $type,
             'request_id' => $envelope['request_id'],
             'nonce' => $envelope['nonce'],
@@ -67,7 +67,7 @@ final class ReferenceProtocolService
                 throw new \InvalidArgumentException("{$field} is required.");
             }
         }
-        if ($envelope['protocol'] !== '3neti.ballot-pdf' || $envelope['version'] !== '1.0' || $type !== $envelope['message_type']) {
+        if ($envelope['protocol'] !== '3neti.ballot-pdf' || ! in_array($envelope['version'], ['1.0', '1.1'], true) || $type !== $envelope['message_type']) {
             throw new \InvalidArgumentException('Protocol envelope is invalid.');
         }
     }

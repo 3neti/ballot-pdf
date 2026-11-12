@@ -4,7 +4,9 @@ namespace LBHurtado\BallotPdf\Scenario;
 
 use LBHurtado\BallotPdf\Application\BuildElectionReturn;
 use LBHurtado\BallotPdf\Application\BuildReports;
-use LBHurtado\BallotPdf\Application\FinalizeBallot;
+use LBHurtado\BallotPdf\Application\CloseElection;
+use LBHurtado\BallotPdf\Application\FinalizeAndAcceptBallot;
+use LBHurtado\BallotPdf\Application\RecordAuditOutput;
 use LBHurtado\BallotPdf\Application\GenerateStockManifest;
 use LBHurtado\BallotPdf\Application\VerifyDirectory;
 use LBHurtado\BallotPdf\Contracts\BallotPayloadCodec;
@@ -15,6 +17,13 @@ use LBHurtado\BallotPdf\Domain\Context\ContestDefinition;
 use LBHurtado\BallotPdf\Domain\Context\ElectionContext;
 use LBHurtado\BallotPdf\Domain\Stock\BallotSerial;
 use LBHurtado\BallotPdf\Domain\Stock\BallotStock;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicPdfSignatureProvider;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicRecordSigner;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicRecordVerifier;
+use LBHurtado\BallotPdf\Infrastructure\Storage\FilesystemAcceptanceLedger;
+use LBHurtado\BallotPdf\Infrastructure\Audit\ReferenceAuditOutputRenderer;
+use LBHurtado\BallotPdf\Infrastructure\Audit\ReferenceAuditReadback;
+use LBHurtado\BallotPdf\Infrastructure\Audit\ReferencePrintAdapter;
 use LBHurtado\BallotPdf\Support\CanonicalJson;
 
 final readonly class ManilaHappyPathScenarioRunner
@@ -128,7 +137,10 @@ final readonly class ManilaHappyPathScenarioRunner
             'status' => 'verified',
         ]);
 
+        $ledger = new FilesystemAcceptanceLedger($root.'/ledger');
+        $recordSigner = new DeterministicRecordSigner;
         $finalized = [];
+        $acceptances = [];
         foreach ($stocks as $index => $stock) {
             $session = new BallotSession(
                 sprintf('manila-happy-path-%06d', $index + 1),
@@ -139,16 +151,44 @@ final readonly class ManilaHappyPathScenarioRunner
             foreach ($contests as $contestId => $contest) {
                 $session->select($contestId, $this->randomSelection($contest, $seed, $index + 1));
             }
-            $finalized[] = (new FinalizeBallot($this->codec, $this->materializer, $this->store))->execute($session);
+            $accepted = (new FinalizeAndAcceptBallot(
+                $this->codec,
+                $this->materializer,
+                new DeterministicPdfSignatureProvider,
+                $recordSigner,
+                $ledger,
+                $this->store,
+            ))->execute($session, sprintf('manila-acceptance-%06d', $index + 1), sprintf('2026-11-13T12:%02d:00+08:00', $index));
+            $finalized[] = $accepted['finalized'];
+            $acceptances[] = $accepted['acceptance'];
         }
 
-        $verification = (new VerifyDirectory($this->codec))->execute($root, $context);
+        $verification = (new VerifyDirectory($this->codec, null, $ledger, new DeterministicRecordVerifier, new DeterministicPdfSignatureProvider))->execute($root, $context);
+        $close = (new CloseElection($ledger, $this->store, $recordSigner))->execute(
+            $context->electionId,
+            $context->precinctId,
+            '2026-11-13T13:00:00+08:00',
+            hash('sha256', 'demo-tally-rules'),
+            hash('sha256', 'demo-trust-roster'),
+            ['accepted' => count($ledger->records())],
+        );
+        $auditRecords = [];
+        foreach ($finalized as $index => $ballot) {
+            $auditRecords[] = (new RecordAuditOutput(
+                new ReferenceAuditOutputRenderer,
+                new ReferencePrintAdapter,
+                new ReferenceAuditReadback($ballot->truthQrScans),
+                $this->codec,
+            ))->execute($ballot, $acceptances[$index], 'accepted', [['actor' => 'BEI', 'action' => 'sealed']])['record'];
+        }
         $electionReturn = (new BuildElectionReturn($this->codec))->execute($verification, $context);
         $this->writeJson($root.'/results/verification-report.json', [
             'scenario_id' => 'manila-1st-district-composite-happy-path',
             'results' => array_map(static fn ($result): array => $result->toArray(), $verification),
         ]);
         $this->writeJson($root.'/results/election-return.json', $electionReturn['artifact']);
+        $this->writeJson($root.'/results/election-close.json', $close->toArray());
+        $this->writeJson($root.'/results/audit-records.json', array_map(static fn ($record): array => $record->toArray(), $auditRecords));
 
         $summary = [
             'scenario_id' => 'manila-1st-district-composite-happy-path',
@@ -163,6 +203,9 @@ final readonly class ManilaHappyPathScenarioRunner
             ], $finalized),
             'accepted_ballot_count' => count(array_filter($verification, static fn ($result): bool => $result->eligible)),
             'election_return_sha256' => $electionReturn['sha256'],
+            'acceptances' => array_map(static fn ($record): array => $record->toArray(), $acceptances),
+            'election_close_certificate_sha256' => $close->hash(),
+            'audit_record_sha256' => hash('sha256', CanonicalJson::encode(array_map(static fn ($record): array => $record->toArray(), $auditRecords))),
             'report_json' => (new BuildReports)->json($verification),
             'report_html' => (new BuildReports)->html($verification),
         ];

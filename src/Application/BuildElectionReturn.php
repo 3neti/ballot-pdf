@@ -45,7 +45,7 @@ final readonly class BuildElectionReturn
         ], $results);
         $artifact = [
             'artifact_type' => 'election-return',
-            'artifact_version' => '1.0',
+            'artifact_version' => '1.1',
             'election_context' => $context->toArray(),
             'eligible_ballot_count' => count($ballots),
             'eligible_ballots' => $ballots,

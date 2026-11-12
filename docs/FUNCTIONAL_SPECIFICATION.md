@@ -5,7 +5,7 @@
 | Field | Value |
 | --- | --- |
 | Package | `3neti/ballot-pdf` |
-| Status | Design draft for review before scaffolding |
+| Status | Design draft with a working reference implementation |
 | Primary purpose | Serialized electronic ballot stock, finalized ballot PDFs, immutable evidence, and independent verification |
 | Intended first domain | Offline OpScan with DRE ballot preparation |
 | Primary runtime | Local election appliance with Nutrient Web SDK rendering the interactive ballot PDF in an offline browser kiosk |
@@ -50,7 +50,7 @@ Election configuration
     -> Contest-limit enforcement and voter confirmation
     -> Finalized signed Ballot PDF
     -> WORM/equivalent immutable storage
-    -> Optional paper output and optional physical retention
+    -> A4 voter-verification/audit output and approved paper custody
     -> Optical payload verification
     -> Independent recursive verification and reporting
 ```
@@ -60,7 +60,7 @@ The package treats the PDF as a first-class, visually auditable election artifac
 ## 3. Design Principles
 
 1. For the proposed OpScan with DRE profile, the finalized signed Ballot PDF is the canonical electronic DRE voting record and proposed tally input. This technical rule does not itself establish statutory “official ballot” status.
-2. Paper output, voter verification, custody, and audit functions must follow the COMELEC-approved profile. The prototype's optional-print setting does not establish that statutory VVPAT requirements are met.
+2. The offered OpScan with DRE solution includes an A4 human-readable voter-verification/audit path with the corresponding authenticated Truth QR. COMELEC and the issued procurement documents must designate the printed artifact's legal role and approve its inspection, custody, retention, and audit procedure. Prototype optional-print behavior does not establish VVPAT compliance.
 3. Every ballot instance has a stable, unique ballot serial.
 4. Control-number authorization and ballot authentication are separate security functions.
 5. Voter identity, control numbers, print PINs, and voter-linked authorization values do not appear in the public signed ballot payload.
@@ -69,7 +69,7 @@ The package treats the PDF as a first-class, visually auditable election artifac
 8. Counting is based on signed payload verification, ballot status, context, uniqueness, and approved custody evidence, not filenames or PDF metadata.
 9. All required operations work offline after the election package has been commissioned.
 10. The package exposes independent verification interfaces so a municipality, auditor, party, or candidate can reproduce verification and reporting without the ballot-preparation application.
-11. The package must distinguish PDF acceptance from optional printing, physical handling, and paper inspection.
+11. The package must distinguish PDF acceptance from A4 output, physical handling, voter inspection, and paper audit. The production bid includes the A4 path; prototype print settings do not determine the offered profile.
 12. The package must not require an Internet lookup, proprietary server, or live cloud service to interpret a finalized ballot.
 
 ## 4. Scope
@@ -87,7 +87,7 @@ The package treats the PDF as a first-class, visually auditable election artifac
 - browser-rendered voter experience contracts;
 - finalized Ballot PDF creation;
 - signed machine-readable payload generation;
-- PDF-native signature integration through a commissioned adapter;
+- required production PDF-native signature integration through a commissioned adapter (not yet implemented in the prototype);
 - immutable/WORM storage contracts;
 - append-only lifecycle events;
 - recursive directory verification;
@@ -136,7 +136,7 @@ The control-number-authorized interaction in which a voter is shown an eligible 
 
 ### 5.3 Finalized Ballot PDF
 
-The read-only electronic ballot artifact produced after voter confirmation. It contains the human-readable selected ballot representation and a signed machine-readable payload. It is ready for complete-artifact authentication, durable acceptance, optional printing, evidence storage, and independent verification.
+The read-only electronic ballot artifact produced after voter confirmation. It contains the human-readable selected ballot representation and a signed machine-readable payload. It is ready for complete-artifact authentication, durable acceptance, the offered A4 voter-verification/audit output, evidence storage, and independent verification. Prototype settings may permit print omission without changing the production bid commitment.
 
 ### 5.4 Ballot serial
 
@@ -272,11 +272,10 @@ Each finalized artifact must provide:
 - Truth QR or equivalent optical representation;
 - finalization status;
 - PDF content hash;
-- PDF-native signature or authenticated PDF-signature adapter result;
+- required PDF-native signature result under the commissioned profile;
 - signed detached acceptance manifest;
 - durable acceptance identity and sequence;
 - evidence references; and
-- PDF-native signature result.
 
 The final payload must not include:
 
@@ -310,9 +309,9 @@ Minimum fields:
 ### 8.4 Evidence manifest
 
 The evidence manifest groups the finalized PDF, signed payload, complete-PDF
-hash, PDF-native signature result, detached manifest signature, acceptance
-record, optional print result, optional custody references, and tally
-disposition. The manifest signature must cover the canonical manifest fields,
+hash, required PDF-native signature result, detached manifest signature,
+acceptance record, print result when output is produced, custody references,
+and tally disposition. The manifest signature must cover the canonical manifest fields,
 including the complete-PDF hash. It must identify whether an item is source
 evidence, reconstructed evidence, or a derived report.
 
@@ -420,7 +419,7 @@ The package must support both interpretations:
 5. At precinct initialization, require offline BEI PIN authorization and sign the OBT import/custody record with the authorized asymmetric key.
 6. Allocate each serial once at the voter session.
 7. Render the voter selections and signed payload from the OBT.
-8. Optionally print supplementary paper evidence at the precinct.
+8. Produce the offered A4 human-readable voter-verification/audit record with Truth QR; record any print failure or exception. The approved profile governs inspection, custody, sealing, retention, and audit access. Prototype runs may skip printing, but this is not evidence of bid-profile or VVPAT compliance.
 9. Reconcile each serial as issued, printed if applicable, spoiled, cancelled, cast, voided, or unused.
 
 #### Serialized stock mode, proposed per-PDF model
@@ -457,9 +456,9 @@ The following v34 provisions are directly supported by this specification:
 | Digitally signed, pre-numbered OBT | OBT artifact, signed manifest, hash lock, and serial-range value objects. |
 | OBT delivered only to authorized precinct devices | Media package scope, device authorization, import verification, and custody manifest. |
 | Single-use serial per voting session | Ballot serial lifecycle and append-only status journal. |
-| Per-precinct printed ballot | Optional print authorization, print result, spoilage, reprint, and supplementary reconciliation events. |
-| QR payload printed on official ballot | `truth-qr` payload profile and optional print-time read-back verification. |
-| Ballot verification | Payload validation, sample independent-imager test, and optional paper/payload evidence. |
+| Per-precinct printed ballot | A4 voter-verification/audit path, print result, spoilage/reprint controls, private inspection, custody, retention, and reconciliation events. |
+| QR payload printed on official ballot | `truth-qr` payload profile and print-time read-back verification, subject to COMELEC designation of the printed artifact. |
+| Ballot verification | Payload validation, independent-imager testing, voter inspection, and paper/PDF/QR reconciliation under the approved profile. |
 | BITS or equivalent status tracking | `StatusResolver`, manifest reports, and per-precinct reconciliation exports. |
 | Eighty-three million-plus total quantity | High-volume generation/stock planning; quantity is not assumed to mean one PDF per ballot unless COMELEC approves serialized stock mode. |
 
@@ -473,19 +472,26 @@ The package specification must preserve these as unresolved until COMELEC issues
 4. Whether the OpScan pathway's immediate QR read-back is validation only or an official cast/tally event.
 5. The issued TOR's paper or voter-receipt provisions must be reconciled with the proposed canonical electronic DRE record and tally-input rule, including applicable statutory VVPAT requirements.
 6. Any paper-deposit or receipt language must be classified by COMELEC as an OMR ballot, DRE VVPAT, statutory official ballot, or other defined artifact; the software must not assume it is merely supplementary evidence.
-7. Whether the PDF-level signature, the signed QR payload, or both are required for OBT and final ballot authenticity.
+7. Which approved signing profile and authority apply to the OBT, in addition to the required PDF-native signature and signed detached manifest for each finalized ballot.
 8. Whether the 83,510,241 quantity includes electronic stock artifacts, printed paper only, or both.
 
 Until these points are clarified, a bidder should describe serialized PDF stock as a proposed compliant implementation option, not as an unambiguous reading of the issued TOR.
 
 ### 9.7 Bid commitments and system acceptance
 
-The bid baseline should explicitly propose (a) the finalized authenticated
+The bid baseline must explicitly propose (a) the finalized authenticated
 ballot PDF as the canonical electronic DRE voting record and input to the
-precinct electronic tally, and (b) a human-readable A4 paper record with a
-Truth QR for voter verification and audit. These are distinct artifacts with
-defined roles; neither role should be left to implication from a file format
-or QR implementation.
+precinct electronic tally, and (b) an A4 human-readable printed representation
+with the corresponding authenticated Truth QR as an offered voter-verification
+and audit path. The bid must define voter inspection, privacy-preserving
+handling, print/read-back verification, mismatch handling, custody, sealing,
+retention, audit access, reconciliation with the accepted PDF, and alignment
+with the applicable COMELEC audit procedure. COMELEC and the issued procurement
+documents must designate whether the paper is the statutory official ballot,
+a VVPAT, a voter receipt, an audit record, or another legally defined artifact.
+The prototype's paper-optional setting is not evidence that the offered path
+satisfies VVPAT requirements. These roles must not be left to implication from
+a file format or QR implementation.
 
 The implementation and acceptance plan must define:
 
@@ -688,6 +694,10 @@ remains the voter-facing surface, while the local `3neti/ballot-pdf` service
 performs the authoritative domain validation, signing, evidence, and status
 operations.
 
+The reference protocol uses version `1.1` for authenticated acceptance and
+closure messages while accepting version `1.0` envelopes for compatibility
+with earlier prototype clients.
+
 ### 12.3 Protocol envelope
 
 Every request and response must include:
@@ -779,6 +789,14 @@ verification. The payload signature authenticates canonical ballot data; the
 PDF-native signature authenticates the PDF through the approved viewer or
 adapter profile; the detached manifest links the complete-PDF hash to the
 payload, context, and acceptance evidence.
+
+| Mechanism | Required role |
+|---|---|
+| Truth QR signature | Authenticates canonical selections and election context. |
+| PDF-native signature | Authenticates the finalized PDF under the commissioned PDF signature profile. |
+| Signed detached manifest | Binds the complete PDF hash, payload hash, context, acceptance identity, and evidence references. |
+| Acceptance ledger | Records the durable cast event. |
+| Election Close Certificate | Commits to the accepted cast set and approved tally rules. |
 
 ## 14. WORM and Immutable Storage
 
@@ -936,7 +954,7 @@ Confidentiality and authenticity are separate:
 - signatures detect alteration and authenticate the signer;
 - encryption protects confidentiality during transport or storage;
 - custody manifests prove handling history;
-- optional paper output supports supplementary physical reconciliation.
+- the offered A4 voter-verification/audit path supports inspection and physical audit under the approved procedure; prototype print configuration is not proof of compliance.
 
 ## 17. Privacy and Transparency
 
@@ -1031,7 +1049,7 @@ The package is functionally acceptable when it can demonstrate:
 16. Idempotent retry, lost-acknowledgment, crash-recovery, and serial-concurrency behavior.
 17. Signed Election Close Certificate with cast-set commitment and reconciliation totals.
 18. Reproducible reports from a separate verifier process.
-19. Offline Nutrient operation after commissioning, including ballot rendering, form interaction, finalization handoff, optional printing, and evidence storage.
+19. Offline Nutrient operation after commissioning, including ballot rendering, form interaction, finalization handoff, the offered A4 voter-verification/audit print path, and evidence storage. Prototype print-skip behavior is not production-profile evidence.
 20. Protection against voter-to-ballot correlation in the final payload and operational evidence.
 21. Self-contained PDF protocol interaction from control-number consumption through durable acceptance status.
 
@@ -1171,7 +1189,7 @@ These questions should be answered before implementation begins:
 15. What evidence proves that a portable media package was complete at transfer and import?
 16. What is the authoritative lifecycle status when two custody logs disagree?
 17. Must the independent verifier consume the signed acceptance ledger export and Election Close Certificate in addition to the PDFs and manifests?
-18. What is the approved policy for paper/payload disagreement?
+18. What is the approved policy for paper/PDF/payload disagreement, including custody, reconciliation, and escalation?
 19. Which `truth-qr` profile and signature algorithm are mandatory for the first implementation?
 20. What storage medium or operating-system control qualifies as WORM for the target appliance, and what operational evidence proves its deployment?
 

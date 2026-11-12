@@ -13,7 +13,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'OPTIONS') {
 require dirname(__DIR__, 2).'/vendor/autoload.php';
 
 use LBHurtado\BallotPdf\Protocol\ReferenceProtocolService;
-use LBHurtado\BallotPdf\Application\FinalizeBallot;
+use LBHurtado\BallotPdf\Application\CloseElection;
+use LBHurtado\BallotPdf\Application\FinalizeAndAcceptBallot;
 use LBHurtado\BallotPdf\Application\BuildReports;
 use LBHurtado\BallotPdf\Application\BuildElectionReturn;
 use LBHurtado\BallotPdf\Application\KeyCeremonyManager;
@@ -27,6 +28,10 @@ use LBHurtado\BallotPdf\Domain\Evidence\EvidenceManifest;
 use LBHurtado\BallotPdf\Domain\Stock\BallotSerial;
 use LBHurtado\BallotPdf\Domain\Stock\BallotStock;
 use LBHurtado\BallotPdf\Infrastructure\Storage\FilesystemWormStore;
+use LBHurtado\BallotPdf\Infrastructure\Storage\FilesystemAcceptanceLedger;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicPdfSignatureProvider;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicRecordSigner;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicRecordVerifier;
 use LBHurtado\BallotPdf\Infrastructure\Crypto\FileSigningKeyProvider;
 use LBHurtado\BallotPdf\Infrastructure\Crypto\PublicTrustRoster;
 use LBHurtado\BallotPdf\Infrastructure\Verification\ZbarPdfQrScanner;
@@ -76,6 +81,11 @@ final class DemoQrPdfMaterializer implements PdfMaterializer
 }
 
 $demoCeremonyRoot = sys_get_temp_dir().'/ballot-pdf-protocol/key-ceremony';
+$protocolRoot = sys_get_temp_dir().'/ballot-pdf-protocol';
+$protocolStore = new FilesystemWormStore($protocolRoot);
+$protocolLedger = new FilesystemAcceptanceLedger($protocolRoot.'/ledger');
+$protocolRecordSigner = new DeterministicRecordSigner;
+$protocolPdfSigner = new DeterministicPdfSignatureProvider;
 $signedCodec = static function () use ($demoCeremonyRoot): BallotPayloadCodec {
     $rosterPath = $demoCeremonyRoot.'/rosters/v0001.json';
     if (! is_file($rosterPath)) {
@@ -117,7 +127,7 @@ $service = new ReferenceProtocolService(
         'session_id' => $message['session_id'] ?? 'SESSION-DEMO',
         'ballot_serial' => $message['ballot_serial'] ?? demoSerial((string) ($message['session_id'] ?? 'SESSION-DEMO')),
     ],
-    static function (array $message) use ($signedCodec): array {
+    static function (array $message) use ($signedCodec, $protocolStore, $protocolLedger, $protocolRecordSigner, $protocolPdfSigner): array {
         $context = new ElectionContext(
             (string) ($message['election_id'] ?? 'DEMO-2028'),
             (string) ($message['precinct_id'] ?? 'DEMO-PRECINCT-001'),
@@ -139,31 +149,49 @@ $service = new ReferenceProtocolService(
             throw new InvalidArgumentException('pdf_base64 is invalid.');
         }
         $materializer = new DemoQrPdfMaterializer($pdfBytes, (string) ($message['control_number'] ?? 'DEMO-000001'), new StandardQrCode(new ZbarPngQrCodeDecoder));
-        $final = (new FinalizeBallot($signedCodec(), $materializer, new FilesystemWormStore(sys_get_temp_dir().'/ballot-pdf-protocol')))->execute($session);
+        $accepted = (new FinalizeAndAcceptBallot(
+            $signedCodec(),
+            $materializer,
+            $protocolPdfSigner,
+            $protocolRecordSigner,
+            $protocolLedger,
+            $protocolStore,
+        ))->execute(
+            $session,
+            (string) ($message['idempotency_key'] ?? $message['session_id'] ?? 'demo-acceptance'),
+            '2026-11-13T12:00:00+08:00',
+        );
+        $final = $accepted['finalized'];
+        $acceptance = $accepted['acceptance'];
         $evidence = $final->evidence();
         return [
-            'status' => 'finalized',
+            'status' => 'accepted',
             'session_id' => $session->sessionId,
             'ballot_serial' => $final->serial,
             'pdf_sha256' => $final->pdfSha256,
             'pdf_base64' => base64_encode($final->pdfBytes),
             'evidence' => $evidence,
-            'evidence_manifest_sha256' => (new EvidenceManifest($evidence))->hash(),
+            'evidence_manifest_sha256' => $acceptance->manifestSha256,
+            'acceptance_manifest_sha256' => $acceptance->manifestSha256,
             'truth_qr_scans' => $final->truthQrScans,
+            'acceptance' => $acceptance->toArray(),
+            'acceptance_id' => $acceptance->acceptanceId,
+            'acceptance_sequence' => $acceptance->sequence,
+            'content_fingerprint' => $acceptance->contentFingerprint,
         ];
     },
     static fn (array $message): array => [
         'status' => 'awaiting-local-printer-adapter',
         'session_id' => $message['session_id'] ?? null,
     ],
-    static function (array $message) use ($signedCodec): array {
+    static function (array $message) use ($signedCodec, $protocolLedger): array {
         $context = new ElectionContext(
             (string) ($message['election_id'] ?? 'DEMO-2028'),
             (string) ($message['precinct_id'] ?? 'DEMO-PRECINCT-001'),
             (string) ($message['ballot_style_id'] ?? 'DEMO-BS-001'),
             (string) ($message['mapping_hash'] ?? 'demo-mapping-hash'),
         );
-        $results = (new VerifyDirectory($signedCodec(), new ZbarPdfQrScanner))->execute(sys_get_temp_dir().'/ballot-pdf-protocol', $context);
+        $results = (new VerifyDirectory($signedCodec(), new ZbarPdfQrScanner, $protocolLedger, new DeterministicRecordVerifier, new DeterministicPdfSignatureProvider))->execute(sys_get_temp_dir().'/ballot-pdf-protocol', $context);
         $report = (new BuildReports)->json($results);
         $targetSerial = (string) ($message['ballot_serial'] ?? '');
         $target = array_values(array_filter($results, static fn ($result): bool => $targetSerial === '' || $result->serial === $targetSerial));
@@ -177,14 +205,14 @@ $service = new ReferenceProtocolService(
             'report_sha256' => hash('sha256', $report),
         ];
     },
-    static function (array $message) use ($signedCodec): array {
+    static function (array $message) use ($signedCodec, $protocolLedger): array {
         $context = new ElectionContext(
             (string) ($message['election_id'] ?? 'DEMO-2028'),
             (string) ($message['precinct_id'] ?? 'DEMO-PRECINCT-001'),
             (string) ($message['ballot_style_id'] ?? 'DEMO-BS-001'),
             (string) ($message['mapping_hash'] ?? 'demo-mapping-hash'),
         );
-        $results = (new VerifyDirectory($signedCodec(), new ZbarPdfQrScanner))->execute(sys_get_temp_dir().'/ballot-pdf-protocol', $context);
+        $results = (new VerifyDirectory($signedCodec(), new ZbarPdfQrScanner, $protocolLedger, new DeterministicRecordVerifier, new DeterministicPdfSignatureProvider))->execute(sys_get_temp_dir().'/ballot-pdf-protocol', $context);
         $return = (new BuildElectionReturn($signedCodec(), new ZbarPdfQrScanner))->execute($results, $context);
         return [
             'status' => 'election_return_ready',
@@ -194,6 +222,28 @@ $service = new ReferenceProtocolService(
             'election_return_sha256' => $return['sha256'],
         ];
     },
+    static function (array $message) use ($protocolLedger): array {
+        $key = (string) ($message['idempotency_key'] ?? '');
+        if ($key === '') {
+            throw new InvalidArgumentException('idempotency_key is required.');
+        }
+        $record = $protocolLedger->byIdempotency($key);
+        if ($record === null) {
+            throw new RuntimeException('Acceptance record not found.');
+        }
+        return ['status' => 'accepted', 'acceptance' => $record->toArray()];
+    },
+    static function (array $message) use ($protocolLedger, $protocolStore, $protocolRecordSigner): array {
+        $certificate = (new CloseElection($protocolLedger, $protocolStore, $protocolRecordSigner))->execute(
+            (string) ($message['election_id'] ?? 'DEMO-2028'),
+            (string) ($message['precinct_id'] ?? 'DEMO-PRECINCT-001'),
+            '2026-11-13T13:00:00+08:00',
+            (string) ($message['tally_rules_hash'] ?? hash('sha256', 'demo-tally-rules')),
+            (string) ($message['trust_roster_hash'] ?? hash('sha256', 'demo-trust-roster')),
+            (array) ($message['reconciliation'] ?? []),
+        );
+        return ['status' => 'election_closed', 'certificate' => $certificate->toArray(), 'certificate_sha256' => $certificate->hash()];
+    },
 );
 
 try {
@@ -202,7 +252,7 @@ try {
 } catch (Throwable $exception) {
     $response = [
         'protocol' => '3neti.ballot-pdf',
-        'version' => '1.0',
+        'version' => $body['version'] ?? '1.1',
         'message_type' => $body['message_type'] ?? $messageType,
         'status' => 'error',
         'error_code' => 'invalid_request',

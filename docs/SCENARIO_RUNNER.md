@@ -10,7 +10,8 @@ stock -> session -> contest validation -> finalization -> PDF authentication
 ```
 
 The scenario also asserts that an over-limit selection is rejected and that a
-second finalization of the same session cannot overwrite committed evidence.
+repeated finalization of the same session returns the original durable
+acceptance instead of overwriting committed evidence.
 The acceptance boundary is covered by the acceptance-ledger feature tests,
 including idempotent retries, changed-content conflicts, serial uniqueness,
 and cast-set close-certificate generation.
@@ -21,7 +22,8 @@ Run it with the package test suite:
 vendor/bin/pest tests/Scenario/LifecycleScenarioTest.php
 ```
 
-This runner validates domain and evidence behavior. It does not execute
+This runner validates domain, acceptance, closure, audit-evidence, and report
+behavior. It does not execute
 Acrobat JavaScript or replace browser compatibility tests. A production
 scenario must inject a PDF-native signature adapter and commissioned signing
 keys; the reference tests use isolated test signers.

@@ -50,5 +50,7 @@ VITE_PROTOCOL_BASE_URL=http://127.0.0.1:8017
 ```
 
 Each opened demo session receives a deterministic synthetic ballot serial. A
-finalized session cannot be submitted twice; this preserves the logical-WORM
-behavior while allowing repeated demonstrations.
+repeated submission with the same session idempotency key returns the original
+durable acceptance acknowledgement; changed content under that key is
+rejected. This preserves the logical-WORM behavior while allowing lost-
+acknowledgement demonstrations.

@@ -4,6 +4,7 @@ namespace LBHurtado\BallotPdf\Infrastructure\Storage;
 
 use LBHurtado\BallotPdf\Contracts\WormStore;
 use LBHurtado\BallotPdf\Domain\Evidence\EvidenceManifest;
+use LBHurtado\BallotPdf\Domain\Evidence\ElectionCloseCertificate;
 use LBHurtado\BallotPdf\Support\CanonicalJson;
 
 final readonly class FilesystemWormStore implements WormStore
@@ -23,6 +24,26 @@ final readonly class FilesystemWormStore implements WormStore
     public function commitManifest(string $serial, EvidenceManifest $manifest): string
     {
         return $this->write($this->path('manifest', $serial.'.json'), CanonicalJson::encode($manifest->toArray()));
+    }
+
+    public function commitCloseCertificate(ElectionCloseCertificate $certificate): string
+    {
+        return $this->write($this->path('closure', 'election-close.json'), CanonicalJson::encode($certificate->toArray()));
+    }
+
+    public function pdf(string $serial): ?string
+    {
+        $path = $this->root.'/pdf/'.$serial.'.pdf';
+        return is_file($path) ? (string) file_get_contents($path) : null;
+    }
+
+    public function manifest(string $serial): ?EvidenceManifest
+    {
+        $path = $this->root.'/manifest/'.$serial.'.json';
+        if (! is_file($path)) {
+            return null;
+        }
+        return new EvidenceManifest(json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR));
     }
 
     public function pdfs(): iterable

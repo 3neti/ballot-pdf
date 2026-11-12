@@ -4,7 +4,9 @@ namespace LBHurtado\BallotPdf\Scenario;
 
 use LBHurtado\BallotPdf\Application\BuildReports;
 use LBHurtado\BallotPdf\Application\BuildElectionReturn;
-use LBHurtado\BallotPdf\Application\FinalizeBallot;
+use LBHurtado\BallotPdf\Application\CloseElection;
+use LBHurtado\BallotPdf\Application\FinalizeAndAcceptBallot;
+use LBHurtado\BallotPdf\Application\RecordAuditOutput;
 use LBHurtado\BallotPdf\Application\VerifyDirectory;
 use LBHurtado\BallotPdf\Contracts\BallotPayloadCodec;
 use LBHurtado\BallotPdf\Contracts\PdfMaterializer;
@@ -13,6 +15,13 @@ use LBHurtado\BallotPdf\Domain\Ballot\BallotSession;
 use LBHurtado\BallotPdf\Domain\Context\ContestDefinition;
 use LBHurtado\BallotPdf\Domain\Context\ElectionContext;
 use LBHurtado\BallotPdf\Domain\Stock\BallotStock;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicPdfSignatureProvider;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicRecordSigner;
+use LBHurtado\BallotPdf\Infrastructure\Signing\DeterministicRecordVerifier;
+use LBHurtado\BallotPdf\Infrastructure\Storage\FilesystemAcceptanceLedger;
+use LBHurtado\BallotPdf\Infrastructure\Audit\ReferenceAuditOutputRenderer;
+use LBHurtado\BallotPdf\Infrastructure\Audit\ReferenceAuditReadback;
+use LBHurtado\BallotPdf\Infrastructure\Audit\ReferencePrintAdapter;
 
 final readonly class LifecycleScenarioRunner
 {
@@ -53,8 +62,32 @@ final readonly class LifecycleScenarioRunner
             $session->select($contestId, $candidateCodes);
         }
 
-        $finalized = (new FinalizeBallot($this->codec, $this->materializer, $this->store))->execute($session);
-        $verification = (new VerifyDirectory($this->codec))->execute($root, $context);
+        $ledger = new FilesystemAcceptanceLedger($root.'/ledger');
+        $recordSigner = new DeterministicRecordSigner;
+        $accepted = (new FinalizeAndAcceptBallot(
+            $this->codec,
+            $this->materializer,
+            new DeterministicPdfSignatureProvider,
+            $recordSigner,
+            $ledger,
+            $this->store,
+        ))->execute($session, 'scenario-acceptance-1', '2026-11-13T12:00:00+08:00');
+        $finalized = $accepted['finalized'];
+        $verification = (new VerifyDirectory($this->codec, null, $ledger, new DeterministicRecordVerifier, new DeterministicPdfSignatureProvider))->execute($root, $context);
+        $close = (new CloseElection($ledger, $this->store, $recordSigner))->execute(
+            $context->electionId,
+            $context->precinctId,
+            '2026-11-13T12:01:00+08:00',
+            hash('sha256', 'demo-tally-rules'),
+            hash('sha256', 'demo-trust-roster'),
+            ['accepted' => count($ledger->records())],
+        );
+        $audit = (new RecordAuditOutput(
+            new ReferenceAuditOutputRenderer,
+            new ReferencePrintAdapter,
+            new ReferenceAuditReadback($finalized->truthQrScans),
+            $this->codec,
+        ))->execute($finalized, $accepted['acceptance'], 'accepted', [['actor' => 'BEI', 'action' => 'sealed']]);
         $electionReturn = (new BuildElectionReturn($this->codec))->execute($verification, $context);
         $decoded = $this->codec->decode($finalized->truthQrScans);
         $tally = [];
@@ -63,11 +96,19 @@ final readonly class LifecycleScenarioRunner
         }
         ksort($tally);
 
-        $repeatFinalizationRejected = false;
+        $repeatFinalizationIdempotent = false;
         try {
-            (new FinalizeBallot($this->codec, $this->materializer, $this->store))->execute($session);
-        } catch (\RuntimeException $exception) {
-            $repeatFinalizationRejected = str_contains($exception->getMessage(), 'WORM store refuses overwrite');
+            $retry = (new FinalizeAndAcceptBallot(
+                $this->codec,
+                $this->materializer,
+                new DeterministicPdfSignatureProvider,
+                $recordSigner,
+                $ledger,
+                $this->store,
+            ))->execute($session, 'scenario-acceptance-1', '2026-11-13T12:00:00+08:00');
+            $repeatFinalizationIdempotent = $retry['acceptance']->acceptanceId === $accepted['acceptance']->acceptanceId;
+        } catch (\RuntimeException) {
+            $repeatFinalizationIdempotent = false;
         }
 
         return [
@@ -86,7 +127,12 @@ final readonly class LifecycleScenarioRunner
             'report_html' => (new BuildReports)->html($verification),
             'election_return' => $electionReturn['artifact'],
             'election_return_sha256' => $electionReturn['sha256'],
-            'repeat_finalization_rejected' => $repeatFinalizationRejected,
+            'acceptance' => $accepted['acceptance']->toArray(),
+            'election_close_certificate' => $close->toArray(),
+            'election_close_certificate_sha256' => $close->hash(),
+            'audit_record' => $audit['record']->toArray(),
+            'audit_record_sha256' => $audit['record']->hash(),
+            'repeat_finalization_idempotent' => $repeatFinalizationIdempotent,
         ];
     }
 }

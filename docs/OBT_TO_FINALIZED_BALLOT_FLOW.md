@@ -88,20 +88,23 @@ Acceptance ledger commit
   |     manifest identity, idempotency key, and sequence;
   |     acknowledge durable acceptance
   v
-Optional paper output
+Produce A4 voter-verification/audit record
   |
-  | 14. An approved printer may produce
-  |     supplementary physical evidence
+  | 14. The offered system produces an A4 human-readable record
+  |     with the corresponding authenticated Truth QR; record
+  |     print success or exception for reconciliation
   v
-Optional QR read-back
+Print read-back and voter inspection
   |
-  | 15. If printed, verify signature, context,
-  |     serial, mapping, and duplicate status
+  | 15. Verify QR signature, context, serial, mapping,
+  |     duplicate status, and print readability; provide
+  |     private voter inspection and record its disposition
   v
-Reconcile accepted ballot PDF
+Reconcile accepted PDF and A4 record
   |
-  | 16. The finalized ballot PDF remains the
-  |     controlling OpScan with DRE record
+  | 16. Retain the accepted PDF and evidence; secure, seal,
+  |     retain, and make the A4 record available for audit
+  |     under the approved custody procedure
   v
 Post-close PDF verification
   |
@@ -133,8 +136,8 @@ EMS + `3neti/ballot-pdf`
   -> signed detached acceptance manifest
   -> WORM/evidence store
   -> acceptance ledger record
-  -> optional printed paper evidence
-  -> optional QR read-back result
+  -> A4 voter-verification/audit record and print result
+  -> QR read-back and voter-inspection evidence
   -> PDF acceptance event
   -> post-close PDF verification result
   -> precinct reconciliation
@@ -146,9 +149,9 @@ The package is used by the EMS and precinct appliance as a deterministic artifac
 For the legal distinction between this system's canonical electronic DRE
 record and the statutory “official ballot,” see the
 [legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md).
-The proposed PDF tally-input role, A4/Truth QR VVPAT workflow, mismatch rules,
-and end-to-end contract acceptance tests must be explicit in the bid and its
-incorporated technical annexes; refer to the note's
+The proposed PDF tally-input role, A4/Truth QR voter-verification and audit
+path, mismatch rules, and end-to-end contract acceptance tests must be explicit
+in the bid and its incorporated technical annexes; refer to the note's
 [bid and contract guidance](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md#bid-and-contract-guidance).
 
 ## 3. OBT Approval and Signing Responsibilities
@@ -268,9 +271,11 @@ protocol. The initial messages are:
 session.open
 session.update
 ballot.finalize
+acceptance.commit
 ballot.print
 evidence.commit
 ceremony.status
+election.close
 ```
 
 Each message is bound to the session, OBT hash, election context, request
@@ -448,13 +453,20 @@ After voter confirmation:
 8. A detached manifest containing the PDF hash and artifact references is signed.
 9. The PDF and signed manifest are committed to WORM/equivalent storage.
 10. The acceptance ledger commits the cast event and returns an acknowledgement.
-11. Optional printing is authorized only after durable acceptance.
+11. The offered A4 voter-verification/audit path is authorized only after durable acceptance. The prototype may allow printing to be skipped; that setting does not demonstrate compliance with the offered profile or VVPAT requirements.
 
 The final artifact must be read-only from the application’s perspective. Any later lifecycle change is an append-only event, not an overwrite of the finalized PDF.
 
-## 8. Artifact 5: Optional Printed Evidence
+## 8. Artifact 5: A4 Voter-Verification and Audit Record
 
-Optional printed evidence may be produced from the Finalized Ballot PDF using an approved printer and paper stock.
+The offered OpScan with DRE profile includes an A4 human-readable record of
+the voter's selections and a Truth QR encoding the corresponding authenticated
+selections. The printer, paper stock, layout, private voter inspection,
+read-back verification, and custody procedure must follow the approved
+profile. COMELEC and the procurement documents must designate whether this is
+the statutory official ballot, a VVPAT, a voter receipt, an audit record, or
+another defined artifact. Prototype paper-optional operation does not establish
+that statutory VVPAT requirements are met.
 
 The print event must record:
 
@@ -468,9 +480,10 @@ The print event must record:
 - spoilage or cancellation status; and
 - operator or ceremony reference.
 
-The voter may inspect the printed output where it is produced. Physical handling,
-retention, or deposit is supplementary and does not determine whether the PDF is
-cast or tally-eligible in the OpScan with DRE profile.
+The voter must be provided the approved private inspection opportunity. Record
+privacy-preserving handling, sealing, retention, and audit access. These paper
+procedures do not silently change the proposed electronic cast event or tally
+input; any conflict rule must be expressly approved and documented.
 
 ## 9. Artifact 6: QR Read-Back and Validation Result
 
@@ -494,8 +507,11 @@ The read-back result must record:
 ## 10. Artifact 7: Post-Close Verification Result
 
 After close of voting, authorized officials verify the durably accepted ballot
-PDFs and their evidence manifests. Optional paper output may be reconciled as
-supplementary evidence where available.
+PDFs and their evidence manifests, and reconcile the A4 records under the
+approved audit procedure. The legal designation and effect of paper/PDF
+discrepancies must be determined by COMELEC and reflected in the applicable
+profile; software must not presume that paper is irrelevant or automatically
+controlling.
 
 The verification result must record:
 
@@ -562,7 +578,7 @@ The precinct report must reconcile at minimum:
 - cancelled ballots;
 - reprints;
 - QR read-backs;
-- optional paper outputs;
+- A4 voter-verification/audit outputs, including recorded print exceptions or prototype omission;
 - post-close PDF verification results;
 - acceptance-ledger entries;
 - accepted ballots;
@@ -601,8 +617,8 @@ OBT approved
   -> PDF-native signature applied
   -> signed manifest committed
   -> acceptance ledger committed
-  -> optionally printed
-  -> optionally print read-back verified
+  -> A4 voter-verification/audit record produced (prototype may omit; approved procedure governs)
+  -> print read-back and voter-inspection evidence recorded
   -> reconciled as an accepted PDF
   -> verified post-close
   -> close certificate issued
@@ -654,7 +670,7 @@ browser scripting, a remote URL, or an Internet connection.
 This flow remains subject to refinement on:
 
 1. Whether OBT serials are embedded in the PDF or supplied through a signed serial manifest.
-2. Whether the final PDF itself receives a PDF-level signature in addition to the signed QR payload.
+2. The commissioned PDF-native signature profile, certificate model, and validation rules required for each finalized ballot PDF, in addition to the signed Truth QR payload and signed detached manifest.
 3. Whether immediate QR read-back is only a print-validation ceremony or also an official cast event.
 4. COMELEC's legal treatment of the proposed canonical electronic DRE record,
    tally input, VVPAT, applicable law, and TOR.

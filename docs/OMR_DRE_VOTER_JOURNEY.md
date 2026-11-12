@@ -58,11 +58,11 @@ flowchart TB
     end
     subgraph S6["6. Verify the record"]
         O6["Feed marked paper ballot into scanner<br/>Interpret marks under approved rules"]
-        D6["Finalize and durably accept<br/>the signed ballot PDF<br/>Optionally print and inspect"]
+        D6["Durably accept the signed ballot PDF<br/>Produce A4 voter-verification record<br/>Read back QR; voter inspects"]
     end
     subgraph S7["7. Custody and exit"]
         O7["Paper ballot retained in ballot box<br/>Voter leaves"]
-        D7["Canonical electronic DRE record retained<br/>Voter leaves"]
+        D7["Accepted PDF and evidence retained<br/>A4 record secured under approved custody<br/>Voter leaves"]
     end
 
     OMR --> O1 --> O2 --> O3 --> O4 --> O5 --> O6
@@ -79,29 +79,35 @@ flowchart TB
     ER --> TX["Transmit Election Returns"]
 ```
 
-## Optional paper output in the DRE profile
+## A4 voter-verification and audit path in the DRE bid profile
+
+The offered OpScan with DRE solution includes an A4 human-readable record of
+the voter's selections with a Truth QR encoding the corresponding authenticated
+selections. The voter is given a private opportunity to inspect it. The QR is
+read back to verify print correctness, and the paper is handled, sealed,
+retained, and made available for audit under the approved procedure. COMELEC
+and the issued procurement documents must designate the artifact's legal role
+and approve the final procedure. The prototype's ability to skip printing is
+not evidence that the proposed bid profile satisfies VVPAT requirements.
 
 ```mermaid
 flowchart TD
     CONFIRM["Voter reviews and confirms selections on screen"]
     ACCEPT["Signed ballot PDF is durably accepted<br/>This is the casting event"]
-    PRINT{"Print supplementary paper evidence?"}
-    PAPER["Print selected candidates and Truth QR on A4"]
-    THERMAL["Print supplementary output using the approved printer"]
-    REVIEW["Voter inspects the printed selections"]
+    PRINT["Produce A4 human-readable voter-verification record with Truth QR"]
+    PAPER["Read back QR and verify print correctness"]
+    REVIEW["Voter privately inspects the selections"]
     MATCH{"Printed selections match the confirmed choices?"}
-    CUSTODY["Record optional paper handling or retention"]
+    CUSTODY["Secure, seal, retain, and provide audit access under approved procedure"]
     EXCEPTION["Pause normal completion<br/>Preserve evidence and follow the approved discrepancy procedure"]
     DONE["Complete the voter session<br/>Canonical electronic DRE record retained"]
     LEAVE["Voter leaves; station readied for the next voter"]
 
-    CONFIRM --> ACCEPT --> PRINT
-    PRINT -->|Yes: A4 laser| PAPER --> REVIEW
-    PRINT -->|Yes: other approved printer| THERMAL --> REVIEW
-    PRINT -->|No| DONE
+    CONFIRM --> ACCEPT --> PRINT --> PAPER --> REVIEW
     REVIEW --> MATCH
     MATCH -->|Yes| CUSTODY --> DONE
     MATCH -->|No| EXCEPTION
+    PAPER -->|Unreadable or missing| EXCEPTION
     DONE --> LEAVE
 ```
 

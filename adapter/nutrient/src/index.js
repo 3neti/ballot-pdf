@@ -60,7 +60,7 @@ export class BallotPdfProtocolClient {
 
   async send(messageType, body = {}) {
     const envelope = {
-      protocol: '3neti.ballot-pdf', version: '1.0', message_type: messageType,
+      protocol: '3neti.ballot-pdf', version: '1.1', message_type: messageType,
       request_id: `REQ-${this.crypto.randomUUID().slice(0, 8)}`,
       nonce: this.crypto.randomUUID(), ...body,
     }

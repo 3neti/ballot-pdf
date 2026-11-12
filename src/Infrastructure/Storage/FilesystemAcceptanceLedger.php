@@ -4,6 +4,7 @@ namespace LBHurtado\BallotPdf\Infrastructure\Storage;
 
 use LBHurtado\BallotPdf\Contracts\AcceptanceLedger;
 use LBHurtado\BallotPdf\Domain\Evidence\AcceptanceRecord;
+use LBHurtado\BallotPdf\Domain\Evidence\ElectionCloseCertificate;
 use LBHurtado\BallotPdf\Support\CanonicalJson;
 
 final readonly class FilesystemAcceptanceLedger implements AcceptanceLedger
@@ -17,6 +18,9 @@ final readonly class FilesystemAcceptanceLedger implements AcceptanceLedger
 
     public function accept(AcceptanceRecord $record): void
     {
+        if ($this->isClosed()) {
+            throw new \RuntimeException('Acceptance ledger is closed.');
+        }
         $existing = $this->byIdempotency($record->idempotencyKey);
         if ($existing !== null) {
             if ($existing->hash() !== $record->hash()) {
@@ -28,6 +32,11 @@ final readonly class FilesystemAcceptanceLedger implements AcceptanceLedger
         $serialRecord = $this->bySerial($record->serial);
         if ($serialRecord !== null && $serialRecord->hash() !== $record->hash()) {
             throw new \RuntimeException('Ballot serial has already been accepted with different content.');
+        }
+
+        $highest = array_reduce($this->records(), static fn (int $carry, AcceptanceRecord $item): int => max($carry, $item->sequence), 0);
+        if ($record->sequence <= $highest) {
+            throw new \RuntimeException('Acceptance sequence must be strictly increasing.');
         }
 
         $path = $this->root.'/'.$record->acceptanceId.'.json';
@@ -57,8 +66,76 @@ final readonly class FilesystemAcceptanceLedger implements AcceptanceLedger
         return null;
     }
 
+    public function allocateSequence(): int
+    {
+        if ($this->isClosed()) {
+            throw new \RuntimeException('Acceptance ledger is closed.');
+        }
+        $path = $this->root.'/.sequence';
+        $handle = fopen($path, 'c+');
+        if ($handle === false || ! flock($handle, LOCK_EX)) {
+            throw new \RuntimeException('Unable to lock acceptance sequence state.');
+        }
+        try {
+            $contents = stream_get_contents($handle);
+            $sequence = max((int) trim((string) $contents), 0) + 1;
+            ftruncate($handle, 0);
+            rewind($handle);
+            if (fwrite($handle, (string) $sequence) === false || ! fflush($handle)) {
+                throw new \RuntimeException('Unable to persist acceptance sequence.');
+            }
+            return $sequence;
+        } finally {
+            flock($handle, LOCK_UN);
+            fclose($handle);
+        }
+    }
+
     /** @return list<AcceptanceRecord> */
-    private function records(): array
+    public function records(): array
+    {
+        return $this->readRecords();
+    }
+
+    public function close(ElectionCloseCertificate $certificate): void
+    {
+        if ($this->isClosed()) {
+            $existing = $this->root.'/.closed.json';
+            if (is_file($existing) && hash_file('sha256', $existing) === hash('sha256', CanonicalJson::encode($certificate->toArray()))) {
+                return;
+            }
+            throw new \RuntimeException('Acceptance ledger is already closed.');
+        }
+        $path = $this->root.'/.closed.json';
+        if (file_exists($path)) {
+            throw new \RuntimeException("Acceptance ledger refuses overwrite: {$path}");
+        }
+        file_put_contents($path, CanonicalJson::encode($certificate->toArray()), LOCK_EX);
+    }
+
+    public function isClosed(): bool
+    {
+        return is_file($this->root.'/.closed.json');
+    }
+
+    /** @return array<string, mixed> */
+    public function recoveryReport(): array
+    {
+        $records = $this->records();
+        $sequence = $this->root.'/.sequence';
+        $highest = array_reduce($records, static fn (int $carry, AcceptanceRecord $item): int => max($carry, $item->sequence), 0);
+        $stored = is_file($sequence) ? (int) trim((string) file_get_contents($sequence)) : 0;
+        return [
+            'record_count' => count($records),
+            'highest_record_sequence' => $highest,
+            'stored_sequence' => $stored,
+            'sequence_consistent' => $stored >= $highest,
+            'closed' => $this->isClosed(),
+        ];
+    }
+
+    /** @return list<AcceptanceRecord> */
+    private function readRecords(): array
     {
         $files = glob($this->root.'/*.json') ?: [];
         sort($files, SORT_STRING);
@@ -75,6 +152,7 @@ final readonly class FilesystemAcceptanceLedger implements AcceptanceLedger
                 (int) $data['acceptance_sequence'],
                 (array) $data['context'],
                 (string) ($data['status'] ?? 'accepted'),
+                (string) ($data['content_fingerprint'] ?? ''),
             );
         }, $files);
     }

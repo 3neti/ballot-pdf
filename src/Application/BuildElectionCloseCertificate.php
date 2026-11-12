@@ -5,9 +5,11 @@ namespace LBHurtado\BallotPdf\Application;
 use LBHurtado\BallotPdf\Domain\Evidence\AcceptanceRecord;
 use LBHurtado\BallotPdf\Domain\Evidence\ElectionCloseCertificate;
 use LBHurtado\BallotPdf\Support\CanonicalJson;
+use LBHurtado\BallotPdf\Contracts\RecordSigner;
 
 final class BuildElectionCloseCertificate
 {
+    public function __construct(private readonly ?RecordSigner $signer = null) {}
     /** @param list<AcceptanceRecord> $accepted */
     public function execute(
         string $electionId,
@@ -27,7 +29,7 @@ final class BuildElectionCloseCertificate
             'acceptance_sequence' => $record->sequence,
         ], $accepted)));
 
-        return new ElectionCloseCertificate(
+        $unsigned = new ElectionCloseCertificate(
             $electionId,
             $scope,
             $closedAt,
@@ -38,6 +40,28 @@ final class BuildElectionCloseCertificate
             $trustRosterHash,
             $reconciliation,
             hash('sha256', $electionId.'|'.$scope.'|'.$closedAt.'|'.$commitment),
+        );
+        if ($this->signer === null) {
+            return $unsigned;
+        }
+        $signature = $this->signer->sign(
+            'election-close-certificate',
+            $electionId,
+            $scope,
+            CanonicalJson::encode($unsigned->toArray()),
+        );
+        return new ElectionCloseCertificate(
+            $unsigned->electionId,
+            $unsigned->scope,
+            $unsigned->closedAt,
+            $unsigned->lastAcceptanceSequence,
+            $unsigned->acceptedSerials,
+            $unsigned->castSetCommitment,
+            $unsigned->tallyRulesHash,
+            $unsigned->trustRosterHash,
+            $unsigned->reconciliation,
+            $unsigned->certificateId,
+            $signature,
         );
     }
 }

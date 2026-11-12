@@ -364,7 +364,7 @@ Until the proof-of-concept is complete:
 - define `PdfRenderer`, `PdfGenerator`, `PdfInspector`, `PdfSigner`, and `PdfPrinterAdapter` ports;
 - keep `truth-qr` authoritative for ballot payload signing and verification;
 - use the controlled WAES voter UI for contest-limit enforcement;
-- use the SDK for PDF rendering, materialization, optional printing, and the commissioned PDF-native signing adapter; and
+- use the SDK for PDF rendering, materialization, the offered A4 voter-verification/audit print path, and the commissioned PDF-native signing adapter; optional print behavior may remain a prototype configuration only; and
 - keep standard PDF viewers as read-only audit/rendering clients.
 
 The current leading candidates are Nutrient or Apryse for the controlled browser/table runtime, Adobe Acrobat-PDFL for a native embedded engine, and Foxit as the strongest commercial alternative. The final choice should follow the proof-of-concept, not precede it.
@@ -376,14 +376,14 @@ Before selecting an SDK, approve:
 - OBT mode as the bid baseline;
 - per-voter Finalized Ballot PDF as the electronic output;
 - the signed QR payload as the authoritative ballot-authentication layer;
-- PDF-level signing as optional or supplementary;
+- a commissioned PDF-native signature as a required production capability for each finalized ballot PDF, together with a signed detached manifest containing the complete-PDF hash; and
 - browser/table interaction as a controlled WAES runtime;
 - Acrobat, Preview, PDF.js, and external viewers as audit/rendering clients; and
 - the volume test plan for the 83,510,241-ballot requirement.
 
 ## 9. Bid response and contract acceptance
 
-The technical proposal and contract annexes should state, test, and make
+The technical proposal and contract annexes must state, test, and make
 traceable the following profile commitments:
 
 | Bid commitment | Required proposal detail and acceptance evidence |

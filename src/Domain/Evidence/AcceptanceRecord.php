@@ -18,6 +18,7 @@ final readonly class AcceptanceRecord
         public int $sequence,
         public array $context,
         public string $status = 'accepted',
+        public string $contentFingerprint = '',
     ) {
         foreach ([$acceptanceId, $idempotencyKey, $serial, $pdfSha256, $payloadSha256, $manifestSha256, $acceptedAt] as $value) {
             if (trim($value) === '') {
@@ -48,6 +49,15 @@ final readonly class AcceptanceRecord
             'acceptance_sequence' => $this->sequence,
             'context' => $this->context,
             'status' => $this->status,
+            'content_fingerprint' => $this->contentFingerprint !== ''
+                ? $this->contentFingerprint
+                : hash('sha256', CanonicalJson::encode([
+                    'ballot_serial' => $this->serial,
+                    'pdf_sha256' => $this->pdfSha256,
+                    'payload_sha256' => $this->payloadSha256,
+                    'manifest_sha256' => $this->manifestSha256,
+                    'context' => $this->context,
+                ])),
         ];
     }
 }

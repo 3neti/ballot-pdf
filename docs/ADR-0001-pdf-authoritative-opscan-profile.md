@@ -31,7 +31,7 @@ The OpScan with DRE path uses:
 - a signed Truth QR payload as the machine-verifiable representation;
 - an append-only evidence store;
 - deterministic recursive verification; and
-- optional paper output for inspection or supplementary evidence.
+- an offered A4 human-readable voter-verification/audit path with the corresponding authenticated Truth QR; COMELEC and the procurement documents must designate the printed artifact's legal role and approve its procedure.
 
 The OMR path remains paper-first and is outside this profile decision.
 
@@ -45,10 +45,13 @@ For OpScan with DRE only:
    ballot” or that paper/VVPAT requirements are waived.
 2. Durable acceptance of the finalized PDF and evidence manifest is the
    casting event.
-3. Printing, paper inspection, physical retention, and paper deposit follow
-   the COMELEC-approved voter-verification and custody rules. Until those rules
-   are established, the prototype's optional-print behavior is not evidence
-   that statutory VVPAT requirements are met.
+3. The offered system includes A4 printing, private voter inspection,
+   print/read-back verification, mismatch handling, custody, sealing,
+   retention, and audit access under the approved voter-verification and
+   custody rules. COMELEC and the procurement documents designate whether the
+   artifact is the statutory official ballot, a VVPAT, a voter receipt, an
+   audit record, or another defined artifact. Prototype optional-print
+   behavior is not evidence that statutory VVPAT requirements are met.
 4. The proposed post-close electronic tally operates on accepted ballot PDFs
    and their evidence manifests, subject to the approved counting rule and
    discrepancy process.
@@ -73,10 +76,12 @@ Not selected as a universal software rule. OMR remains paper-first, while the
 proposed DRE profile uses an electronic record as its machine tally input.
 That technical distinction does not decide the legal status of each artifact.
 
-### Make paper optional without separating OMR and DRE
+### Treat paper as universally optional
 
-Rejected because it would blur the distinct paper-marking and electronic
-selection workflows and leave the paper/VVPAT role unclear.
+Rejected because OMR remains paper-first and the offered DRE system includes an
+A4 voter-verification/audit path. The DRE electronic cast boundary is distinct
+from paper production, but that does not make the paper path irrelevant or
+settle its legal designation.
 
 ### Treat the Truth QR as the only voting record
 
@@ -91,7 +96,7 @@ Positive:
 - the voter journey matches the intended PDF-centered design;
 - casting does not depend on printer availability;
 - tallying can operate from accepted PDFs and evidence packages;
-- optional paper output remains available for inspection and demonstrations;
+- the offered A4 voter-verification/audit path is explicit, while its legal designation and operating rules remain subject to approval;
 - OMR and OpScan authority models are explicit and non-conflicting.
 - complete-PDF authentication detects transplantation of a valid QR into a
   different PDF;

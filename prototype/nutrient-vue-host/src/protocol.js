@@ -33,6 +33,7 @@ export class BallotPdfProtocolClient extends AdapterProtocolClient {
       precinct_id: precinctId,
       ballot_style_id: ballotStyleId,
       mapping_hash: mappingHash,
+      idempotency_key: sessionId,
       status: 'awaiting-local-ballot-pdf-finalizer',
     })
   }

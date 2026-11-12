@@ -11,7 +11,7 @@
 
 ## 1. Executive specification
 
-OpScan with DRE is an authenticated electronic-record system. The finalized authenticated ballot PDF becomes cast in the proposed system upon durable acceptance together with its evidence manifest and is the proposed tally input. Any paper output and voter-verification procedure must meet the COMELEC-approved profile; optional output in a prototype must not be described as satisfying VVPAT requirements. OMR remains a separate marked-paper workflow.
+OpScan with DRE is an authenticated electronic-record system. The finalized authenticated ballot PDF becomes cast in the proposed system upon durable acceptance together with its evidence manifest and is the proposed tally input. The offered system includes an A4 human-readable voter-verification and audit path with a Truth QR for the corresponding authenticated selections. The prototype's optional-print operation is not evidence that this path satisfies VVPAT requirements. COMELEC and the issued procurement documents must designate the printed artifact's legal role and approve its procedure. OMR remains a separate marked-paper workflow.
 
 The system targets explicit trust assumptions, signed ballot records, deterministic verification, append-only evidence, offline operation after commissioning, and independent tally reproduction. It does not claim end-to-end verifiability against fully compromised capture, signing, or tallying components.
 
@@ -27,7 +27,7 @@ The system targets explicit trust assumptions, signed ballot records, determinis
 | Evidence preservation | WORM or commissioned equivalent; ordinary-filesystem prototype is logical append-only storage |
 | Election closure | Signed Election Close Certificate committing to the accepted cast set and approved rules |
 | Tally basis | Eligible records in the authenticated closed cast set, each counted once |
-| Paper | Optional inspection and supplementary evidence; not a prerequisite for casting or counting |
+| Offered A4 paper path | Human-readable selected choices and corresponding Truth QR for private voter inspection and audit; production role, custody, and discrepancy procedure require COMELEC/TOR designation |
 | Payload cryptography | Ed25519 or another explicitly approved asymmetric profile |
 | Deployment posture | Offline precinct operation; independently provisioned verification material |
 
@@ -72,9 +72,9 @@ The principal architecture sources are [domain boundaries](ARCHITECTURE_DOMAIN_B
 
 Evidence status is informed by the [scenario-runner description](SCENARIO_RUNNER.md), [Manila scenario](MANILA_HAPPY_PATH_SCENARIO.md), [software decision log](SOFTWARE_DECISION_LOG.md), and [engineering backlog](TODO.md). Procurement context is drawn from the [TOR v34 delta and SDK criteria](TOR_V34_COMPLIANCE_DELTA_AND_SDK_CRITERIA.md); this paper does not independently certify the underlying TOR interpretation.
 
-The external working references are `~/Downloads/Ballot Journey.pdf` and `~/Downloads/pdf-ballot-document-update-handoff.txt`. The journey PDF supplies voter-stage questions and A4/thermal inspection examples. Its printing-station sequence is not adopted as a system requirement. The proposed DRE profile separates durable electronic acceptance from paper production, while the legally required voter-verification and paper-audit procedure remains for COMELEC to determine. Reuse of a control number at printing remains subject to privacy controls.
+The external working references are `~/Downloads/Ballot Journey.pdf` and `~/Downloads/pdf-ballot-document-update-handoff.txt`. The journey PDF supplies voter-stage questions and A4/thermal inspection examples. Its printing-station sequence is not adopted as a system requirement. The proposed DRE profile separates durable electronic acceptance from paper production while the offered system includes an A4 voter-verification/audit path. COMELEC and the issued procurement documents determine the paper artifact's designation and approved procedure. Reuse of a control number at printing remains subject to privacy controls.
 
-Some source passages retain earlier paper-deposit, optional-PDF-signing, or tally-before-certificate language. For the prototype architecture, durable acceptance and the closed cast set govern electronic eligibility and reproducible tally input. This engineering rule does not determine the statutory status of the PDF or printed paper. Remaining source inconsistencies are not evidence of legal approval.
+Older external working notes may retain earlier paper-deposit or tally-before-certificate language. This package's production profile requires both PDF-native signing and a signed detached manifest; current prototype status is recorded separately. For the proposed electronic architecture, durable acceptance and the closed cast set govern electronic eligibility and reproducible tally input. This engineering rule does not determine the statutory status of the PDF or printed paper, and no technical wording is evidence of legal approval.
 
 ## 3. OpScan with DRE architecture
 
@@ -157,7 +157,7 @@ PDF is selected to combine a fixed ballot layout, interactive selection fields, 
 | PDF-native signature | Authenticate the document under the commissioned signature profile | SDK support, signed revision coverage, and validation rules must be commissioned. |
 | Encryption | Protect authorized opening or stored/transported content | Does not authenticate intent or prevent all copying and correlation. |
 | Detached manifest | Bind complete artifact bytes to canonical data and acceptance identity | Manifest signature and trust scope must be verified. |
-| Optional printing | Inspection and supplementary evidence | Print completion does not determine casting. |
+| A4 voter-verification/audit output | Human-readable selected choices and corresponding Truth QR; offered production capability, operated under the approved profile | Durable PDF acceptance defines the proposed system cast event; printing status is separately recorded and reconciled. |
 
 The package distinguishes OBT mode—an approved master plus controlled serial allocation—from proposed serialized-stock mode, with one blank PDF per serial. Both lead to a per-ballot finalized PDF. Pre-generating a PDF for every estimated voter is not assumed mandatory. Serialized-stock distribution and the applicable supply model require approval.
 
@@ -173,7 +173,7 @@ Deterministic EMS output means reproducibility under fixed source hashes, rules,
 4. The voter opens the approved PDF, selects candidates, navigates contests, and corrects selections.
 5. The voter privately reviews candidate names, selected choices, and permitted undervotes, then confirms.
 6. The local service validates and authenticates the final record, preserves the bundle, commits acceptance, and acknowledges durable acceptance.
-7. Optional paper may be printed and inspected under the approved procedure.
+7. The offered system produces the A4 voter-verification/audit record, verifies its QR read-back, and gives the voter a private opportunity to inspect it under the approved procedure. The prototype may permit printing to be skipped; that behavior does not establish compliance with the proposed bid profile or VVPAT requirements.
 8. The canonical electronic DRE record remains retained; officers reconcile, close the accepted set, verify, and produce the proposed electronic tally under the approved counting rules.
 
 ### 6.2 Required lifecycle
@@ -190,7 +190,7 @@ allocated
   -> WORM bundle committed
   -> acceptance ledger committed
   -> durable acceptance acknowledged
-  -> optionally printed
+  -> A4 voter-verification/audit record produced (prototype may omit; omission is not bid-profile evidence)
   -> reconciled
   -> election closed
   -> tallied
@@ -198,7 +198,7 @@ allocated
 
 The durable acceptance acknowledgement is the casting event. It is backed by the ledger commit, not by successful delivery of a screen message alone. If acknowledgement delivery is lost after commitment, the accepted record persists and a retry must recover the original result rather than create a second vote.
 
-Saving a PDF, a viewer confirmation action, QR scanning, or printing alone does not cast a ballot. The optional printing step may be skipped without blocking reconciliation or tally eligibility. Print failure after acceptance must not silently uncast the ballot.
+Saving a PDF, a viewer confirmation action, QR scanning, or printing alone does not cast a ballot. Durable acceptance is the proposed DRE cast event. The prototype can skip printing without changing that event model, but the offered bid profile includes the A4 voter-verification/audit path. A print failure after acceptance must trigger the approved exception and custody procedure and must not silently uncast the ballot.
 
 The diagram includes session, artifact, printing, and election milestones; these are not interchangeable statuses. Cancelled, spoiled, abandoned, invalid, and duplicate records must be explicitly classified and accounted for. No finalized artifact or serial history is silently deleted. Post-acceptance changes of disposition require separately approved authority and append-only evidence.
 
@@ -242,6 +242,16 @@ Complete-artifact authentication requires both:
 
 1. A PDF-native signature through a commissioned PDF-signature adapter.
 2. A signed detached manifest binding the complete PDF to canonical data, context, and acceptance identity.
+
+These mechanisms have distinct responsibilities:
+
+| Mechanism | Function |
+|---|---|
+| Truth QR signature | Authenticates canonical selections and election context. |
+| PDF-native signature | Authenticates the finalized PDF under the commissioned PDF signature profile. |
+| Signed detached manifest | Binds the complete PDF hash, payload hash, context, acceptance identity, and evidence references. |
+| Acceptance ledger | Records the durable cast event. |
+| Election Close Certificate | Commits to the accepted cast set and approved tally rules. |
 
 | Signed detached-manifest content | Required binding |
 |---|---|
@@ -398,15 +408,15 @@ Authenticated close certificate + acceptance evidence
   -> compare with Election Return
 ```
 
-Reproducible totals do not prove that selections were captured as intended before finalization. Optional paper does not become controlling through a recount.
+Reproducible totals do not prove that selections were captured as intended before finalization. The existence of paper output alone does not make it controlling through a recount.
 
 The prototype generates a canonical, timestamp-free Election Return-like artifact containing context, eligible records, tally, and verification references. It is not a prescribed COMELEC form. Production must define canonical report bytes separately from ceremony timestamps, signature envelopes, and official presentation. Independent implementations and privacy-approved access remain required.
 
 ## 13. Paper output and audit treatment
 
-Paper may support human inspection, supplementary evidence, demonstrations, reconciliation, or operational contingency. Approved A4 laser or thermal output may be considered, subject to readability, custody, retention, and procurement validation.
+The offered OpScan with DRE solution includes an A4 human-readable record of selected choices with a Truth QR encoding the corresponding authenticated selections. The bid must specify private voter inspection, print/read-back verification, mismatch handling, custody, sealing, retention, audit access, reconciliation with the accepted PDF, and alignment with the applicable COMELEC audit procedure. The printed artifact's legal designation (official ballot, VVPAT, voter receipt, audit record, or another defined artifact) remains for COMELEC and the procurement documents to determine. Prototype paper-optional operation does not establish VVPAT compliance.
 
-In the current prototype, printing is not a casting prerequisite. This implementation choice does not establish whether printing, voter inspection, retention, or deposit is legally required for an official DRE profile. Printed confirmation marks are human-readable representations, not OMR inputs in this profile. QR read-back checks encoding and print readability; it does not create another cast event or tally contribution. COMELEC must determine whether and how this output satisfies the applicable VVPAT and official-ballot rules.
+In the current prototype, printing is not a casting prerequisite. This implementation choice does not establish whether the printed artifact satisfies statutory VVPAT or official-ballot requirements. In the offered bid profile, A4 output, voter inspection, print/read-back verification, and the approved custody/audit procedure are explicit capabilities. Printed confirmation marks are human-readable representations, not OMR inputs in this profile. QR read-back checks encoding and print readability; it does not create another cast event or tally contribution. COMELEC must designate the paper artifact's role and approve the applicable procedure.
 
 Where output is produced, record the originating PDF hash, serial, print attempt, printer identity, result, read-back evidence, and custody disposition under the privacy policy. A reprint is not a new vote; any replacement-ballot procedure requires separate authorization and serial accounting.
 
@@ -446,34 +456,34 @@ A valid signature proves authenticity under the trust infrastructure. It does no
 
 ### 15.1 Automated package evidence
 
-On 2026-11-12, `vendor/bin/pest` completed with **15 passing tests and 85 assertions**. This is a point-in-time test result, not a certification or comprehensive adversarial evaluation.
+On 2026-11-13, `vendor/bin/pest` completed with **17 passing tests and 95 assertions**. The Nutrient host's native Node fixture tests also completed with **5 passing tests**, and the Vite production build completed successfully. These are point-in-time prototype results, not certification or comprehensive adversarial evaluation.
 
 | Evidence | Demonstrated behavior | Boundary |
 |---|---|---|
 | `tests/Feature/CoreWorkflowTest.php` | Contest ceiling rejection; context-bound stock; injected authorization; final-artifact construction; overwrite refusal; protocol envelope handling; nested duplicate suppression; declared-PDF-hash mismatch detection | Several codecs, materializers, and authorization dependencies are test doubles. |
 | `tests/Feature/TruthQrIntegrationTest.php` | Existing `aes-election-v2` Ed25519 encode/decode; scoped key resolution; reference ceremony/rotation records; approval-ID checks; distribution hashes; escrow tamper rejection; injected key-store boundary | Synthetic keys and records; no production HSM, human identity ceremony, or historical revocation assurance. |
-| `tests/Feature/AcceptanceLedgerTest.php` | Identical ledger-record retries; changed-record conflict; deterministic close-set commitment; PDF/manifest storage before ledger acceptance | PDF signer and manifest signer are test doubles; no real PDF-native signature validation or crash/concurrency proof. |
-| `tests/Scenario/LifecycleScenarioTest.php` | Synthetic selection/finalization/verification/report flow and repeat-finalization refusal | Does not currently integrate the new acceptance service or closed-set authentication. |
-| `tests/Scenario/ManilaHappyPathScenarioTest.php` | Synthetic composite-contest orchestration, offline-context fixtures, serial-range checks, artifact/report generation | Simulated PDF/codec/signing dependencies; not a live approved precinct ceremony. |
+| `tests/Feature/AcceptanceLedgerTest.php` and `tests/Feature/AuthenticatedAcceptanceWorkflowTest.php` | Idempotent retries; changed-content conflict; manifest validation; signed PDF/manifest bundle; durable sequence state; signed close/freeze; A4 read-back and custody evidence | PDF signer, manifest signer, printer, and read-back implementations are deterministic reference adapters; no production certificate or crash/concurrency proof. |
+| `tests/Scenario/LifecycleScenarioTest.php` | Synthetic selection, authenticated finalization, manifest/WORM/ledger acceptance, recursive verification, close certificate, A4 audit record, deterministic Election Return, and idempotent retry | Uses isolated reference signers and storage; not a live approved precinct ceremony. |
+| `tests/Scenario/ManilaHappyPathScenarioTest.php` | Synthetic composite-contest orchestration, offline-context fixtures, serial-range checks, authenticated acceptance, closure, A4 audit records, and artifact/report generation | Simulated PDF/codec/signing/printer dependencies; not a live approved precinct ceremony. |
 
 ### 15.2 Recorded prototype integration evidence
 
 The software decision log records a local Nutrient browser smoke test opening an encrypted synthetic OBT, exporting selections, invoking reference finalization, returning flattened PDF and QR evidence, and using local assets. It also records QR extraction/read-back and `qpdf` syntax checks. These are prior recorded prototype observations, not newly repeated cross-viewer acceptance tests for this white paper.
 
-The same log records incomplete Acrobat compatibility validation, a Nutrient evaluation watermark/licensing issue, and a Vitest module-runner failure before test collection. A successful Vite build or PHP suite does not close those gaps.
+The same log records incomplete Acrobat compatibility validation and a Nutrient evaluation watermark/licensing issue. A successful Vite build or PHP suite does not close those gaps.
 
 ### 15.3 Implementation gaps that limit current claims
 
 The reviewed implementation is relevant evidence, but interfaces and passing tests do not establish the complete architecture:
 
-- `src/Application/AcceptFinalizedBallot.php` applies an injected PDF signature, hashes returned bytes, signs a manifest, stores artifacts, and then writes an acceptance record. Its existing-idempotency shortcut returns the original record without comparing new request content. The ledger's changed-record test does not establish changed-content conflict handling at this service boundary.
-- Its current manifest includes a payload hash, QR scans, context, idempotency key, signature metadata, and status, but not every explicit binding required by section 8, including the separate QR payload hash, acceptance sequence, and complete style/mapping/artifact-reference schema.
-- `src/Infrastructure/Storage/FilesystemAcceptanceLedger.php` stores JSON records with file-write locking. It does not demonstrate authenticated ledger exports, authority-wide transactional uniqueness, monotonic sequence allocation, or power-loss durability. An `AcceptanceRecord` hash is not an independent signature.
-- `src/Application/BuildElectionCloseCertificate.php` and `src/Domain/Evidence/ElectionCloseCertificate.php` build deterministic certificate data and a cast-set hash. They do not currently supply the required official/device signatures, previous-checkpoint field, or an enforced acceptance freeze.
-- `src/Application/VerifyDirectory.php` checks decoded context, selected statuses, serials, and declared PDF hashes, but does not enforce all PDF-native, detached-manifest, acceptance-ledger, or close-certificate checks. It still locates PDF candidates by basename and retains the first eligible representation when classifying later duplicates. This is legacy prototype behavior, not the required authority policy.
-- `src/Protocol/ReferenceProtocolService.php` exposes injectable `acceptance.commit` and `election.close` callbacks, but route availability does not prove their deployment or full context authentication. The scenario runners still use the earlier finalization path.
+- `src/Application/AcceptFinalizedBallot.php` now applies an injected PDF signature, computes the complete-PDF hash, validates and signs the acceptance manifest, stores the bundle, allocates the acceptance sequence, and records the accepted cast event. Identical retries return the stored signed artifact; changed content under the same idempotency key is rejected.
+- The acceptance manifest now includes the payload/QR hash, context, idempotency key, signature metadata, acceptance identity and sequence, content fingerprint, and artifact references. The schema is validated before WORM commit.
+- `src/Infrastructure/Storage/FilesystemAcceptanceLedger.php` now provides locked local sequence allocation, closure freeze, recovery reporting, serial/idempotency checks, and post-close rejection. It remains a logical reference implementation and does not establish production power-loss or multi-device durability.
+- `src/Application/BuildElectionCloseCertificate.php` and `src/Domain/Evidence/ElectionCloseCertificate.php` now produce signed certificate data, and `CloseElection` persists the certificate before freezing the ledger. Previous-checkpoint chaining and commissioned official signature thresholds remain production decisions.
+- `src/Application/VerifyDirectory.php` can enforce acceptance-ledger membership, detached-manifest signatures, complete-PDF signature verification, and authenticated duplicate selection when supplied with the commissioned verification ports. Legacy manifest-only verification remains available for old fixtures.
+- `src/Protocol/ReferenceProtocolService.php`, the local reference router, and both scenario runners now expose/use the authenticated acceptance and closure path. Transport authentication, replay protection, and operational device authorization remain application/deployment responsibilities.
 
-Some scenario descriptions describe the intended full chain more broadly than the code currently exercises. The backlog explicitly retains acceptance/closure integration and real PDF-native signing as unfinished. This paper therefore does not call the current scenario an end-to-end demonstration of the commissioned profile.
+The current scenarios demonstrate the authenticated reference workflow, including acceptance, closure, and A4 evidence. They do not constitute an end-to-end demonstration of the commissioned profile because the production PDF-signature adapter, certified printer/read-back hardware, operational key custody, and physical WORM deployment remain unfinished.
 
 ## 16. Production requirements
 
@@ -507,7 +517,7 @@ Capture, finalization, signing, acceptance, and closure remain trusted boundarie
 
 The legal designation and priority of the proposed canonical electronic DRE record remain subject to COMELEC determination. Software implementation cannot authorize replacing a legally controlling paper record or waive VVPAT safeguards. Deployments must follow their applicable approved rules rather than silently applying this profile.
 
-The TOR-delta document preserves paper-printing/deposit requirements and unresolved signature language from earlier procurement analysis. Its reported quantities and hardware criteria are planning context, not proof that the proposed electronic-record/tally rule is compliant. Written clarification must reconcile the proposed profile with the applicable TOR, receipt/VVPAT requirements, stock-supply interpretation, approved signing profile, and official forms. See the [legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md) for the authorities, questions for COMELEC Legal, and [bid/contract drafting guidance](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md#bid-and-contract-guidance).
+The TOR-delta document preserves paper-printing/deposit requirements and identifies the signing profile and other procurement details that require clarification. Its reported quantities and hardware criteria are planning context, not proof that the proposed electronic-record/tally rule is compliant. Written clarification must reconcile the proposed profile with the applicable TOR, receipt/VVPAT requirements, stock-supply interpretation, approved signing profile, and official forms. See the [legal-position note](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md) for the authorities, questions for COMELEC Legal, and [bid/contract drafting guidance](LEGAL_POSITION_DRE_CANONICAL_ELECTRONIC_RECORD.md#bid-and-contract-guidance).
 
 Viewer and signing vendors remain subject to licensing, offline deployment rights, procurement, interoperability, and commissioning. No SDK feature list substitutes for tests on the approved appliance.
 
@@ -515,7 +525,7 @@ Viewer and signing vendors remain subject to licensing, offline deployment right
 
 Official bodies must approve discrepancy adjudication, post-acceptance dispositions, retention, disclosure, independent audit access, signature thresholds, and key ceremonies. Technical rejection, an investigative hold, and legal invalidity are distinct outcomes.
 
-The prototype's accepted PDF controls its internal electronic tally input. Its legal priority over paper evidence has not been established here. Optional printing does not by itself establish complete voter verification, a complete physical audit trail, or a risk-limiting audit of all ballots. Independent tally reproduction does not establish intent fidelity.
+The prototype's accepted PDF controls its internal electronic tally input. Its legal priority over paper evidence has not been established here. Prototype optional printing does not by itself establish complete voter verification, a complete physical audit trail, or a risk-limiting audit of all ballots. Independent tally reproduction does not establish intent fidelity.
 
 ## 18. Open decisions
 
@@ -532,7 +542,7 @@ The architecture is fixed for this paper; the following commissioning and govern
 | Mapping and visible consistency | Independent approval process and reproducible semantic checks across supported renderers |
 | Post-acceptance discrepancies | Authorized disposition, effect on eligibility/certification, and preservation without silent replacement |
 | Privacy and publication | Temporary recovery links, retention/deletion separation, allowed ballot-level access, copies, receipts, and correlation assessment |
-| Optional paper | Availability, format, access, reprint rules, inspection, and custody without becoming a casting dependency |
+| A4 voter-verification/audit path | Required offered capability; approved format, access, reprint rules, inspection, custody, sealing, retention, audit access, and reconciliation with the accepted PDF |
 | Keys and compromise | Provisioning, historical verification, offline revocation, signing versus encryption recovery, and authorized escrow |
 | Viewer/accessibility acceptance | Approved versions, hardware, private review, error reporting, offline licensing, and representative-user testing |
 | Independent reproduction | Canonical totals/report scope, approved tally rules, separately operated verifier, and privacy-compatible evidence access |

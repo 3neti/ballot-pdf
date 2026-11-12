@@ -18,6 +18,7 @@ final readonly class ElectionCloseCertificate
         public string $trustRosterHash,
         public array $reconciliation,
         public string $certificateId,
+        public array $signature = [],
     ) {}
 
     public function hash(): string
@@ -40,6 +41,7 @@ final readonly class ElectionCloseCertificate
             'tally_rules_hash' => $this->tallyRulesHash,
             'trust_roster_hash' => $this->trustRosterHash,
             'reconciliation' => $this->reconciliation,
+            'signature' => $this->signature,
         ];
     }
 }

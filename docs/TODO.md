@@ -1,8 +1,9 @@
 # TODO
 
-## Audit-Ready Election Evidence Package
+## Remaining Audit-Ready Deployment Work
 
-Deferred until the prototype workflow is stable. This package must add:
+The reference acceptance, closure, verification, and A4 workflow is now
+implemented. The following production and commissioning work remains:
 
 - durable signing keys, public-key trust roster, and key-ceremony evidence;
 - signed BEI/operator authorization and lifecycle records;
@@ -12,8 +13,8 @@ Deferred until the prototype workflow is stable. This package must add:
 - physical paper-ballot custody, handoff, and reconciliation records;
 - Election Return and precinct-level reconciliation artifacts;
 - independent replay and verification tooling;
-- acceptance-ledger deployment, idempotency recovery, and serial-authority controls;
-- signed Election Close Certificate generation and independent cast-set checkpoints;
+- production acceptance-ledger deployment, idempotency recovery, and serial-authority controls;
+- independent cast-set checkpoints and commissioned closure governance;
 - evidence retention, archival, and package-level hashes; and
 - end-to-end audit scenarios using non-synthetic fixtures.
 
@@ -29,6 +30,9 @@ This is an engineering backlog item, not a claim of legal compliance.
 - [x] Add acceptance-ledger domain port and filesystem reference implementation.
 - [x] Add dual-authenticated bundle acceptance service boundary.
 - [x] Add deterministic Election Close Certificate domain and builder.
+- [x] Route lifecycle and Manila scenarios through authenticated acceptance and closure.
+- [x] Add deterministic A4 audit-output, print, QR read-back, discrepancy, and custody workflow.
+- [x] Add manifest validation, content-bound retries, durable local sequence state, and recovery reporting.
 
 ## Deployment Hardening Status
 
@@ -38,5 +42,6 @@ This is an engineering backlog item, not a claim of legal compliance.
 - [x] Hash-checked public-roster distribution records.
 - [x] Encrypted key escrow and recovery fixture.
 - [ ] Production HSM/OS keychain provisioning, quorum identity verification, and operational recovery drill.
-- [ ] Integrate acceptance commit and close-certificate generation into the end-to-end scenario runner and protocol service.
+- [x] Integrate acceptance commit and close-certificate generation into the end-to-end scenario runner and protocol service.
 - [ ] Commission a real PDF-native signature adapter and validate it in Acrobat, Nutrient, and the independent verifier.
+- [ ] Replace the deterministic reference signer with the commissioned standards-based PDF signature adapter.

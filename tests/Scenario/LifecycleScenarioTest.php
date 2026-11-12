@@ -50,5 +50,6 @@ it('runs the complete deterministic ballot PDF lifecycle', function (): void {
         ->and($result['verification'][0]['classification'])->toBe('accepted')
         ->and($result['report_json'])->toContain('accepted_count')
         ->and($result['report_html'])->toContain('<table>')
-        ->and($result['repeat_finalization_rejected'])->toBeTrue();
+        ->and($result['repeat_finalization_idempotent'])->toBeTrue()
+        ->and($result['election_close_certificate']['signature']['key_id'])->toBe('reference-record-key');
 });

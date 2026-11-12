@@ -4,12 +4,22 @@ namespace LBHurtado\BallotPdf\Application;
 
 use LBHurtado\BallotPdf\Contracts\BallotPayloadCodec;
 use LBHurtado\BallotPdf\Contracts\PdfQrScanner;
+use LBHurtado\BallotPdf\Contracts\AcceptanceLedger;
+use LBHurtado\BallotPdf\Contracts\RecordVerifier;
+use LBHurtado\BallotPdf\Contracts\PdfSignatureVerifier;
 use LBHurtado\BallotPdf\Domain\Context\ElectionContext;
 use LBHurtado\BallotPdf\Domain\Verification\VerificationResult;
+use LBHurtado\BallotPdf\Support\CanonicalJson;
 
 final readonly class VerifyDirectory
 {
-    public function __construct(private BallotPayloadCodec $codec, private ?PdfQrScanner $pdfQrScanner = null) {}
+    public function __construct(
+        private BallotPayloadCodec $codec,
+        private ?PdfQrScanner $pdfQrScanner = null,
+        private ?AcceptanceLedger $ledger = null,
+        private ?RecordVerifier $recordVerifier = null,
+        private ?PdfSignatureVerifier $pdfSignatureVerifier = null,
+    ) {}
 
     /** @return list<VerificationResult> */
     public function execute(string $root, ElectionContext $context): array
@@ -65,6 +75,48 @@ final readonly class VerifyDirectory
                         $issues[] = 'PDF hash mismatch';
                     }
                 }
+                if ($this->ledger !== null) {
+                    (new ValidateAcceptanceManifest)->execute($data);
+                    $accepted = $this->ledger->bySerial($serial);
+                    if ($accepted === null) {
+                        $issues[] = 'acceptance ledger record not found';
+                    } elseif (($data['pdf_sha256'] ?? null) !== $accepted->pdfSha256 || ($data['payload_sha256'] ?? null) !== $accepted->payloadSha256) {
+                        $issues[] = 'acceptance ledger hash mismatch';
+                    }
+                    if ($this->recordVerifier !== null && isset($data['manifest_signature'])) {
+                        $unsigned = $data;
+                        $signature = (array) $unsigned['manifest_signature'];
+                        unset($unsigned['manifest_signature']);
+                        if (! $this->recordVerifier->verify(
+                            'ballot.acceptance-manifest',
+                            (string) ($payload['election_id'] ?? ''),
+                            (string) ($payload['precinct_id'] ?? ''),
+                            CanonicalJson::encode($unsigned),
+                            $signature,
+                        )) {
+                            $issues[] = 'manifest signature invalid';
+                        }
+                    }
+                    if ($this->pdfSignatureVerifier !== null && isset($data['pdf_signature'])) {
+                        $pdfPaths = $pdfBySerial[$serial] ?? [];
+                        $signatureValid = false;
+                        foreach ($pdfPaths as $pdfPath) {
+                            $pdfBytes = file_get_contents($pdfPath);
+                            if ($pdfBytes !== false && $this->pdfSignatureVerifier->verify(
+                                $pdfBytes,
+                                (string) ($payload['election_id'] ?? ''),
+                                (string) ($payload['precinct_id'] ?? ''),
+                                (array) $data['pdf_signature'],
+                            )) {
+                                $signatureValid = true;
+                                break;
+                            }
+                        }
+                        if (! $signatureValid) {
+                            $issues[] = 'PDF-native signature invalid';
+                        }
+                    }
+                }
                 $classification = $issues === [] ? 'accepted' : 'invalid_context';
                 $results[] = new VerificationResult($file, $serial, $classification, $classification === 'accepted', $issues);
                 $bySerial[$serial][] = count($results) - 1;
@@ -98,12 +150,25 @@ final readonly class VerifyDirectory
             }
         }
 
-        foreach ($bySerial as $indexes) {
+        foreach ($bySerial as $serial => $indexes) {
             $eligible = array_values(array_filter($indexes, fn (int $index): bool => $results[$index]->eligible));
             if (count($eligible) > 1) {
                 $distinctPayloads = array_unique(array_map(static fn (int $index): string => $payloadHashes[$results[$index]->serial][$index] ?? '', $eligible));
                 $classification = count($distinctPayloads) > 1 ? 'duplicate_conflicting' : 'duplicate_exact';
-                foreach (array_slice($eligible, 1) as $index) {
+                $winner = $eligible[0];
+                if ($this->ledger !== null) {
+                    $accepted = $this->ledger->bySerial((string) $serial);
+                    foreach ($eligible as $candidate) {
+                        $data = str_ends_with(strtolower($results[$candidate]->path), '.json')
+                            ? json_decode((string) file_get_contents($results[$candidate]->path), true, 512, JSON_THROW_ON_ERROR)
+                            : null;
+                        if ($accepted !== null && is_array($data) && ($data['pdf_sha256'] ?? null) === $accepted->pdfSha256) {
+                            $winner = $candidate;
+                            break;
+                        }
+                    }
+                }
+                foreach (array_values(array_filter($eligible, static fn (int $index): bool => $index !== $winner)) as $index) {
                     $results[$index] = new VerificationResult($results[$index]->path, $results[$index]->serial, $classification, false, ['serial already represented by another eligible artifact']);
                 }
             }
