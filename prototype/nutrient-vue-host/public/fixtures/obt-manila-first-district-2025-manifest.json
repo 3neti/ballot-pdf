@@ -1,0 +1,3566 @@
+{
+  "schema_version": "automation-ready-obt-1",
+  "election_id": "2025NLE",
+  "ballot_style_id": "MANILA-1ST-DISTRICT-2025",
+  "source_obt": {
+    "file": "obt-manila-first-district-2025-source.pdf",
+    "sha256": "76b8fd0108c1f1534fcdc6e4522f3fe97f36f9ad0c6d1f3f101bc985750baeef",
+    "source_precinct_id": "39010001",
+    "provenance": "Supplied COMELEC ballot PDF; preserved unchanged as the visual OBT source."
+  },
+  "interaction_model": "DRE-field-selection",
+  "paper_record": "controlling-legal-record",
+  "contests": [
+    {
+      "id": "senator",
+      "code": "SEN",
+      "max_selections": 12,
+      "candidate_count": 66,
+      "candidates": [
+        {
+          "candidate_code": "SEN-001",
+          "candidate_number": 1,
+          "field_name": "contest.senator.candidate.SEN-001",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1565.537,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-002",
+          "candidate_number": 2,
+          "field_name": "contest.senator.candidate.SEN-002",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1546.726,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-003",
+          "candidate_number": 3,
+          "field_name": "contest.senator.candidate.SEN-003",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1517.915,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-004",
+          "candidate_number": 4,
+          "field_name": "contest.senator.candidate.SEN-004",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1499.104,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-005",
+          "candidate_number": 5,
+          "field_name": "contest.senator.candidate.SEN-005",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1470.293,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-006",
+          "candidate_number": 6,
+          "field_name": "contest.senator.candidate.SEN-006",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1451.482,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-007",
+          "candidate_number": 7,
+          "field_name": "contest.senator.candidate.SEN-007",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1427.671,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-008",
+          "candidate_number": 8,
+          "field_name": "contest.senator.candidate.SEN-008",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1398.86,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-009",
+          "candidate_number": 9,
+          "field_name": "contest.senator.candidate.SEN-009",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1375.049,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-010",
+          "candidate_number": 10,
+          "field_name": "contest.senator.candidate.SEN-010",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1356.238,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-011",
+          "candidate_number": 11,
+          "field_name": "contest.senator.candidate.SEN-011",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1332.427,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-012",
+          "candidate_number": 12,
+          "field_name": "contest.senator.candidate.SEN-012",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1303.616,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-013",
+          "candidate_number": 13,
+          "field_name": "contest.senator.candidate.SEN-013",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1284.805,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-014",
+          "candidate_number": 14,
+          "field_name": "contest.senator.candidate.SEN-014",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1260.994,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-015",
+          "candidate_number": 15,
+          "field_name": "contest.senator.candidate.SEN-015",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1232.183,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-016",
+          "candidate_number": 16,
+          "field_name": "contest.senator.candidate.SEN-016",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1213.372,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-017",
+          "candidate_number": 17,
+          "field_name": "contest.senator.candidate.SEN-017",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1189.561,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-018",
+          "candidate_number": 18,
+          "field_name": "contest.senator.candidate.SEN-018",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1565.537,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-019",
+          "candidate_number": 19,
+          "field_name": "contest.senator.candidate.SEN-019",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1546.726,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-020",
+          "candidate_number": 20,
+          "field_name": "contest.senator.candidate.SEN-020",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1522.915,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-021",
+          "candidate_number": 21,
+          "field_name": "contest.senator.candidate.SEN-021",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1499.104,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-022",
+          "candidate_number": 22,
+          "field_name": "contest.senator.candidate.SEN-022",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1475.293,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-023",
+          "candidate_number": 23,
+          "field_name": "contest.senator.candidate.SEN-023",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1451.482,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-024",
+          "candidate_number": 24,
+          "field_name": "contest.senator.candidate.SEN-024",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1422.671,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-025",
+          "candidate_number": 25,
+          "field_name": "contest.senator.candidate.SEN-025",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1398.86,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-026",
+          "candidate_number": 26,
+          "field_name": "contest.senator.candidate.SEN-026",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1380.049,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-027",
+          "candidate_number": 27,
+          "field_name": "contest.senator.candidate.SEN-027",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1356.238,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-028",
+          "candidate_number": 28,
+          "field_name": "contest.senator.candidate.SEN-028",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1332.427,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-029",
+          "candidate_number": 29,
+          "field_name": "contest.senator.candidate.SEN-029",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1308.616,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-030",
+          "candidate_number": 30,
+          "field_name": "contest.senator.candidate.SEN-030",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1284.805,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-031",
+          "candidate_number": 31,
+          "field_name": "contest.senator.candidate.SEN-031",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1260.994,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-032",
+          "candidate_number": 32,
+          "field_name": "contest.senator.candidate.SEN-032",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1232.183,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-033",
+          "candidate_number": 33,
+          "field_name": "contest.senator.candidate.SEN-033",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1208.372,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-034",
+          "candidate_number": 34,
+          "field_name": "contest.senator.candidate.SEN-034",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1189.561,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-035",
+          "candidate_number": 35,
+          "field_name": "contest.senator.candidate.SEN-035",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1565.537,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-036",
+          "candidate_number": 36,
+          "field_name": "contest.senator.candidate.SEN-036",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1546.726,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-037",
+          "candidate_number": 37,
+          "field_name": "contest.senator.candidate.SEN-037",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1522.915,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-038",
+          "candidate_number": 38,
+          "field_name": "contest.senator.candidate.SEN-038",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1499.104,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-039",
+          "candidate_number": 39,
+          "field_name": "contest.senator.candidate.SEN-039",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1470.293,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-040",
+          "candidate_number": 40,
+          "field_name": "contest.senator.candidate.SEN-040",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1451.482,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-041",
+          "candidate_number": 41,
+          "field_name": "contest.senator.candidate.SEN-041",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1422.671,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-042",
+          "candidate_number": 42,
+          "field_name": "contest.senator.candidate.SEN-042",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1403.86,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-043",
+          "candidate_number": 43,
+          "field_name": "contest.senator.candidate.SEN-043",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1380.049,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-044",
+          "candidate_number": 44,
+          "field_name": "contest.senator.candidate.SEN-044",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1351.238,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-045",
+          "candidate_number": 45,
+          "field_name": "contest.senator.candidate.SEN-045",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1327.427,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-046",
+          "candidate_number": 46,
+          "field_name": "contest.senator.candidate.SEN-046",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1308.616,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-047",
+          "candidate_number": 47,
+          "field_name": "contest.senator.candidate.SEN-047",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1284.805,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-048",
+          "candidate_number": 48,
+          "field_name": "contest.senator.candidate.SEN-048",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1260.994,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-049",
+          "candidate_number": 49,
+          "field_name": "contest.senator.candidate.SEN-049",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1237.183,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-050",
+          "candidate_number": 50,
+          "field_name": "contest.senator.candidate.SEN-050",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1213.372,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-051",
+          "candidate_number": 51,
+          "field_name": "contest.senator.candidate.SEN-051",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1184.561,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-052",
+          "candidate_number": 52,
+          "field_name": "contest.senator.candidate.SEN-052",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1570.537,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-053",
+          "candidate_number": 53,
+          "field_name": "contest.senator.candidate.SEN-053",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1546.726,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-054",
+          "candidate_number": 54,
+          "field_name": "contest.senator.candidate.SEN-054",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1522.915,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-055",
+          "candidate_number": 55,
+          "field_name": "contest.senator.candidate.SEN-055",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1499.104,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-056",
+          "candidate_number": 56,
+          "field_name": "contest.senator.candidate.SEN-056",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1475.293,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-057",
+          "candidate_number": 57,
+          "field_name": "contest.senator.candidate.SEN-057",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1451.482,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-058",
+          "candidate_number": 58,
+          "field_name": "contest.senator.candidate.SEN-058",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1427.671,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-059",
+          "candidate_number": 59,
+          "field_name": "contest.senator.candidate.SEN-059",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1398.86,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-060",
+          "candidate_number": 60,
+          "field_name": "contest.senator.candidate.SEN-060",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1380.049,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-061",
+          "candidate_number": 61,
+          "field_name": "contest.senator.candidate.SEN-061",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1356.238,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-062",
+          "candidate_number": 62,
+          "field_name": "contest.senator.candidate.SEN-062",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1327.427,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-063",
+          "candidate_number": 63,
+          "field_name": "contest.senator.candidate.SEN-063",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1303.616,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-064",
+          "candidate_number": 64,
+          "field_name": "contest.senator.candidate.SEN-064",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1284.805,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-065",
+          "candidate_number": 65,
+          "field_name": "contest.senator.candidate.SEN-065",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1260.994,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "SEN-066",
+          "candidate_number": 66,
+          "field_name": "contest.senator.candidate.SEN-066",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1232.183,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        }
+      ]
+    },
+    {
+      "id": "house",
+      "code": "HOUSE",
+      "max_selections": 1,
+      "candidate_count": 4,
+      "candidates": [
+        {
+          "candidate_code": "HOUSE-001",
+          "candidate_number": 1,
+          "field_name": "contest.house.candidate.HOUSE-001",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1113.128,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "HOUSE-002",
+          "candidate_number": 2,
+          "field_name": "contest.house.candidate.HOUSE-002",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1118.128,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "HOUSE-003",
+          "candidate_number": 3,
+          "field_name": "contest.house.candidate.HOUSE-003",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1118.128,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "HOUSE-004",
+          "candidate_number": 4,
+          "field_name": "contest.house.candidate.HOUSE-004",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1113.128,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mayor",
+      "code": "MAYOR",
+      "max_selections": 1,
+      "candidate_count": 11,
+      "candidates": [
+        {
+          "candidate_code": "MAYOR-001",
+          "candidate_number": 1,
+          "field_name": "contest.mayor.candidate.MAYOR-001",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1046.695,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-002",
+          "candidate_number": 2,
+          "field_name": "contest.mayor.candidate.MAYOR-002",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 1022.884,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-003",
+          "candidate_number": 3,
+          "field_name": "contest.mayor.candidate.MAYOR-003",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 994.073,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-004",
+          "candidate_number": 4,
+          "field_name": "contest.mayor.candidate.MAYOR-004",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1041.695,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-005",
+          "candidate_number": 5,
+          "field_name": "contest.mayor.candidate.MAYOR-005",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 1022.884,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-006",
+          "candidate_number": 6,
+          "field_name": "contest.mayor.candidate.MAYOR-006",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 994.073,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-007",
+          "candidate_number": 7,
+          "field_name": "contest.mayor.candidate.MAYOR-007",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1041.695,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-008",
+          "candidate_number": 8,
+          "field_name": "contest.mayor.candidate.MAYOR-008",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 1022.884,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-009",
+          "candidate_number": 9,
+          "field_name": "contest.mayor.candidate.MAYOR-009",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 999.073,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-010",
+          "candidate_number": 10,
+          "field_name": "contest.mayor.candidate.MAYOR-010",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1041.695,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "MAYOR-011",
+          "candidate_number": 11,
+          "field_name": "contest.mayor.candidate.MAYOR-011",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 1017.884,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vice_mayor",
+      "code": "VICE_MAYOR",
+      "max_selections": 1,
+      "candidate_count": 7,
+      "candidates": [
+        {
+          "candidate_code": "VICE_MAYOR-001",
+          "candidate_number": 1,
+          "field_name": "contest.vice_mayor.candidate.VICE_MAYOR-001",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 922.64,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "VICE_MAYOR-002",
+          "candidate_number": 2,
+          "field_name": "contest.vice_mayor.candidate.VICE_MAYOR-002",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 903.829,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "VICE_MAYOR-003",
+          "candidate_number": 3,
+          "field_name": "contest.vice_mayor.candidate.VICE_MAYOR-003",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 927.64,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "VICE_MAYOR-004",
+          "candidate_number": 4,
+          "field_name": "contest.vice_mayor.candidate.VICE_MAYOR-004",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 903.829,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "VICE_MAYOR-005",
+          "candidate_number": 5,
+          "field_name": "contest.vice_mayor.candidate.VICE_MAYOR-005",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 922.64,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "VICE_MAYOR-006",
+          "candidate_number": 6,
+          "field_name": "contest.vice_mayor.candidate.VICE_MAYOR-006",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 898.829,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "VICE_MAYOR-007",
+          "candidate_number": 7,
+          "field_name": "contest.vice_mayor.candidate.VICE_MAYOR-007",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 922.64,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        }
+      ]
+    },
+    {
+      "id": "councilor",
+      "code": "COUNCILOR",
+      "max_selections": 6,
+      "candidate_count": 26,
+      "candidates": [
+        {
+          "candidate_code": "COUNCILOR-001",
+          "candidate_number": 1,
+          "field_name": "contest.councilor.candidate.COUNCILOR-001",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 827.396,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-002",
+          "candidate_number": 2,
+          "field_name": "contest.councilor.candidate.COUNCILOR-002",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 808.585,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-003",
+          "candidate_number": 3,
+          "field_name": "contest.councilor.candidate.COUNCILOR-003",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 784.774,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-004",
+          "candidate_number": 4,
+          "field_name": "contest.councilor.candidate.COUNCILOR-004",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 760.963,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-005",
+          "candidate_number": 5,
+          "field_name": "contest.councilor.candidate.COUNCILOR-005",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 732.152,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-006",
+          "candidate_number": 6,
+          "field_name": "contest.councilor.candidate.COUNCILOR-006",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 713.341,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-007",
+          "candidate_number": 7,
+          "field_name": "contest.councilor.candidate.COUNCILOR-007",
+          "mark": {
+            "page": 1,
+            "x": 41.076,
+            "y": 689.53,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-008",
+          "candidate_number": 8,
+          "field_name": "contest.councilor.candidate.COUNCILOR-008",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 827.396,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-009",
+          "candidate_number": 9,
+          "field_name": "contest.councilor.candidate.COUNCILOR-009",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 808.585,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-010",
+          "candidate_number": 10,
+          "field_name": "contest.councilor.candidate.COUNCILOR-010",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 779.774,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-011",
+          "candidate_number": 11,
+          "field_name": "contest.councilor.candidate.COUNCILOR-011",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 760.963,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-012",
+          "candidate_number": 12,
+          "field_name": "contest.councilor.candidate.COUNCILOR-012",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 737.152,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-013",
+          "candidate_number": 13,
+          "field_name": "contest.councilor.candidate.COUNCILOR-013",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 713.341,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-014",
+          "candidate_number": 14,
+          "field_name": "contest.councilor.candidate.COUNCILOR-014",
+          "mark": {
+            "page": 1,
+            "x": 174.077,
+            "y": 689.53,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-015",
+          "candidate_number": 15,
+          "field_name": "contest.councilor.candidate.COUNCILOR-015",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 832.396,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-016",
+          "candidate_number": 16,
+          "field_name": "contest.councilor.candidate.COUNCILOR-016",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 808.585,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-017",
+          "candidate_number": 17,
+          "field_name": "contest.councilor.candidate.COUNCILOR-017",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 784.774,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-018",
+          "candidate_number": 18,
+          "field_name": "contest.councilor.candidate.COUNCILOR-018",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 755.963,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-019",
+          "candidate_number": 19,
+          "field_name": "contest.councilor.candidate.COUNCILOR-019",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 737.152,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-020",
+          "candidate_number": 20,
+          "field_name": "contest.councilor.candidate.COUNCILOR-020",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 713.341,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-021",
+          "candidate_number": 21,
+          "field_name": "contest.councilor.candidate.COUNCILOR-021",
+          "mark": {
+            "page": 1,
+            "x": 307.079,
+            "y": 689.53,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-022",
+          "candidate_number": 22,
+          "field_name": "contest.councilor.candidate.COUNCILOR-022",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 832.396,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-023",
+          "candidate_number": 23,
+          "field_name": "contest.councilor.candidate.COUNCILOR-023",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 808.585,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-024",
+          "candidate_number": 24,
+          "field_name": "contest.councilor.candidate.COUNCILOR-024",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 784.774,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-025",
+          "candidate_number": 25,
+          "field_name": "contest.councilor.candidate.COUNCILOR-025",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 755.963,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "COUNCILOR-026",
+          "candidate_number": 26,
+          "field_name": "contest.councilor.candidate.COUNCILOR-026",
+          "mark": {
+            "page": 1,
+            "x": 440.08,
+            "y": 737.152,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        }
+      ]
+    },
+    {
+      "id": "party_list",
+      "code": "PARTY",
+      "max_selections": 1,
+      "candidate_count": 155,
+      "candidates": [
+        {
+          "candidate_code": "PARTY-001",
+          "candidate_number": 1,
+          "field_name": "contest.party_list.candidate.PARTY-001",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1565.537,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-002",
+          "candidate_number": 2,
+          "field_name": "contest.party_list.candidate.PARTY-002",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1541.726,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-003",
+          "candidate_number": 3,
+          "field_name": "contest.party_list.candidate.PARTY-003",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1517.915,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-004",
+          "candidate_number": 4,
+          "field_name": "contest.party_list.candidate.PARTY-004",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1494.104,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-005",
+          "candidate_number": 5,
+          "field_name": "contest.party_list.candidate.PARTY-005",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1470.293,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-006",
+          "candidate_number": 6,
+          "field_name": "contest.party_list.candidate.PARTY-006",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1446.482,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-007",
+          "candidate_number": 7,
+          "field_name": "contest.party_list.candidate.PARTY-007",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1422.671,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-008",
+          "candidate_number": 8,
+          "field_name": "contest.party_list.candidate.PARTY-008",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1398.86,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-009",
+          "candidate_number": 9,
+          "field_name": "contest.party_list.candidate.PARTY-009",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1375.049,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-010",
+          "candidate_number": 10,
+          "field_name": "contest.party_list.candidate.PARTY-010",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1351.238,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-011",
+          "candidate_number": 11,
+          "field_name": "contest.party_list.candidate.PARTY-011",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1327.427,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-012",
+          "candidate_number": 12,
+          "field_name": "contest.party_list.candidate.PARTY-012",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1303.616,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-013",
+          "candidate_number": 13,
+          "field_name": "contest.party_list.candidate.PARTY-013",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1279.805,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-014",
+          "candidate_number": 14,
+          "field_name": "contest.party_list.candidate.PARTY-014",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1255.994,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-015",
+          "candidate_number": 15,
+          "field_name": "contest.party_list.candidate.PARTY-015",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1232.183,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-016",
+          "candidate_number": 16,
+          "field_name": "contest.party_list.candidate.PARTY-016",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1208.372,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-017",
+          "candidate_number": 17,
+          "field_name": "contest.party_list.candidate.PARTY-017",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1189.561,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-018",
+          "candidate_number": 18,
+          "field_name": "contest.party_list.candidate.PARTY-018",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1160.75,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-019",
+          "candidate_number": 19,
+          "field_name": "contest.party_list.candidate.PARTY-019",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1136.939,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-020",
+          "candidate_number": 20,
+          "field_name": "contest.party_list.candidate.PARTY-020",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1113.128,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-021",
+          "candidate_number": 21,
+          "field_name": "contest.party_list.candidate.PARTY-021",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1089.317,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-022",
+          "candidate_number": 22,
+          "field_name": "contest.party_list.candidate.PARTY-022",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1065.506,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-023",
+          "candidate_number": 23,
+          "field_name": "contest.party_list.candidate.PARTY-023",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1041.695,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-024",
+          "candidate_number": 24,
+          "field_name": "contest.party_list.candidate.PARTY-024",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 1017.884,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-025",
+          "candidate_number": 25,
+          "field_name": "contest.party_list.candidate.PARTY-025",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 994.073,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-026",
+          "candidate_number": 26,
+          "field_name": "contest.party_list.candidate.PARTY-026",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 970.262,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-027",
+          "candidate_number": 27,
+          "field_name": "contest.party_list.candidate.PARTY-027",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 946.451,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-028",
+          "candidate_number": 28,
+          "field_name": "contest.party_list.candidate.PARTY-028",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 922.64,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-029",
+          "candidate_number": 29,
+          "field_name": "contest.party_list.candidate.PARTY-029",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 898.829,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-030",
+          "candidate_number": 30,
+          "field_name": "contest.party_list.candidate.PARTY-030",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 875.018,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-031",
+          "candidate_number": 31,
+          "field_name": "contest.party_list.candidate.PARTY-031",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 851.207,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-032",
+          "candidate_number": 32,
+          "field_name": "contest.party_list.candidate.PARTY-032",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 827.396,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-033",
+          "candidate_number": 33,
+          "field_name": "contest.party_list.candidate.PARTY-033",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 808.585,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-034",
+          "candidate_number": 34,
+          "field_name": "contest.party_list.candidate.PARTY-034",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 779.774,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-035",
+          "candidate_number": 35,
+          "field_name": "contest.party_list.candidate.PARTY-035",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 755.963,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-036",
+          "candidate_number": 36,
+          "field_name": "contest.party_list.candidate.PARTY-036",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 732.152,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-037",
+          "candidate_number": 37,
+          "field_name": "contest.party_list.candidate.PARTY-037",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 708.341,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-038",
+          "candidate_number": 38,
+          "field_name": "contest.party_list.candidate.PARTY-038",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 684.53,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-039",
+          "candidate_number": 39,
+          "field_name": "contest.party_list.candidate.PARTY-039",
+          "mark": {
+            "page": 2,
+            "x": 41.076,
+            "y": 660.719,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-040",
+          "candidate_number": 40,
+          "field_name": "contest.party_list.candidate.PARTY-040",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1565.537,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-041",
+          "candidate_number": 41,
+          "field_name": "contest.party_list.candidate.PARTY-041",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1541.726,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-042",
+          "candidate_number": 42,
+          "field_name": "contest.party_list.candidate.PARTY-042",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1517.915,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-043",
+          "candidate_number": 43,
+          "field_name": "contest.party_list.candidate.PARTY-043",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1494.104,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-044",
+          "candidate_number": 44,
+          "field_name": "contest.party_list.candidate.PARTY-044",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1470.293,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-045",
+          "candidate_number": 45,
+          "field_name": "contest.party_list.candidate.PARTY-045",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1446.482,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-046",
+          "candidate_number": 46,
+          "field_name": "contest.party_list.candidate.PARTY-046",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1422.671,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-047",
+          "candidate_number": 47,
+          "field_name": "contest.party_list.candidate.PARTY-047",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1398.86,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-048",
+          "candidate_number": 48,
+          "field_name": "contest.party_list.candidate.PARTY-048",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1375.049,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-049",
+          "candidate_number": 49,
+          "field_name": "contest.party_list.candidate.PARTY-049",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1351.238,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-050",
+          "candidate_number": 50,
+          "field_name": "contest.party_list.candidate.PARTY-050",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1327.427,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-051",
+          "candidate_number": 51,
+          "field_name": "contest.party_list.candidate.PARTY-051",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1303.616,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-052",
+          "candidate_number": 52,
+          "field_name": "contest.party_list.candidate.PARTY-052",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1279.805,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-053",
+          "candidate_number": 53,
+          "field_name": "contest.party_list.candidate.PARTY-053",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1255.994,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-054",
+          "candidate_number": 54,
+          "field_name": "contest.party_list.candidate.PARTY-054",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1232.183,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-055",
+          "candidate_number": 55,
+          "field_name": "contest.party_list.candidate.PARTY-055",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1208.372,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-056",
+          "candidate_number": 56,
+          "field_name": "contest.party_list.candidate.PARTY-056",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1184.561,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-057",
+          "candidate_number": 57,
+          "field_name": "contest.party_list.candidate.PARTY-057",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1160.75,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-059",
+          "candidate_number": 59,
+          "field_name": "contest.party_list.candidate.PARTY-059",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1136.939,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-060",
+          "candidate_number": 60,
+          "field_name": "contest.party_list.candidate.PARTY-060",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1113.128,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-061",
+          "candidate_number": 61,
+          "field_name": "contest.party_list.candidate.PARTY-061",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1089.317,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-062",
+          "candidate_number": 62,
+          "field_name": "contest.party_list.candidate.PARTY-062",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1065.506,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-063",
+          "candidate_number": 63,
+          "field_name": "contest.party_list.candidate.PARTY-063",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1041.695,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-064",
+          "candidate_number": 64,
+          "field_name": "contest.party_list.candidate.PARTY-064",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 1017.884,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-065",
+          "candidate_number": 65,
+          "field_name": "contest.party_list.candidate.PARTY-065",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 994.073,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-066",
+          "candidate_number": 66,
+          "field_name": "contest.party_list.candidate.PARTY-066",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 970.262,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-067",
+          "candidate_number": 67,
+          "field_name": "contest.party_list.candidate.PARTY-067",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 946.451,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-068",
+          "candidate_number": 68,
+          "field_name": "contest.party_list.candidate.PARTY-068",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 922.64,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-069",
+          "candidate_number": 69,
+          "field_name": "contest.party_list.candidate.PARTY-069",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 898.829,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-070",
+          "candidate_number": 70,
+          "field_name": "contest.party_list.candidate.PARTY-070",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 875.018,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-071",
+          "candidate_number": 71,
+          "field_name": "contest.party_list.candidate.PARTY-071",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 851.207,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-072",
+          "candidate_number": 72,
+          "field_name": "contest.party_list.candidate.PARTY-072",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 827.396,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-073",
+          "candidate_number": 73,
+          "field_name": "contest.party_list.candidate.PARTY-073",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 803.585,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-074",
+          "candidate_number": 74,
+          "field_name": "contest.party_list.candidate.PARTY-074",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 779.774,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-075",
+          "candidate_number": 75,
+          "field_name": "contest.party_list.candidate.PARTY-075",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 755.963,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-076",
+          "candidate_number": 76,
+          "field_name": "contest.party_list.candidate.PARTY-076",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 732.152,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-077",
+          "candidate_number": 77,
+          "field_name": "contest.party_list.candidate.PARTY-077",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 708.341,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-078",
+          "candidate_number": 78,
+          "field_name": "contest.party_list.candidate.PARTY-078",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 684.53,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-079",
+          "candidate_number": 79,
+          "field_name": "contest.party_list.candidate.PARTY-079",
+          "mark": {
+            "page": 2,
+            "x": 174.077,
+            "y": 660.719,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-080",
+          "candidate_number": 80,
+          "field_name": "contest.party_list.candidate.PARTY-080",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1565.537,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-081",
+          "candidate_number": 81,
+          "field_name": "contest.party_list.candidate.PARTY-081",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1541.726,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-082",
+          "candidate_number": 82,
+          "field_name": "contest.party_list.candidate.PARTY-082",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1517.915,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-083",
+          "candidate_number": 83,
+          "field_name": "contest.party_list.candidate.PARTY-083",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1494.104,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-084",
+          "candidate_number": 84,
+          "field_name": "contest.party_list.candidate.PARTY-084",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1470.293,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-085",
+          "candidate_number": 85,
+          "field_name": "contest.party_list.candidate.PARTY-085",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1446.482,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-086",
+          "candidate_number": 86,
+          "field_name": "contest.party_list.candidate.PARTY-086",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1422.671,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-087",
+          "candidate_number": 87,
+          "field_name": "contest.party_list.candidate.PARTY-087",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1398.86,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-088",
+          "candidate_number": 88,
+          "field_name": "contest.party_list.candidate.PARTY-088",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1375.049,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-089",
+          "candidate_number": 89,
+          "field_name": "contest.party_list.candidate.PARTY-089",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1351.238,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-090",
+          "candidate_number": 90,
+          "field_name": "contest.party_list.candidate.PARTY-090",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1327.427,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-091",
+          "candidate_number": 91,
+          "field_name": "contest.party_list.candidate.PARTY-091",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1303.616,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-092",
+          "candidate_number": 92,
+          "field_name": "contest.party_list.candidate.PARTY-092",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1279.805,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-093",
+          "candidate_number": 93,
+          "field_name": "contest.party_list.candidate.PARTY-093",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1255.994,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-094",
+          "candidate_number": 94,
+          "field_name": "contest.party_list.candidate.PARTY-094",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1237.183,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-095",
+          "candidate_number": 95,
+          "field_name": "contest.party_list.candidate.PARTY-095",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1208.372,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-096",
+          "candidate_number": 96,
+          "field_name": "contest.party_list.candidate.PARTY-096",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1184.561,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-097",
+          "candidate_number": 97,
+          "field_name": "contest.party_list.candidate.PARTY-097",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1160.75,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-098",
+          "candidate_number": 98,
+          "field_name": "contest.party_list.candidate.PARTY-098",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1136.939,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-099",
+          "candidate_number": 99,
+          "field_name": "contest.party_list.candidate.PARTY-099",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1113.128,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-100",
+          "candidate_number": 100,
+          "field_name": "contest.party_list.candidate.PARTY-100",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1089.317,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-101",
+          "candidate_number": 101,
+          "field_name": "contest.party_list.candidate.PARTY-101",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1065.506,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-102",
+          "candidate_number": 102,
+          "field_name": "contest.party_list.candidate.PARTY-102",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1041.695,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-103",
+          "candidate_number": 103,
+          "field_name": "contest.party_list.candidate.PARTY-103",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 1017.884,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-104",
+          "candidate_number": 104,
+          "field_name": "contest.party_list.candidate.PARTY-104",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 994.073,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-105",
+          "candidate_number": 105,
+          "field_name": "contest.party_list.candidate.PARTY-105",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 970.262,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-106",
+          "candidate_number": 106,
+          "field_name": "contest.party_list.candidate.PARTY-106",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 946.451,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-107",
+          "candidate_number": 107,
+          "field_name": "contest.party_list.candidate.PARTY-107",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 922.64,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-108",
+          "candidate_number": 108,
+          "field_name": "contest.party_list.candidate.PARTY-108",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 898.829,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-109",
+          "candidate_number": 109,
+          "field_name": "contest.party_list.candidate.PARTY-109",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 875.018,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-110",
+          "candidate_number": 110,
+          "field_name": "contest.party_list.candidate.PARTY-110",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 851.207,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-111",
+          "candidate_number": 111,
+          "field_name": "contest.party_list.candidate.PARTY-111",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 827.396,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-112",
+          "candidate_number": 112,
+          "field_name": "contest.party_list.candidate.PARTY-112",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 803.585,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-113",
+          "candidate_number": 113,
+          "field_name": "contest.party_list.candidate.PARTY-113",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 779.774,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-114",
+          "candidate_number": 114,
+          "field_name": "contest.party_list.candidate.PARTY-114",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 755.963,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-115",
+          "candidate_number": 115,
+          "field_name": "contest.party_list.candidate.PARTY-115",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 732.152,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-116",
+          "candidate_number": 116,
+          "field_name": "contest.party_list.candidate.PARTY-116",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 708.341,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-117",
+          "candidate_number": 117,
+          "field_name": "contest.party_list.candidate.PARTY-117",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 684.53,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-118",
+          "candidate_number": 118,
+          "field_name": "contest.party_list.candidate.PARTY-118",
+          "mark": {
+            "page": 2,
+            "x": 307.079,
+            "y": 660.719,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-119",
+          "candidate_number": 119,
+          "field_name": "contest.party_list.candidate.PARTY-119",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1565.537,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-120",
+          "candidate_number": 120,
+          "field_name": "contest.party_list.candidate.PARTY-120",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1541.726,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-121",
+          "candidate_number": 121,
+          "field_name": "contest.party_list.candidate.PARTY-121",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1517.915,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-122",
+          "candidate_number": 122,
+          "field_name": "contest.party_list.candidate.PARTY-122",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1494.104,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-123",
+          "candidate_number": 123,
+          "field_name": "contest.party_list.candidate.PARTY-123",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1470.293,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-124",
+          "candidate_number": 124,
+          "field_name": "contest.party_list.candidate.PARTY-124",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1446.482,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-125",
+          "candidate_number": 125,
+          "field_name": "contest.party_list.candidate.PARTY-125",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1422.671,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-126",
+          "candidate_number": 126,
+          "field_name": "contest.party_list.candidate.PARTY-126",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1398.86,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-127",
+          "candidate_number": 127,
+          "field_name": "contest.party_list.candidate.PARTY-127",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1375.049,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-128",
+          "candidate_number": 128,
+          "field_name": "contest.party_list.candidate.PARTY-128",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1351.238,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-129",
+          "candidate_number": 129,
+          "field_name": "contest.party_list.candidate.PARTY-129",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1327.427,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-130",
+          "candidate_number": 130,
+          "field_name": "contest.party_list.candidate.PARTY-130",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1303.616,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-131",
+          "candidate_number": 131,
+          "field_name": "contest.party_list.candidate.PARTY-131",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1279.805,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-132",
+          "candidate_number": 132,
+          "field_name": "contest.party_list.candidate.PARTY-132",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1255.994,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-133",
+          "candidate_number": 133,
+          "field_name": "contest.party_list.candidate.PARTY-133",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1232.183,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-134",
+          "candidate_number": 134,
+          "field_name": "contest.party_list.candidate.PARTY-134",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1208.372,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-135",
+          "candidate_number": 135,
+          "field_name": "contest.party_list.candidate.PARTY-135",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1184.561,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-136",
+          "candidate_number": 136,
+          "field_name": "contest.party_list.candidate.PARTY-136",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1160.75,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-137",
+          "candidate_number": 137,
+          "field_name": "contest.party_list.candidate.PARTY-137",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1136.939,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-138",
+          "candidate_number": 138,
+          "field_name": "contest.party_list.candidate.PARTY-138",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1113.128,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-139",
+          "candidate_number": 139,
+          "field_name": "contest.party_list.candidate.PARTY-139",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1089.317,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-140",
+          "candidate_number": 140,
+          "field_name": "contest.party_list.candidate.PARTY-140",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1070.506,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-141",
+          "candidate_number": 141,
+          "field_name": "contest.party_list.candidate.PARTY-141",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1041.695,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-142",
+          "candidate_number": 142,
+          "field_name": "contest.party_list.candidate.PARTY-142",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 1017.884,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-143",
+          "candidate_number": 143,
+          "field_name": "contest.party_list.candidate.PARTY-143",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 994.073,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-144",
+          "candidate_number": 144,
+          "field_name": "contest.party_list.candidate.PARTY-144",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 970.262,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-145",
+          "candidate_number": 145,
+          "field_name": "contest.party_list.candidate.PARTY-145",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 946.451,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-146",
+          "candidate_number": 146,
+          "field_name": "contest.party_list.candidate.PARTY-146",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 922.64,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-147",
+          "candidate_number": 147,
+          "field_name": "contest.party_list.candidate.PARTY-147",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 898.829,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-148",
+          "candidate_number": 148,
+          "field_name": "contest.party_list.candidate.PARTY-148",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 875.018,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-149",
+          "candidate_number": 149,
+          "field_name": "contest.party_list.candidate.PARTY-149",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 851.207,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-150",
+          "candidate_number": 150,
+          "field_name": "contest.party_list.candidate.PARTY-150",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 827.396,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-151",
+          "candidate_number": 151,
+          "field_name": "contest.party_list.candidate.PARTY-151",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 803.585,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-152",
+          "candidate_number": 152,
+          "field_name": "contest.party_list.candidate.PARTY-152",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 779.774,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-153",
+          "candidate_number": 153,
+          "field_name": "contest.party_list.candidate.PARTY-153",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 755.963,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-154",
+          "candidate_number": 154,
+          "field_name": "contest.party_list.candidate.PARTY-154",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 732.152,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-155",
+          "candidate_number": 155,
+          "field_name": "contest.party_list.candidate.PARTY-155",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 708.341,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        },
+        {
+          "candidate_code": "PARTY-156",
+          "candidate_number": 156,
+          "field_name": "contest.party_list.candidate.PARTY-156",
+          "mark": {
+            "page": 2,
+            "x": 440.08,
+            "y": 684.53,
+            "width": 18,
+            "height": 16,
+            "coordinate_system": "pdf-points-from-bottom-left"
+          }
+        }
+      ]
+    }
+  ],
+  "field_count": 269,
+  "control_number_demo_password": "OBT-MANILA-000001",
+  "generated_artifacts": {
+    "automation_pdf": "obt-manila-first-district-2025-automation.pdf",
+    "encrypted_serial_fixture": "obt-manila-first-district-2025-automation-encrypted.pdf"
+  }
+}

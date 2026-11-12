@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test": "node --test tests/*.node.test.js",
     "test:vitest": "vitest run --config vitest.config.js",
+    "fixture:manila": "node scripts/generate-manila-obt.mjs",
     "prepare": "mkdir -p public/nutrient-web && cp -R node_modules/@nutrient-sdk/viewer/dist/. public/nutrient-web/",
     "fixture:generate": "node scripts/generate-ballot-pdf.mjs"
   },

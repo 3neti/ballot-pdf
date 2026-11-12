@@ -9,7 +9,7 @@
 | Primary purpose | Serialized electronic ballot stock, finalized ballot PDFs, immutable evidence, and independent verification |
 | Intended first domain | Offline OpScan with DRE ballot preparation |
 | Primary runtime | Local election appliance with Nutrient Web SDK rendering the interactive ballot PDF in an offline browser kiosk |
-| Legal-record assumption | The deposited paper ballot remains the controlling legal election record unless applicable law or the issued TOR provides otherwise |
+| Profile authority | In the OpScan with DRE profile, the finalized signed ballot PDF is the authoritative ballot record; paper output is optional supplementary evidence |
 | Security posture | Offline-first, cryptographically authenticated, append-only, independently verifiable |
 
 This document describes the behavior and boundaries of the package. It is not an implementation plan, a COMELEC certification, or a claim that every capability is already available in the WAES application.
@@ -37,7 +37,7 @@ Election configuration
     -> Contest-limit enforcement and voter confirmation
     -> Finalized signed Ballot PDF
     -> WORM/equivalent immutable storage
-    -> Full-page paper printing and physical deposit
+    -> Optional paper output and optional physical retention
     -> Optical payload verification
     -> Independent recursive verification and reporting
 ```
@@ -46,8 +46,8 @@ The package treats the PDF as a first-class, visually auditable election artifac
 
 ## 3. Design Principles
 
-1. The paper ballot remains the controlling legal record under the current legal assumption.
-2. The Ballot PDF is an electronic ballot representation and evidence artifact, not an independent legal source of truth by itself.
+1. The finalized signed Ballot PDF is the authoritative record for the OpScan with DRE profile.
+2. Paper output may provide supplementary human-readable evidence but is not required for casting or tally eligibility.
 3. Every ballot instance has a stable, unique ballot serial.
 4. Control-number authorization and ballot authentication are separate security functions.
 5. Voter identity, control numbers, print PINs, and voter-linked authorization values do not appear in the public signed ballot payload.
@@ -56,7 +56,7 @@ The package treats the PDF as a first-class, visually auditable election artifac
 8. Counting is based on signed payload verification, ballot status, context, uniqueness, and approved custody evidence, not filenames or PDF metadata.
 9. All required operations work offline after the election package has been commissioned.
 10. The package exposes independent verification interfaces so a municipality, auditor, party, or candidate can reproduce verification and reporting without the ballot-preparation application.
-11. The package must not claim that a valid signature proves physical deposit or that a reconstructed PDF proves the physical paper appearance.
+11. The package must distinguish PDF acceptance from optional printing, physical handling, and paper inspection.
 12. The package must not require an Internet lookup, proprietary server, or live cloud service to interpret a finalized ballot.
 
 ## 4. Scope
@@ -74,7 +74,7 @@ The package treats the PDF as a first-class, visually auditable election artifac
 - browser-rendered voter experience contracts;
 - finalized Ballot PDF creation;
 - signed machine-readable payload generation;
-- optional PDF-level signature integration;
+- PDF-native signature integration through a commissioned adapter;
 - immutable/WORM storage contracts;
 - append-only lifecycle events;
 - recursive directory verification;
@@ -106,7 +106,7 @@ A pre-election PDF artifact used as controlled electronic ballot material. In OB
 
 ### 5.1.1 Official Ballot Template (OBT)
 
-The COMELEC-approved, digitally signed, pre-numbered electronic master from which an OpScan ballot is printed. The OBT is generated once, hash-locked, delivered only to authorized devices, and governed as controlled election material. A serial allocated from the OBT is single-use.
+The COMELEC-approved, digitally signed, pre-numbered electronic master from which an OpScan ballot PDF is generated and, when requested, printed. The OBT is generated once, hash-locked, delivered only to authorized devices, and governed as controlled election material. A serial allocated from the OBT is single-use.
 
 The OBT may contain a non-secret `bei_authorization_policy_id` or equivalent
 policy reference identifying the approved offline BEI authorization rules.
@@ -115,7 +115,7 @@ reusable authorization secret.
 
 ### 5.1.2 Serialized Ballot Stock PDF
 
-An optional serialized-stock artifact containing one approved blank ballot face and one assigned ballot serial. It is a packaging and distribution optimization only if COMELEC approves it. It must obey the same custody, encryption, hash, serial, print, spoilage, cancellation, and retention rules as an OBT-derived ballot.
+An optional serialized-stock artifact containing one approved blank ballot face and one assigned ballot serial. It is a packaging and distribution optimization only if COMELEC approves it. It must obey the same encryption, hash, serial, spoilage, cancellation, and retention rules as an OBT-derived ballot; printing is an optional supplementary operation in the PDF-authoritative OpScan with DRE profile.
 
 ### 5.2 Ballot Session
 
@@ -123,7 +123,7 @@ The control-number-authorized interaction in which a voter is shown an eligible 
 
 ### 5.3 Finalized Ballot PDF
 
-The read-only electronic ballot artifact produced after voter confirmation. It contains the human-readable selected ballot representation and a signed machine-readable payload. It is ready for printing, evidence storage, and independent verification.
+The read-only electronic ballot artifact produced after voter confirmation. It contains the human-readable selected ballot representation and a signed machine-readable payload. It is ready for complete-artifact authentication, durable acceptance, optional printing, evidence storage, and independent verification.
 
 ### 5.4 Ballot serial
 
@@ -152,6 +152,22 @@ ballot PDF and a commissioned local service. It carries session, selection,
 finalization, printing, storage, custody, and status messages. Protocol
 messages use canonical JSON envelopes and are bound to the election context,
 ballot serial, session, nonce, and OBT hash.
+
+### 5.10 Acceptance ledger
+
+The authoritative acceptance ledger records the atomic cast decision after the
+complete signed ballot bundle has been committed. It records the ballot serial,
+complete-PDF hash, payload hash, authenticated manifest hash, idempotency key,
+acceptance sequence, timestamp, context, and status. A WORM store preserves
+artifacts but does not independently decide acceptance.
+
+### 5.11 Election Close Certificate
+
+The signed close certificate commits the election or precinct scope to an
+authenticated accepted cast set. It includes the close timestamp, last
+acceptance sequence, accepted serials or an equivalent authenticated set
+commitment, tally-rule hash, trust-roster hash, reconciliation totals, and
+required signatures. A timestamp alone is not election closure.
 
 ## 6. Package Boundary and Dependencies
 
@@ -243,8 +259,11 @@ Each finalized artifact must provide:
 - Truth QR or equivalent optical representation;
 - finalization status;
 - PDF content hash;
+- PDF-native signature or authenticated PDF-signature adapter result;
+- signed detached acceptance manifest;
+- durable acceptance identity and sequence;
 - evidence references; and
-- optional PDF-level digital signature.
+- PDF-native signature result.
 
 The final payload must not include:
 
@@ -277,7 +296,12 @@ Minimum fields:
 
 ### 8.4 Evidence manifest
 
-The evidence manifest groups the finalized PDF, signed payload, verification result, print result, custody references, and tally disposition. It must identify whether an item is source evidence, reconstructed evidence, or a derived report.
+The evidence manifest groups the finalized PDF, signed payload, complete-PDF
+hash, PDF-native signature result, detached manifest signature, acceptance
+record, optional print result, optional custody references, and tally
+disposition. The manifest signature must cover the canonical manifest fields,
+including the complete-PDF hash. It must identify whether an item is source
+evidence, reconstructed evidence, or a derived report.
 
 ### 8.5 Offline BEI authorization and signature artifacts
 
@@ -383,8 +407,8 @@ The package must support both interpretations:
 5. At precinct initialization, require offline BEI PIN authorization and sign the OBT import/custody record with the authorized asymmetric key.
 6. Allocate each serial once at the voter session.
 7. Render the voter selections and signed payload from the OBT.
-8. Print the paper ballot at the precinct.
-9. Reconcile each serial as issued, printed, spoiled, cancelled, cast, voided, or unused.
+8. Optionally print supplementary paper evidence at the precinct.
+9. Reconcile each serial as issued, printed if applicable, spoiled, cancelled, cast, voided, or unused.
 
 #### Serialized stock mode, proposed per-PDF model
 
@@ -420,9 +444,9 @@ The following v34 provisions are directly supported by this specification:
 | Digitally signed, pre-numbered OBT | OBT artifact, signed manifest, hash lock, and serial-range value objects. |
 | OBT delivered only to authorized precinct devices | Media package scope, device authorization, import verification, and custody manifest. |
 | Single-use serial per voting session | Ballot serial lifecycle and append-only status journal. |
-| Per-precinct printed ballot | Print authorization, print result, spoilage, reprint, and reconciliation events. |
-| QR payload printed on official ballot | `truth-qr` payload profile and print-time read-back verification. |
-| Ballot verification | Payload validation, sample independent-imager test, and final paper/payload evidence. |
+| Per-precinct printed ballot | Optional print authorization, print result, spoilage, reprint, and supplementary reconciliation events. |
+| QR payload printed on official ballot | `truth-qr` payload profile and optional print-time read-back verification. |
+| Ballot verification | Payload validation, sample independent-imager test, and optional paper/payload evidence. |
 | BITS or equivalent status tracking | `StatusResolver`, manifest reports, and per-precinct reconciliation exports. |
 | Eighty-three million-plus total quantity | High-volume generation/stock planning; quantity is not assumed to mean one PDF per ballot unless COMELEC approves serialized stock mode. |
 
@@ -434,8 +458,8 @@ The package specification must preserve these as unresolved until COMELEC issues
 2. Whether per-serial PDF stock may be transported on municipal portable media before election day.
 3. Whether each per-serial PDF is required to be physically present on the ACM, or whether an OBT plus serial ledger is sufficient.
 4. Whether the OpScan pathway's immediate QR read-back is validation only or an official cast/tally event.
-5. The v34 Part B language that identifies the voter receipt as the controlling election record conflicts with the paper-first legal-record model and must be resolved.
-6. The v34 language requiring both printed ballot and voter receipt to be deposited must be reconciled with the final legal-record and custody procedure.
+5. The issued TOR's paper or voter-receipt provisions must be reconciled with the PDF-authoritative OpScan with DRE profile.
+6. Any retained paper-deposit language must be classified as an OMR or supplementary-evidence requirement, unless the TOR expressly authorizes the PDF-authoritative profile.
 7. Whether the PDF-level signature, the signed QR payload, or both are required for OBT and final ballot authenticity.
 8. Whether the 83,510,241 quantity includes electronic stock artifacts, printed paper only, or both.
 
@@ -644,9 +668,11 @@ The initial protocol surface is:
 session.open
 session.update
 ballot.finalize
+acceptance.commit
 ballot.print
 evidence.commit
 ceremony.status
+election.close
 ```
 
 ### 12.4 Nutrient ACM runtime
@@ -666,7 +692,9 @@ WebView. The Nutrient adapter must:
 Nutrient form state is not itself the election authority. The local
 `3neti/ballot-pdf` service must revalidate the selections, create the
 canonical signed payload, generate or verify the QR representation, compute
-the final hash, and commit the lifecycle event before the ballot is accepted.
+the final hash, authenticate the complete PDF, sign the detached manifest,
+and commit the immutable bundle to the acceptance ledger before the ballot is
+accepted.
 The public Acrobat demonstration may use the same protocol messages through
 its own viewer adapter. It does not change the production Nutrient runtime.
 
@@ -683,24 +711,32 @@ its own viewer adapter. It does not change the production Nutrient runtime.
 7. Sign the payload using the commissioned ballot-signing key.
 8. Render the Truth QR or equivalent optical representation.
 9. Produce the finalized PDF.
-10. Compute the final PDF hash.
-11. Commit the artifact and evidence to WORM/equivalent storage.
-12. Append the confirmation and finalization events.
-13. Authorize printing.
+10. Apply the PDF-native signature through the commissioned PDF-signature adapter.
+11. Compute the complete final PDF hash.
+12. Sign the detached manifest containing the complete-PDF hash and artifact references.
+13. Commit the PDF and signed manifest to WORM/equivalent storage.
+14. Commit the acceptance record to the authoritative acceptance ledger.
+15. Acknowledge durable acceptance.
+16. Optionally authorize printing.
 
 Finalization must be atomic from the perspective of the ballot lifecycle. A partial finalized artifact must not appear as accepted ballot evidence.
 
 ### 13.2 Signature profile
 
-The payload signature must use Ed25519 or another approved asymmetric algorithm. The exact PDF-level signature profile remains an open design decision because standard PDF viewer support for Ed25519 signatures is not uniform.
+The payload signature must use Ed25519 or another approved asymmetric algorithm. Complete-artifact authentication uses both a PDF-native signature through a commissioned adapter and a signed detached manifest.
 
 The package should support:
 
 - signed payload inside the Truth QR;
 - detached signature in the evidence manifest; and
-- optional standards-compatible PDF signature adapter.
+- standards-compatible PDF-native signature adapter.
 
-The payload signature and independent trust roster are authoritative for ballot verification.
+The payload signature, PDF-native signature, signed detached manifest, and
+independent trust roster are jointly required for complete-artifact
+verification. The payload signature authenticates canonical ballot data; the
+PDF-native signature authenticates the PDF through the approved viewer or
+adapter profile; the detached manifest links the complete-PDF hash to the
+payload, context, and acceptance evidence.
 
 ## 14. WORM and Immutable Storage
 
@@ -717,6 +753,13 @@ The storage boundary must:
 - expose storage and verification errors; and
 - support export with a manifest.
 
+WORM commit and acceptance-ledger commit are separate boundaries. The storage
+commit occurs first. If the ledger commit is interrupted, the preserved bundle
+remains verifiable evidence but is excluded from the accepted cast set until a
+recovery procedure records acceptance. The same idempotency identity with
+different content is a conflict; identical retries return the original
+acceptance.
+
 ### 14.2 Storage interface
 
 The package should define a storage port such as:
@@ -731,6 +774,36 @@ exportEvidence(scope): EvidencePackage
 ```
 
 The package cannot make ordinary writable filesystem storage physically WORM by itself. It can enforce logical append-only behavior and require a commissioned storage adapter to provide stronger media or operating-system guarantees.
+
+### 14.3 Acceptance ledger and recovery
+
+The acceptance ledger is the authoritative acceptance authority. The PDF and
+signed manifest are committed to WORM before the ledger record is committed.
+An artifact without an acceptance record remains verifiable evidence but is
+excluded from the accepted cast set. Identical retries return the original
+acceptance. The same idempotency identity with different content is a
+conflict. A serial may be accepted only once across the actual acceptance
+authority; disconnected devices therefore require non-overlapping serial
+ranges or an equivalent offline allocation authority.
+
+### 14.4 Election Close Certificate
+
+Election closure is a signed certificate, not a timestamp alone. The
+certificate commits the election or precinct scope to the accepted cast set
+and includes:
+
+- close timestamp;
+- last acceptance sequence;
+- accepted serials or an authenticated set commitment;
+- tally-rules hash;
+- trust-roster hash;
+- reconciliation totals;
+- previous checkpoint reference; and
+- required official or device signatures.
+
+A hash list or Merkle-style commitment identifies a set but does not by itself
+prove completeness. Completeness requires authenticated acceptance authority,
+serial reconciliation, and independently retained checkpoints.
 
 ### 14.3 Cancellation and spoilage
 
@@ -750,13 +823,16 @@ For each PDF, the verifier should:
 2. decode all multipart symbols;
 3. reconstruct the canonical payload;
 4. verify the signature against an independent trust roster;
-5. verify election, precinct, ballot-style, device, mapping, and schema context;
-6. validate selections and contest limits;
-7. verify the ballot serial and lifecycle status;
-8. detect duplicate and conflicting serials;
-9. compare PDF and payload hashes where required;
-10. record a deterministic classification; and
-11. never mutate the source artifact.
+5. verify the PDF-native signature or adapter evidence;
+6. verify the detached manifest signature and complete-PDF hash;
+7. verify election, precinct, ballot-style, device, mapping, and schema context;
+8. validate selections and contest limits;
+9. verify the ballot serial and authenticated lifecycle status;
+10. detect duplicate and conflicting serials;
+11. compare visible PDF, canonical selections, and QR payload where required;
+12. verify acceptance evidence when classifying a ballot as accepted;
+13. record a deterministic classification; and
+14. never mutate the source artifact.
 
 ### 15.3 Classification categories
 
@@ -779,6 +855,7 @@ For each PDF, the verifier should:
 - `missing_manifest_entry`;
 - `unlisted_artifact`;
 - `paper_payload_discrepancy`; and
+- `pdf_payload_discrepancy`;
 - `held_for_resolution`.
 
 ### 15.4 Reports
@@ -794,6 +871,7 @@ The verifier must produce:
 - candidate and contest totals from eligible records;
 - precinct reconciliation report;
 - evidence manifest;
+- election close certificate;
 - deterministic report hash; and
 - machine-readable export plus human-readable PDF or text report.
 
@@ -816,7 +894,7 @@ Confidentiality and authenticity are separate:
 - signatures detect alteration and authenticate the signer;
 - encryption protects confidentiality during transport or storage;
 - custody manifests prove handling history;
-- paper records support physical reconciliation.
+- optional paper output supports supplementary physical reconciliation.
 
 ## 17. Privacy and Transparency
 
@@ -900,18 +978,20 @@ The package is functionally acceptable when it can demonstrate:
 5. Nutrient rendering of the approved interactive ballot PDF in the offline ACM browser.
 6. Contest-limit enforcement for all configured contests.
 7. Intentional undervoting and correction.
-8. Finalization into an immutable signed Ballot PDF.
+8. Finalization into a PDF-native-signed Ballot PDF with a signed detached manifest.
 9. Rejection of post-finalization mutation.
 10. Truth QR or equivalent payload reconstruction and signature verification.
-11. WORM/equivalent storage commit and append-only lifecycle events.
+11. WORM/equivalent bundle commit followed by authoritative acceptance-ledger commit.
 12. Recursive verification over nested directories.
 13. Exact duplicate classification and conflicting-serial detection.
 14. Correct exclusion of cancelled, spoiled, invalid, and unresolved records.
-15. Deterministic tally generation from eligible finalized ballots.
-16. Reproducible reports from a separate verifier process.
-17. Offline Nutrient operation after commissioning, including ballot rendering, form interaction, finalization handoff, printing, and evidence storage.
-18. Protection against voter-to-ballot correlation in the final payload.
-19. Self-contained PDF protocol interaction from control-number consumption through finalization status.
+15. Deterministic tally generation from an authenticated closed cast set.
+16. Idempotent retry, lost-acknowledgment, crash-recovery, and serial-concurrency behavior.
+17. Signed Election Close Certificate with cast-set commitment and reconciliation totals.
+18. Reproducible reports from a separate verifier process.
+19. Offline Nutrient operation after commissioning, including ballot rendering, form interaction, finalization handoff, optional printing, and evidence storage.
+20. Protection against voter-to-ballot correlation in the final payload and operational evidence.
+21. Self-contained PDF protocol interaction from control-number consumption through durable acceptance status.
 
 ### 19.1 Acrobat demonstration profile
 
@@ -1036,22 +1116,22 @@ These questions should be answered before implementation begins:
 2. Are ballot serials allocated to all expected voters in advance, or drawn from a controlled pool during voter admission?
 3. Does the control number authorize a ballot style only, or a specific stock serial?
 4. What privacy-preserving identifier replaces raw control-number inclusion in internal evidence?
-5. Is the final PDF itself signed using a standards-compatible PDF signature, or is the signed Truth QR payload authoritative with an optional PDF signature?
+5. Which approved PDF-native signature profile and viewer/adapter validation rules will be commissioned for the required PDF signature?
 6. Which PDF encryption profile must Acrobat, Preview, and the browser viewer support?
 7. Is a server-backed authorization check mandatory, optional, or only used during commissioning?
 8. What is the offline fallback when the local authorization service is unavailable?
 9. Which Nutrient Web SDK feature profile and offline license terms are required for the PDF form, security, printing, and finalization handoff?
-10. What constitutes a finalization commit when printing fails after WORM commit?
+10. What constitutes a separately governed post-acceptance disposition, if any, when optional printing fails after WORM and ledger commit?
 11. Does a printed but un-deposited ballot become spoiled, cancelled, or unresolved?
 12. Is the ballot serial public, encrypted, or represented only through the signed payload?
 13. Which fields are permitted in public transparency exports?
 14. How are replacement ballots linked without linking voter identity to final selections?
 15. What evidence proves that a portable media package was complete at transfer and import?
 16. What is the authoritative lifecycle status when two custody logs disagree?
-17. Is the independent verifier allowed to compute totals from PDFs alone, or must it consume a signed status manifest as well?
+17. Must the independent verifier consume the signed acceptance ledger export and Election Close Certificate in addition to the PDFs and manifests?
 18. What is the approved policy for paper/payload disagreement?
 19. Which `truth-qr` profile and signature algorithm are mandatory for the first implementation?
-20. What storage medium or operating-system control qualifies as WORM for the target appliance?
+20. What storage medium or operating-system control qualifies as WORM for the target appliance, and what operational evidence proves its deployment?
 
 ## 22. Architectural Risk Register
 

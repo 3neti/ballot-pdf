@@ -8,7 +8,7 @@
 | Status | Refinable design draft |
 | Related document | `docs/FUNCTIONAL_SPECIFICATION.md` |
 | Pathway | OpScan with DRE ballot preparation |
-| Legal-record assumption | The printed and physically deposited paper ballot remains the controlling legal record unless applicable law or the issued TOR provides otherwise |
+| Profile authority | For OpScan with DRE, the finalized signed ballot PDF is the authoritative ballot record; paper output is optional supplementary evidence |
 | Package host | EMS uses `3neti/ballot-pdf`; the ACM uses the planned Nutrient adapter for local PDF rendering, form interaction, materialization, and printing |
 
 ## 1. End-to-End Flow
@@ -78,33 +78,41 @@ Export selections and materialize Finalized Ballot PDF
   v
 Sign and hash Finalized Ballot PDF
   |
-  | 12. Commit final artifact and lifecycle event
+  | 12. Apply PDF-native signature, hash the complete PDF,
+  |     sign the detached manifest, and commit the bundle
   |     to WORM/equivalent evidence storage
   v
-Print full-page paper ballot
+Acceptance ledger commit
   |
-  | 13. Printer produces the physical ballot
-  |     from the finalized PDF
+  | 13. Commit the acceptance record with serial, hashes,
+  |     manifest identity, idempotency key, and sequence;
+  |     acknowledge durable acceptance
   v
-Read back QR payload
+Optional paper output
   |
-  | 14. Verify signature, context, serial,
-  |     mapping, and duplicate status
+  | 14. An approved printer may produce
+  |     supplementary physical evidence
   v
-Voter verifies and deposits paper ballot
+Optional QR read-back
   |
-  | 15. The paper ballot becomes the
-  |     controlling legal record
+  | 15. If printed, verify signature, context,
+  |     serial, mapping, and duplicate status
   v
-Post-close OpScan
+Reconcile accepted ballot PDF
   |
-  | 16. Authorized officials scan deposited ballots
+  | 16. The finalized ballot PDF remains the
+  |     controlling OpScan with DRE record
+  v
+Post-close PDF verification
+  |
+  | 17. Authorized officials verify accepted PDFs
   |     and count each accepted serial exactly once
   v
 Generate signed Election Return
   |
-  | 17. Reconcile ballots, serials, statuses,
-  |     custody, and tally; BEI signs ceremony reports
+  | 18. Issue a signed Election Close Certificate
+  |     committing to the accepted cast set and rules;
+  |     reconcile ballots and tally; BEI signs reports
   v
 Transmit or transfer to CCS
 ```
@@ -121,11 +129,14 @@ EMS + `3neti/ballot-pdf`
   -> voter session
   -> Finalized Ballot PDF
   -> signed QR payload
+  -> PDF-native signature
+  -> signed detached acceptance manifest
   -> WORM/evidence store
-  -> printed paper ballot
-  -> QR read-back result
-  -> physical deposit event
-  -> post-close scan result
+  -> acceptance ledger record
+  -> optional printed paper evidence
+  -> optional QR read-back result
+  -> PDF acceptance event
+  -> post-close PDF verification result
   -> precinct reconciliation
   -> signed Election Return
 ```
@@ -398,6 +409,9 @@ It must contain or be associated with:
 - signed machine-readable payload;
 - QR or equivalent optical representation;
 - PDF content hash;
+- PDF-native signature result;
+- signed detached manifest containing the complete-PDF hash;
+- acceptance identity and sequence;
 - finalization status; and
 - evidence references.
 
@@ -418,19 +432,21 @@ After voter confirmation:
 
 1. The selections are validated.
 2. One unused ballot serial is allocated.
-3. The canonical payload is constructed.
-4. The payload is digitally signed.
-5. The QR representation is rendered.
-6. The Finalized Ballot PDF is generated.
-7. The final PDF hash is computed.
-8. The final artifact is committed to WORM/equivalent storage.
-9. The print operation is authorized.
+3. The canonical payload is constructed and signed.
+4. The QR representation is rendered.
+5. The Finalized Ballot PDF is generated.
+6. A PDF-native signature is applied through the approved adapter.
+7. The complete final PDF hash is computed.
+8. A detached manifest containing the PDF hash and artifact references is signed.
+9. The PDF and signed manifest are committed to WORM/equivalent storage.
+10. The acceptance ledger commits the cast event and returns an acknowledgement.
+11. Optional printing is authorized only after durable acceptance.
 
 The final artifact must be read-only from the application’s perspective. Any later lifecycle change is an append-only event, not an overwrite of the finalized PDF.
 
-## 8. Artifact 5: Printed Paper Ballot
+## 8. Artifact 5: Optional Printed Evidence
 
-The printed paper ballot is produced from the Finalized Ballot PDF using the approved full-page printer and paper stock.
+Optional printed evidence may be produced from the Finalized Ballot PDF using an approved printer and paper stock.
 
 The print event must record:
 
@@ -444,9 +460,9 @@ The print event must record:
 - spoilage or cancellation status; and
 - operator or ceremony reference.
 
-The printed ballot must be inspected by the voter and deposited under the approved physical-custody procedure.
-
-Under the current paper-first assumption, physical deposit is the controlling cast event and the paper ballot is the controlling legal record.
+The voter may inspect the printed output where it is produced. Physical handling,
+retention, or deposit is supplementary and does not determine whether the PDF is
+cast or tally-eligible in the OpScan with DRE profile.
 
 ## 9. Artifact 6: QR Read-Back and Validation Result
 
@@ -467,13 +483,15 @@ The read-back result must record:
 - print readability; and
 - whether the ballot proceeds to voter inspection, spoilage, or resolution.
 
-## 10. Artifact 7: Post-Close Scan Result
+## 10. Artifact 7: Post-Close Verification Result
 
-After close of voting, authorized officials scan physically deposited paper ballots.
+After close of voting, authorized officials verify the durably accepted ballot
+PDFs and their evidence manifests. Optional paper output may be reconciled as
+supplementary evidence where available.
 
-The scan result must record:
+The verification result must record:
 
-- physical ballot custody reference;
+- acceptance-ledger reference;
 - ballot serial;
 - complete payload result;
 - signature result;
@@ -482,10 +500,13 @@ The scan result must record:
 - duplicate/replay result;
 - lifecycle status;
 - tally eligibility;
-- reconciliation reference; and
+- reconciliation reference;
 - operator/ceremony reference.
 
-An accepted ballot may contribute to the tally exactly once. A print-time read-back must not create a second tally contribution.
+An accepted ballot may contribute to the tally exactly once. A print-time
+read-back must not create a second tally contribution. Directory traversal is
+only enumeration; acceptance requires authenticated signatures, manifest
+references, lifecycle evidence, and the closed cast-set certificate.
 
 ## 11. Artifact 8: BEI Ceremony Record
 
@@ -501,6 +522,7 @@ Relevant signed records include:
 - close-polls record;
 - ballot and serial reconciliation;
 - signed Election Return;
+- signed Election Close Certificate;
 - evidence manifest; and
 - storage or CCS handoff certificate.
 
@@ -532,8 +554,9 @@ The precinct report must reconcile at minimum:
 - cancelled ballots;
 - reprints;
 - QR read-backs;
-- ballots deposited;
-- ballots scanned;
+- optional paper outputs;
+- post-close PDF verification results;
+- acceptance-ledger entries;
 - accepted ballots;
 - rejected ballots;
 - unresolved ballots;
@@ -542,9 +565,13 @@ The precinct report must reconcile at minimum:
 
 The report must explain every difference and be signed through the approved BEI ceremony.
 
-## 13. Artifact 10: Signed Election Return and CCS Handoff
+## 13. Artifact 10: Election Close Certificate, Signed Election Return, and CCS Handoff
 
 The precinct generates:
+
+- a signed Election Close Certificate containing the close timestamp, last
+  acceptance sequence, accepted-cast-set commitment, tally-rules hash,
+  trust-roster hash, reconciliation totals, and required signatures;
 
 - the prescribed human-readable Election Return;
 - the signed machine-readable Election Return payload;
@@ -563,12 +590,14 @@ OBT approved
   -> serial reserved
   -> session authorized
   -> ballot confirmed
-  -> final PDF committed
-  -> printed
-  -> print read-back verified
-  -> paper deposited
-  -> scanned post-close
-  -> accepted or rejected
+  -> PDF-native signature applied
+  -> signed manifest committed
+  -> acceptance ledger committed
+  -> optionally printed
+  -> optionally print read-back verified
+  -> reconciled as an accepted PDF
+  -> verified post-close
+  -> close certificate issued
   -> reconciled
   -> included or excluded from tally
 ```
@@ -619,7 +648,7 @@ This flow remains subject to refinement on:
 1. Whether OBT serials are embedded in the PDF or supplied through a signed serial manifest.
 2. Whether the final PDF itself receives a PDF-level signature in addition to the signed QR payload.
 3. Whether immediate QR read-back is only a print-validation ceremony or also an official cast event.
-4. The final legal relationship between the paper ballot, voter receipt, QR payload, and Finalized Ballot PDF.
+4. The legal treatment of this PDF-authoritative profile in the applicable law and TOR.
 5. The exact BEI signature threshold and certificate model.
 6. The final WORM storage implementation and evidence export format.
 7. Which evidence is available to watchers, parties, candidates, and the public.

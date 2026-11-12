@@ -12,6 +12,8 @@ Deferred until the prototype workflow is stable. This package must add:
 - physical paper-ballot custody, handoff, and reconciliation records;
 - Election Return and precinct-level reconciliation artifacts;
 - independent replay and verification tooling;
+- acceptance-ledger deployment, idempotency recovery, and serial-authority controls;
+- signed Election Close Certificate generation and independent cast-set checkpoints;
 - evidence retention, archival, and package-level hashes; and
 - end-to-end audit scenarios using non-synthetic fixtures.
 
@@ -24,6 +26,9 @@ This is an engineering backlog item, not a claim of legal compliance.
 - [x] Run recursive verification against the latest finalized artifact.
 - [x] Add a deterministic Election Return/tally artifact to the scenario runner.
 - [x] Replace ephemeral demo signing keys with an injectable persistent trust roster.
+- [x] Add acceptance-ledger domain port and filesystem reference implementation.
+- [x] Add dual-authenticated bundle acceptance service boundary.
+- [x] Add deterministic Election Close Certificate domain and builder.
 
 ## Deployment Hardening Status
 
@@ -33,3 +38,5 @@ This is an engineering backlog item, not a claim of legal compliance.
 - [x] Hash-checked public-roster distribution records.
 - [x] Encrypted key escrow and recovery fixture.
 - [ ] Production HSM/OS keychain provisioning, quorum identity verification, and operational recovery drill.
+- [ ] Integrate acceptance commit and close-certificate generation into the end-to-end scenario runner and protocol service.
+- [ ] Commission a real PDF-native signature adapter and validate it in Acrobat, Nutrient, and the independent verifier.

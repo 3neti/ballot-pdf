@@ -256,11 +256,14 @@ The SDK must not replace the package's canonical signed payload layer. It must p
 
 - signed Truth QR payload insertion;
 - PDF hash computation after final rendering;
-- optional PDF-level signature;
+- required PDF-native signature adapter boundary;
 - independent verification outside the SDK; and
 - preservation of signature and payload bytes after printing.
 
-The vendor must document whether Ed25519 is supported inside PDF-level signatures. If not, the signed payload remains authoritative and the PDF-level signature is optional.
+The vendor must document the approved PDF-native signature profile and its
+validation behavior. The OpScan with DRE profile requires both the PDF-native
+signature and a signed detached manifest containing the complete-PDF hash. The
+Truth QR payload remains the authenticated canonical-selection encoding.
 
 ### 4.6 High-volume generation
 
@@ -354,7 +357,7 @@ Until the proof-of-concept is complete:
 - define `PdfRenderer`, `PdfGenerator`, `PdfInspector`, `PdfSigner`, and `PdfPrinterAdapter` ports;
 - keep `truth-qr` authoritative for ballot payload signing and verification;
 - use the controlled WAES voter UI for contest-limit enforcement;
-- use the SDK for PDF rendering, materialization, printing, and optional PDF-level signing; and
+- use the SDK for PDF rendering, materialization, optional printing, and the commissioned PDF-native signing adapter; and
 - keep standard PDF viewers as read-only audit/rendering clients.
 
 The current leading candidates are Nutrient or Apryse for the controlled browser/table runtime, Adobe Acrobat-PDFL for a native embedded engine, and Foxit as the strongest commercial alternative. The final choice should follow the proof-of-concept, not precede it.

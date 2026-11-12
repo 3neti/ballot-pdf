@@ -9,13 +9,15 @@ final class ReferenceProtocolService
     /** @var array<string, array<string, mixed>> */
     private array $sessions = [];
 
-    /** @param callable(array<string, mixed>): array<string, mixed> $openSession @param callable(array<string, mixed>): array<string, mixed> $finalize @param callable(array<string, mixed>): array<string, mixed> $print @param (callable(array<string, mixed>): array<string, mixed>)|null $verify @param (callable(array<string, mixed>): array<string, mixed>)|null $electionReturn */
+    /** @param callable(array<string, mixed>): array<string, mixed> $openSession @param callable(array<string, mixed>): array<string, mixed> $finalize @param callable(array<string, mixed>): array<string, mixed> $print @param (callable(array<string, mixed>): array<string, mixed>)|null $verify @param (callable(array<string, mixed>): array<string, mixed>)|null $electionReturn @param (callable(array<string, mixed>): array<string, mixed>)|null $accept @param (callable(array<string, mixed>): array<string, mixed>)|null $close */
     public function __construct(
         private readonly mixed $openSession,
         private readonly mixed $finalize,
         private readonly mixed $print,
         private readonly mixed $verify = null,
         private readonly mixed $electionReturn = null,
+        private readonly mixed $accept = null,
+        private readonly mixed $close = null,
     ) {}
 
     /** @param array<string, mixed> $envelope @return array<string, mixed> */
@@ -27,9 +29,11 @@ final class ReferenceProtocolService
             'session.open' => ($this->openSession)($envelope),
             'session.update' => $this->update($envelope),
             'ballot.finalize' => ($this->finalize)($envelope),
+            'acceptance.commit' => $this->accept === null ? throw new \InvalidArgumentException('Acceptance commit is unavailable.') : ($this->accept)($envelope),
             'ballot.print' => ($this->print)($envelope),
             'evidence.verify' => $this->verify === null ? throw new \InvalidArgumentException('Evidence verification is unavailable.') : ($this->verify)($envelope),
             'election.return' => $this->electionReturn === null ? throw new \InvalidArgumentException('Election Return generation is unavailable.') : ($this->electionReturn)($envelope),
+            'election.close' => $this->close === null ? throw new \InvalidArgumentException('Election close is unavailable.') : ($this->close)($envelope),
             'evidence.commit' => ['status' => 'evidence_acknowledged'],
             'ceremony.status' => ['status' => 'ready'],
             default => throw new \InvalidArgumentException("Unsupported protocol message {$type}."),

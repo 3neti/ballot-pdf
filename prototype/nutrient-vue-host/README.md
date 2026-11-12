@@ -49,3 +49,21 @@ the generated fixture is `DEMO-000001`.
 The synthetic OBT is a two-page role-demo-style facsimile with four contest
 panels, contest-limited AcroForm controls, review/confirmation fields, and
 reserved Truth QR placement. It remains demonstration-only.
+
+## Manila OBT Fixture
+
+The Manila fixture preserves the supplied OBT PDF as an immutable visual source
+and generates an automation-ready derivative with one named DRE field per
+candidate mark. The field mapping is recorded in the adjacent manifest and uses
+candidate numbers as stable demonstration codes. The source PDF is not changed.
+
+```bash
+npm run fixture:manila
+qpdf --check --password=OBT-MANILA-000001 public/fixtures/obt-manila-first-district-2025-automation-encrypted.pdf
+```
+
+The fixture password is `OBT-MANILA-000001`. This is demonstration material
+only; the paper ballot remains the controlling legal record. The old EMS
+currently assumes an eight-contest package, while this supplied Manila OBT
+contains six contests. A future EMS export should emit the six-contest manifest
+directly rather than relying on this source-derived compatibility mapping.
